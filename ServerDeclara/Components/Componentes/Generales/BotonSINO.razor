@@ -1,0 +1,22 @@
+﻿
+
+<p>@Titulo</p>
+<div class="d-flex justify-content-between">
+    <input type="number" step="0.1" placeholder="Mes1" class="form-control" @bind-value="ValorMes1" />
+    <input type="number" step="0.1" placeholder="Mes2" class="form-control" @bind-value="ValorMes2" />
+</div>
+
+
+
+@code {
+    [Parameter] public string Titulo { get; set; }
+    [Parameter] public string ValorMes1 { get; set; }
+    [Parameter] public string ValorMes2 { get; set; }
+    [Parameter] public EventCallback<(string,double)> CambioValor { get; set; }
+
+    async Task CambioValorMes1()
+    {
+        
+    }
+
+}

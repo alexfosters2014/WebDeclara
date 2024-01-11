@@ -1,0 +1,26 @@
+﻿
+.boxIRPFEdicion{
+    padding: 0 10px;
+}
+
+.boxIRPFEdicion h3 {
+    color: forestgreen;
+}
+
+
+.boxIRPFEdicion input {
+   width: 48%;
+   
+}
+
+.boxIRPFEdicion p {
+  margin:0;
+  padding:0;
+}
+
+.recuadro {
+    box-shadow: 1px 1px 8px -4px rgba(0,0,0,0.75);
+    padding:10px;
+    border-radius:10px;
+}
+

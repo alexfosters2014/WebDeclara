@@ -1,0 +1,250 @@
+﻿@page "/NuevoIRPF"
+
+<section class="boxIRPFEdicion" >
+
+     <h3>Ingresos</h3>
+
+    <article class="recuadro">
+       
+
+        <h5>Ingresos fuera de la relación de dependencia</h5>
+
+        <p>Total ingresos brutos mensuales</p>
+         <div class="d-flex justify-content-between">
+            <input type="number" step="0.1" placeholder="Mes1" class="form-control" @bind-value="ImpuestoBimensual.DeclaracionMes1.IngIndependiente" />
+            <input type="number" step="0.1" placeholder="Mes2" class="form-control" @bind-value="ImpuestoBimensual.DeclaracionMes2.IngIndependiente" />
+        </div>
+
+    </article>
+
+
+    <article class="recuadro">
+        <h5>Ingresos en relación de dependencia (excl. aguinaldo)</h5>
+
+        <p>Ingresos nominales mensual gravados con CESS</p>
+        <div class="d-flex justify-content-between">
+            <input type="number" step="0.1" placeholder="Mes1" class="form-control" @bind-value="ImpuestoBimensual.DeclaracionMes1.IngDependenciaCess" />
+            <input type="number" step="0.1" placeholder="Mes2" class="form-control" @bind-value="ImpuestoBimensual.DeclaracionMes2.IngDependenciaCess" />
+        </div>
+
+        <p>Ingresos mensuales no grabado con CESS (excl. SV)</p>
+        <div class="d-flex justify-content-between">
+            <input type="number" step="0.1" placeholder="Mes1" class="form-control" @bind-value="ImpuestoBimensual.DeclaracionMes1.IngDependenciaNoCess" />
+            <input type="number" step="0.1" placeholder="Mes2" class="form-control" @bind-value="ImpuestoBimensual.DeclaracionMes2.IngDependenciaNoCess" />
+        </div>
+
+        <p>Salario vacacional</p>
+        <div class="d-flex justify-content-between">
+            <input type="number" step="0.1" placeholder="Mes1" class="form-control" @bind-value="ImpuestoBimensual.DeclaracionMes1.IngSalVacacional" />
+            <input type="number" step="0.1" placeholder="Mes2" class="form-control" @bind-value="ImpuestoBimensual.DeclaracionMes2.IngSalVacacional" />
+        </div>
+
+        <p>Otros ingresos</p>
+        <div class="d-flex justify-content-between">
+            <input type="number" step="0.1" placeholder="Mes1" class="form-control" @bind-value="ImpuestoBimensual.DeclaracionMes1.IngOtros" />
+            <input type="number" step="0.1" placeholder="Mes2" class="form-control" @bind-value="ImpuestoBimensual.DeclaracionMes2.IngOtros" />
+        </div>
+
+    </article>
+
+
+    <h3>Deducciones</h3>
+    
+    <article class="recuadro">
+       
+
+        <h5>Deducción para personas a cargo</h5>
+
+        <p>Sin discapacidad (menores) 100%</p>
+         <div class="d-flex justify-content-between">
+            <input type="number" step="0.1" placeholder="Mes1" class="form-control" @bind-value="ImpuestoBimensual.DeclaracionMes1.DeduccionSDmenores" />
+            <input type="number" step="0.1" placeholder="Mes2" class="form-control" @bind-value="ImpuestoBimensual.DeclaracionMes2.DeduccionSDmenores" />
+        </div>
+
+        <p>Con discapacidad 100%</p>
+        <div class="d-flex justify-content-between">
+            <input type="number" step="0.1" placeholder="Mes1" class="form-control" @bind-value="ImpuestoBimensual.DeclaracionMes1.DeduccionCD" />
+            <input type="number" step="0.1" placeholder="Mes2" class="form-control" @bind-value="ImpuestoBimensual.DeclaracionMes2.DeduccionCD" />
+        </div>
+
+        <p>Sin discapacidad (menores) 50%</p>
+        <div class="d-flex justify-content-between">
+            <input type="number" step="0.1" placeholder="Mes1" class="form-control" @bind-value="ImpuestoBimensual.DeclaracionMes1.DeduccionSDMenoresCincuenta" />
+            <input type="number" step="0.1" placeholder="Mes2" class="form-control" @bind-value="ImpuestoBimensual.DeclaracionMes2.DeduccionSDMenoresCincuenta" />
+        </div>
+
+        <p>Con discapacidad 50%</p>
+        <div class="d-flex justify-content-between">
+            <input type="number" step="0.1" placeholder="Mes1" class="form-control" @bind-value="ImpuestoBimensual.DeclaracionMes1.DeduccionCDCincuenta" />
+            <input type="number" step="0.1" placeholder="Mes2" class="form-control" @bind-value="ImpuestoBimensual.DeclaracionMes2.DeduccionCDCincuenta" />
+        </div>
+
+    </article>
+
+
+    <article class="recuadro">
+
+
+        <h5>Aportes al fondo de solidaridad, CJPPU y Caja Notarial</h5>
+
+        <p>Fondo de solidariadad</p>
+        <div class="d-flex justify-content-between">
+
+            <select @onchange="CambioFSMes1" placeholder="Mes1" class="form-control">
+                <option value="0" selected>0 BPC</option>
+                @foreach (var tipoFS in Parametros.TipoFondoSolidaridad)
+                {
+                    <option value="@tipoFS.Value">@tipoFS.Key</option>
+                }
+            </select>
+
+            <select @onchange="CambioFSMes2" placeholder="Mes2" class="form-control">
+                <option value="0" selected>0 BPC</option>
+                @foreach (var tipoFS in Parametros.TipoFondoSolidaridad)
+                {
+                    <option value="@tipoFS.Value">@tipoFS.Key</option>
+                }
+            </select>
+        </div>
+
+
+        <p>Adicional Fondo Solidaridad</p>
+        <div class="d-flex justify-content-between">
+
+            <select @onchange="AdicionalFS_MES1" placeholder="Mes1" class="form-control">
+                <option value="SI" selected>SI</option>
+                <option value="NO" selected>NO</option>
+            </select>
+
+            <select @onchange="AdicionalFS_MES2" placeholder="Mes1" class="form-control">
+                <option value="SI" selected>SI</option>
+                <option value="NO" selected>NO</option>
+            </select>
+        </div>
+
+        <p>Aporte mensual a CJPPU o caja notarial</p>
+        <div class="d-flex justify-content-between">
+            <input type="number" step="0.1" placeholder="Mes1" class="form-control" @bind-value="ImpuestoBimensual.DeclaracionMes1.DeduccionCJPPU" />
+            <input type="number" step="0.1" placeholder="Mes2" class="form-control" @bind-value="ImpuestoBimensual.DeclaracionMes2.DeduccionCJPPU" />
+        </div>
+
+    </article>
+
+    
+    <article class="recuadro">
+        <h5>Aportes a la seguridad social</h5>
+
+        <p>Aportes jubitalorios</p>
+        <div class="d-flex justify-content-between">
+            <input type="number" step="0.1" placeholder="Mes1" class="form-control" @bind-value="ImpuestoBimensual.DeclaracionMes1.DeduccionJubilatorio" />
+            <input type="number" step="0.1" placeholder="Mes2" class="form-control" @bind-value="ImpuestoBimensual.DeclaracionMes2.DeduccionJubilatorio" />
+        </div>
+
+        <p>Aportes FONASA</p>
+        <div class="d-flex justify-content-between">
+            <input type="number" step="0.1" placeholder="Mes1" class="form-control" @bind-value="ImpuestoBimensual.DeclaracionMes1.DeduccionFonasa" />
+            <input type="number" step="0.1" placeholder="Mes2" class="form-control" @bind-value="ImpuestoBimensual.DeclaracionMes2.DeduccionFonasa" />
+        </div>
+
+        <p>Aporte FRL</p>
+        <div class="d-flex justify-content-between">
+            <input type="number" step="0.1" placeholder="Mes1" class="form-control" @bind-value="ImpuestoBimensual.DeclaracionMes1.DeduccionFRL" />
+            <input type="number" step="0.1" placeholder="Mes2" class="form-control" @bind-value="ImpuestoBimensual.DeclaracionMes2.DeduccionFRL" />
+        </div>
+
+    </article>
+
+    <article class="recuadro">
+    
+        <p>Otras deducciones (mensual)</p>
+        <div class="d-flex justify-content-between">
+            <input type="number" step="0.1" placeholder="Mes1" class="form-control" @bind-value="ImpuestoBimensual.DeclaracionMes1.DeduccionOtros" />
+            <input type="number" step="0.1" placeholder="Mes2" class="form-control" @bind-value="ImpuestoBimensual.DeclaracionMes2.DeduccionOtros" />
+        </div>
+
+    </article>
+
+
+    <article class="recuadro">
+
+        <h5>Determinación del anticipo</h5>
+
+        <p>Opción reducción retención NF</p>
+        <div class="d-flex justify-content-between">
+
+            <select @onchange="OpcionReduccionNF" placeholder="Mes1" class="form-control">
+                <option value="0.95" selected>SI</option>
+                <option value="1" selected>NO</option>
+            </select>
+        </div>
+
+
+        <p>Retenciones por terceros</p>
+        <div class="d-flex justify-content-between">
+            <input type="number" step="0.1" placeholder="Mes1" class="form-control" @bind-value="ImpuestoBimensual.DeclaracionMes1.AnticipoRetenciones" />
+            <input type="number" step="0.1" placeholder="Mes2" class="form-control" @bind-value="ImpuestoBimensual.DeclaracionMes2.AnticipoRetenciones" />
+        </div>
+
+        <p>Excedente del bimestre anterior</p>
+        <div class="d-flex justify-content-between">
+            <input type="number" step="0.1" placeholder="Mes1" class="form-control" @bind-value="ImpuestoBimensual.AnticipoExcedente" />
+        </div>
+
+
+
+    </article>
+
+        <button>Guardar</button>
+
+</section>
+
+
+
+@code {
+    private BimensualIRPF_DTO ImpuestoBimensual = new();
+
+
+    void CambioFSMes1(ChangeEventArgs e)
+    {
+        double fsValor = double.Parse(e.Value.ToString());
+
+        double BPC = 2330; //cambiarlo de manera programatica
+
+        ImpuestoBimensual.DeclaracionMes1.DeduccionFondoSolidaridad = BPC * fsValor;
+    }
+
+    void CambioFSMes2(ChangeEventArgs e)
+    {
+        double fsValor = double.Parse(e.Value.ToString());
+
+        double BPC = 2330; //cambiarlo de manera programatica
+
+        ImpuestoBimensual.DeclaracionMes2.DeduccionFondoSolidaridad = BPC * fsValor;
+    }
+
+
+    private void AdicionalFS_MES1(ChangeEventArgs e)
+    {
+        string valor = e.Value.ToString();
+        //tengo que obtener el valor del fondo del adicional de fondo de solidaridad
+        double valorAdicional = 0;
+
+        ImpuestoBimensual.DeclaracionMes1.DeduccionFondoSolidaridadAdicional = valor == "SI" ? valorAdicional : 0;
+
+    }
+    private void AdicionalFS_MES2(ChangeEventArgs e)
+    {
+        string valor = e.Value.ToString();
+        //tengo que obtener el valor del fondo del adicional de fondo de solidaridad
+        double valorAdicional = 0;
+
+        ImpuestoBimensual.DeclaracionMes2.DeduccionFondoSolidaridadAdicional = valor == "SI" ? valorAdicional : 0;
+    }
+    private void OpcionReduccionNF(ChangeEventArgs e)
+    {
+        double valorNF = double.Parse(e.Value.ToString());
+        ImpuestoBimensual.AnticipoNF_SI_NO = valorNF == 1 ? false : true;
+        ImpuestoBimensual.DeclaracionMes1.AnticipoMensual = 0 * valorNF;
+        ImpuestoBimensual.DeclaracionMes2.AnticipoMensual = 0 * valorNF;
+    }
+}

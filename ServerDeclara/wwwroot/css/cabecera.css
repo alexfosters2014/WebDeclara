@@ -1,0 +1,32 @@
+﻿.cabecera {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    margin: 0;
+    padding: 0;
+    background-color: var(--color-primario);
+    height: 8vh;
+    z-index: 1000;
+    color: white;
+}
+
+.cabecera-separador {
+    position: fixed;
+    left: 0;
+    top: 8.5vh;
+    width: 100vw;
+    background-color: var(--color-primario);
+    height: 5px;
+    z-index: 1001;
+}
+
+.cabecera-blanca {
+    position: fixed;
+    left: 0;
+    top: 8vh;
+    width: 100vw;
+    background-color: white;
+    height: 5px;
+    z-index: 1002;
+}

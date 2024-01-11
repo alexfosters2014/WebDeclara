@@ -1,0 +1,44 @@
+﻿
+.menu {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100vw;
+    margin: 0;
+    padding: 0;
+    background-color: var(--color-primario);
+    height: 8vh;
+    z-index: 1000;
+    color: white;
+    font-size: 0.9rem;
+}
+
+.menu img {
+    height: 25px;
+    width: auto;
+    filter: invert();
+}
+
+.menu-separador {
+    position: fixed;
+    left: 0;
+    bottom: 8.5vh;
+    width: 100vw;
+    background-color: var(--color-primario);
+    height: 5px;
+    z-index: 1001;
+}
+
+.selector {
+    filter: invert(80%);
+}
+
+.menu-franja-blanca {
+    position: fixed;
+    left: 0;
+    bottom: 8vh;
+    width: 100vw;
+    background-color: white;
+    height: 5px;
+    z-index: 1002;
+}
