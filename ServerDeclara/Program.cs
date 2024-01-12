@@ -2,6 +2,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using ServerDeclara.Components;
 using ServerDeclara.Datos;
+using ServerDeclara.Servicios;
+using ServerDeclara.Servicios_de_datos;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +16,13 @@ string conexionBaseDatosAzure = "ConnectionStrings:AzureBD";
 
 builder.Services.AddDbContext<DeclaraContext>(options =>
     options.UseSqlServer(builder.Configuration.GetValue<string>(conexionBaseDatosLocal)));
+
+
+builder.Services.AddAutoMapper(typeof(Program));
+
+builder.Services.AddScoped<UsuarioServicio>();
+builder.Services.AddScoped<UsuarioRepositorio>();
+
 
 
 var app = builder.Build();

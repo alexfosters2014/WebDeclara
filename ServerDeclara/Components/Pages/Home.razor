@@ -1,8 +1,33 @@
 ﻿@page "/"
+@inject NavigationManager _nav
+@inject UsuarioServicio _usuarioServicio
 
-<PageTitle>Home</PageTitle>
 
-<h1>Hello, world!</h1>
+<PageTitle></PageTitle>
 
-Welcome to your new app.
-<h1>Hello, world!</h1>
+<button @onclick="AutentificarmeEnDuro">Iniciar Sesión con Google</button>
+
+
+@code{
+
+    private void AutentificarmeConGoogle()
+    {
+        var url = "https://accounts.google.com/o/oauth2/v2/auth?";
+        url += "client_id=446867793846-0rp377qf18vd0ineseiftohhb7mi0852.apps.googleusercontent.com";
+        url += "&redirect_uri=https://localhost:7123/";
+        url += "&response_type=id_token";
+        url += "&scope=openid%20profile%20email&nonce=RANDOM_NONCE&state=RANDOM_STATE";
+
+        _nav.NavigateTo(url);
+
+    }
+
+    private async Task AutentificarmeEnDuro()
+    {
+        bool autentificado = await _usuarioServicio.LoginRegistro("alexfosters2014@gmail.com", "123456");
+        if (autentificado)
+        {
+            _nav.NavigateTo("/vistaIva");
+        }
+    }
+}
