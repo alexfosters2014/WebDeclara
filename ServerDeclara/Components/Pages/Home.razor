@@ -1,4 +1,5 @@
-﻿@page "/"
+﻿@layout LoginLayout
+@page "/"
 @inject NavigationManager _nav
 @inject UsuarioServicio _usuarioServicio
 
@@ -27,7 +28,7 @@
         bool autentificado = await _usuarioServicio.LoginRegistro("alexfosters2014@gmail.com", "123456");
         if (autentificado)
         {
-            _nav.NavigateTo("/vistaIva");
+            _nav.NavigateTo("/Principal");
         }
     }
 }

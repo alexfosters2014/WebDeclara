@@ -5,8 +5,10 @@ namespace ServerDeclara.Datos.Datos_Iniciales
 {
     public class ParametroSeed : IEntityTypeConfiguration<Parametro>
     {
+      
         public void Configure(EntityTypeBuilder<Parametro> builder)
         {
+         
           builder.HasData(
               new Parametro()
               {
@@ -20,7 +22,8 @@ namespace ServerDeclara.Datos.Datos_Iniciales
                   Tasa=0,
                   Atributo="",
                   Formula="",
-                  Tipo="RENTA"
+                  Tipo="RENTA",
+                  HistorialParametroId=1
               }, 
               new Parametro()
               {
@@ -34,7 +37,8 @@ namespace ServerDeclara.Datos.Datos_Iniciales
                   Tasa = 0.1,
                   Atributo = "",
                   Formula = "",
-                  Tipo = "RENTA"
+                  Tipo = "RENTA",
+                  HistorialParametroId = 1
               },
                new Parametro()
                {
@@ -48,7 +52,8 @@ namespace ServerDeclara.Datos.Datos_Iniciales
                    Tasa = 0.15,
                    Atributo = "",
                    Formula = "",
-                   Tipo = "RENTA"
+                   Tipo = "RENTA",
+                   HistorialParametroId = 1
                },
                  new Parametro()
                  {
@@ -62,7 +67,8 @@ namespace ServerDeclara.Datos.Datos_Iniciales
                      Tasa = 0.24,
                      Atributo = "",
                      Formula = "",
-                     Tipo = "RENTA"
+                     Tipo = "RENTA",
+                     HistorialParametroId = 1
                  },
                    new Parametro()
                    {
@@ -76,7 +82,8 @@ namespace ServerDeclara.Datos.Datos_Iniciales
                        Tasa = 0.25,
                        Atributo = "",
                        Formula = "",
-                       Tipo = "RENTA"
+                       Tipo = "RENTA",
+                       HistorialParametroId = 1
                    },
                      new Parametro()
                      {
@@ -90,7 +97,8 @@ namespace ServerDeclara.Datos.Datos_Iniciales
                          Tasa = 0.27,
                          Atributo = "",
                          Formula = "",
-                         Tipo = "RENTA"
+                         Tipo = "RENTA",
+                         HistorialParametroId = 1
                      },
                       new Parametro()
                       {
@@ -104,7 +112,8 @@ namespace ServerDeclara.Datos.Datos_Iniciales
                           Tasa = 0.31,
                           Atributo = "",
                           Formula = "",
-                          Tipo = "RENTA"
+                          Tipo = "RENTA",
+                          HistorialParametroId = 1
                       },
 
                        new Parametro()
@@ -119,7 +128,8 @@ namespace ServerDeclara.Datos.Datos_Iniciales
                            Tasa = 0.36,
                            Atributo = "",
                            Formula = "",
-                           Tipo = "RENTA"
+                           Tipo = "RENTA",
+                           HistorialParametroId = 1
                        },
                         new Parametro()
                         {
@@ -127,14 +137,60 @@ namespace ServerDeclara.Datos.Datos_Iniciales
                             Descripcion = "BPC",
                             ValidezParametrosDesde = new DateTime(2024, 01, 01),
                             ValidezParametrosHasta = new DateTime(2024, 12, 31),
-                            Orden = 1,
+                            Orden = 9,
                             IngresosDesde = 0,
                             IngresosHasta = 0,
                             Tasa = 5660,
                             Atributo = "",
                             Formula = "",
-                            Tipo = "BPC"
-                        }
+                            Tipo = "BPC",
+                            HistorialParametroId = 1
+                        },
+                         new Parametro()
+                         {
+                             Id = 10,
+                             Descripcion = "Deducción legal 30%",
+                             ValidezParametrosDesde = new DateTime(2024, 01, 01),
+                             ValidezParametrosHasta = new DateTime(2024, 12, 31),
+                             Orden = 10,
+                             IngresosDesde = 0,
+                             IngresosHasta = 0,
+                             Tasa = 0,
+                             Atributo = "DeduccionLegalIngresos",
+                             Formula = "IngIndependiente * -0.3",
+                             Tipo = "CALCULO",
+                             HistorialParametroId = 1
+                         },
+                            new Parametro()
+                            {
+                                Id = 11,
+                                Descripcion = "Total ingresos fuera de la relación de dependencia",
+                                ValidezParametrosDesde = new DateTime(2024, 01, 01),
+                                ValidezParametrosHasta = new DateTime(2024, 12, 31),
+                                Orden = 11,
+                                IngresosDesde = 0,
+                                IngresosHasta = 0,
+                                Tasa = 0,
+                                Atributo = "IngTotalIndependiente",
+                                Formula = "IngIndependiente + DeduccionLegalIngresos",
+                                Tipo = "CALCULO",
+                                HistorialParametroId = 1
+                            },
+                            new Parametro()
+                            {
+                                Id = 12,
+                                Descripcion = "Incremento del 6%",
+                                ValidezParametrosDesde = new DateTime(2024, 01, 01),
+                                ValidezParametrosHasta = new DateTime(2024, 12, 31),
+                                Orden = 12,
+                                IngresosDesde = 0,
+                                IngresosHasta = 0,
+                                Tasa = 0,
+                                Atributo = "IngIncrementoSeisPorciento",
+                                Formula = "",
+                                Tipo = "CALCULO",
+                                HistorialParametroId = 1
+                            }
 
 
               );

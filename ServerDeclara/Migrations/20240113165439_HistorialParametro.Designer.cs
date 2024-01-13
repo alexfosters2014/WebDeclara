@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ServerDeclara.Datos;
 
@@ -11,9 +12,11 @@ using ServerDeclara.Datos;
 namespace ServerDeclara.Migrations
 {
     [DbContext(typeof(DeclaraContext))]
-    partial class DeclaraContextModelSnapshot : ModelSnapshot
+    [Migration("20240113165439_HistorialParametro")]
+    partial class HistorialParametro
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -258,15 +261,7 @@ namespace ServerDeclara.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("HistorialParametros");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Descripcion = "Periodo enero-diciembre 2024",
-                            Fecha = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        });
+                    b.ToTable("HistorialParametro");
                 });
 
             modelBuilder.Entity("ServerDeclara.Datos.Parametro", b =>
@@ -286,7 +281,7 @@ namespace ServerDeclara.Migrations
                     b.Property<string>("Formula")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("HistorialParametroId")
+                    b.Property<int?>("HistorialParametroId")
                         .HasColumnType("int");
 
                     b.Property<double>("IngresosDesde")
@@ -323,7 +318,6 @@ namespace ServerDeclara.Migrations
                             Atributo = "",
                             Descripcion = "0 A 7 BPC",
                             Formula = "",
-                            HistorialParametroId = 1,
                             IngresosDesde = 0.0,
                             IngresosHasta = 7.0,
                             Orden = 1,
@@ -338,7 +332,6 @@ namespace ServerDeclara.Migrations
                             Atributo = "",
                             Descripcion = "7 A 10 BPC",
                             Formula = "",
-                            HistorialParametroId = 1,
                             IngresosDesde = 7.0,
                             IngresosHasta = 10.0,
                             Orden = 2,
@@ -353,7 +346,6 @@ namespace ServerDeclara.Migrations
                             Atributo = "",
                             Descripcion = "10 A 15 BPC",
                             Formula = "",
-                            HistorialParametroId = 1,
                             IngresosDesde = 10.0,
                             IngresosHasta = 15.0,
                             Orden = 3,
@@ -368,7 +360,6 @@ namespace ServerDeclara.Migrations
                             Atributo = "",
                             Descripcion = "15 A 30 BPC",
                             Formula = "",
-                            HistorialParametroId = 1,
                             IngresosDesde = 15.0,
                             IngresosHasta = 30.0,
                             Orden = 4,
@@ -383,7 +374,6 @@ namespace ServerDeclara.Migrations
                             Atributo = "",
                             Descripcion = "30 A 50 BPC",
                             Formula = "",
-                            HistorialParametroId = 1,
                             IngresosDesde = 30.0,
                             IngresosHasta = 50.0,
                             Orden = 5,
@@ -398,7 +388,6 @@ namespace ServerDeclara.Migrations
                             Atributo = "",
                             Descripcion = "50 A 75 BPC",
                             Formula = "",
-                            HistorialParametroId = 1,
                             IngresosDesde = 50.0,
                             IngresosHasta = 75.0,
                             Orden = 6,
@@ -413,7 +402,6 @@ namespace ServerDeclara.Migrations
                             Atributo = "",
                             Descripcion = "75 A 115 BPC",
                             Formula = "",
-                            HistorialParametroId = 1,
                             IngresosDesde = 75.0,
                             IngresosHasta = 115.0,
                             Orden = 7,
@@ -428,7 +416,6 @@ namespace ServerDeclara.Migrations
                             Atributo = "",
                             Descripcion = "> BPC",
                             Formula = "",
-                            HistorialParametroId = 1,
                             IngresosDesde = 115.0,
                             IngresosHasta = 20000.0,
                             Orden = 8,
@@ -443,7 +430,6 @@ namespace ServerDeclara.Migrations
                             Atributo = "",
                             Descripcion = "BPC",
                             Formula = "",
-                            HistorialParametroId = 1,
                             IngresosDesde = 0.0,
                             IngresosHasta = 0.0,
                             Orden = 9,
@@ -458,7 +444,6 @@ namespace ServerDeclara.Migrations
                             Atributo = "DeduccionLegalIngresos",
                             Descripcion = "Deducción legal 30%",
                             Formula = "IngIndependiente * -0.3",
-                            HistorialParametroId = 1,
                             IngresosDesde = 0.0,
                             IngresosHasta = 0.0,
                             Orden = 10,
@@ -473,7 +458,6 @@ namespace ServerDeclara.Migrations
                             Atributo = "IngTotalIndependiente",
                             Descripcion = "Total ingresos fuera de la relación de dependencia",
                             Formula = "IngIndependiente + DeduccionLegalIngresos",
-                            HistorialParametroId = 1,
                             IngresosDesde = 0.0,
                             IngresosHasta = 0.0,
                             Orden = 11,
@@ -488,7 +472,6 @@ namespace ServerDeclara.Migrations
                             Atributo = "IngIncrementoSeisPorciento",
                             Descripcion = "Incremento del 6%",
                             Formula = "",
-                            HistorialParametroId = 1,
                             IngresosDesde = 0.0,
                             IngresosHasta = 0.0,
                             Orden = 12,
@@ -573,9 +556,7 @@ namespace ServerDeclara.Migrations
                 {
                     b.HasOne("ServerDeclara.Datos.HistorialParametro", "HistorialParametro")
                         .WithMany()
-                        .HasForeignKey("HistorialParametroId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("HistorialParametroId");
 
                     b.Navigation("HistorialParametro");
                 });

@@ -13,6 +13,7 @@ namespace ServerDeclara.Mapper
             CreateMap<DeclaracionMensualIRPF, DeclaracionMensualIRPFDTO>().ReverseMap();
             CreateMap<EntradaIVADiario, EntradaIVADiarioDTO>().ReverseMap();
             CreateMap<Parametro, ParametroDTO>().ReverseMap();
+            CreateMap<HistorialParametro, HistorialParametrosDTO>().ReverseMap();
             CreateMap<Usuario, UsuarioDTO>().ReverseMap();
         }
     }

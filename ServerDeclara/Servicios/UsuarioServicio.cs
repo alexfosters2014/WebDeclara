@@ -13,6 +13,11 @@ namespace ServerDeclara.Servicios
             this.usuarioRepositorio = usuarioRepositorio;
         }
 
+        public UsuarioDTO GetUsuarioLogueado()
+        {
+            return usuarioLogueado;
+        }
+
         public async Task<bool> LoginRegistro(string email, string idGoogle)
         {
             // llamar al repositorio para loguear o registrar automaticamente
