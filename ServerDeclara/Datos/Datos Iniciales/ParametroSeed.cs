@@ -235,7 +235,82 @@ namespace ServerDeclara.Datos.Datos_Iniciales
                                    Formula = "(DeduccionSDmenores * 20 * BPC + DeduccionCD * 40 * BPC) / 12 + (DeduccionSDMenoresCincuenta * 20 * BPC + DeduccionCDCincuenta * 40 * BPC) * 0.5 / 12",
                                    Tipo = "CALCULO",
                                    HistorialParametroId = 1
-                               }
+                               },
+                                new Parametro()
+                                {
+                                    Id = 16,
+                                    Descripcion = "Deduccion de fondo de solidaridad",
+                                    ValidezParametrosDesde = new DateTime(2024, 01, 01),
+                                    ValidezParametrosHasta = new DateTime(2024, 12, 31),
+                                    Orden = 16,
+                                    IngresosDesde = 0,
+                                    IngresosHasta = 0,
+                                    Tasa = 0,
+                                    Atributo = "DeduccionFondoSolidaridad",
+                                    Formula = "CantidadBPCParaFS * BPC",
+                                    Tipo = "CALCULO",
+                                    HistorialParametroId = 1
+                                },
+                                new Parametro()
+                                {
+                                    Id = 17,
+                                    Descripcion = "Total de deducciones",
+                                    ValidezParametrosDesde = new DateTime(2024, 01, 01),
+                                    ValidezParametrosHasta = new DateTime(2024, 12, 31),
+                                    Orden = 17,
+                                    IngresosDesde = 0,
+                                    IngresosHasta = 0,
+                                    Tasa = 0,
+                                    Atributo = "DeduccionTotal",
+                                    Formula = "DeduccionTotalDeducir + DeduccionFondoSolidaridad + DeduccionFondoSolidaridadAdicional + DeduccionCJPPU + DeduccionJubilatorio + DeduccionFonasa + DeduccionFRL + DeduccionOtros",
+                                    Tipo = "CALCULO",
+                                    HistorialParametroId = 1
+                                },
+                                 new Parametro()
+                                 {
+                                     Id = 18,
+                                     Descripcion = "Adicional fondo de solidaridad",
+                                     ValidezParametrosDesde = new DateTime(2024, 01, 01),
+                                     ValidezParametrosHasta = new DateTime(2024, 12, 31),
+                                     Orden = 18,
+                                     IngresosDesde = 0,
+                                     IngresosHasta = 0,
+                                     Tasa = 0,
+                                     Atributo = "DeduccionFondoSolidaridadAdicional",
+                                     Formula = "IFF(AdicionalFS = true,5/3 * BPC / 12, 0)",
+                                     Tipo = "CALCULO",
+                                     HistorialParametroId = 1
+                                 },
+                                  new Parametro()
+                                  {
+                                      Id = 19,
+                                      Descripcion = "Anticipo Mensual",
+                                      ValidezParametrosDesde = new DateTime(2024, 01, 01),
+                                      ValidezParametrosHasta = new DateTime(2024, 12, 31),
+                                      Orden = 19,
+                                      IngresosDesde = 0,
+                                      IngresosHasta = 0,
+                                      Tasa = 0,
+                                      Atributo = "AnticipoMensual",
+                                      Formula = "IFF(AnticipoNF = false, LiquidacionMes, LiquidacionMes * 0.95)",
+                                      Tipo = "CALCULO",
+                                      HistorialParametroId = 1
+                                  },
+                                    new Parametro()
+                                    {
+                                        Id = 20,
+                                        Descripcion = "Tasa liquidacion",
+                                        ValidezParametrosDesde = new DateTime(2024, 01, 01),
+                                        ValidezParametrosHasta = new DateTime(2024, 12, 31),
+                                        Orden = 20,
+                                        IngresosDesde = 0,
+                                        IngresosHasta = 0,
+                                        Tasa = 0,
+                                        Atributo = "TasaDeduccion",
+                                        Formula = "IFF(IngresosExc > (15 * BPC), 0.8, 0.14)",
+                                        Tipo = "CALCULO",
+                                        HistorialParametroId = 1
+                                    }
 
 
               );

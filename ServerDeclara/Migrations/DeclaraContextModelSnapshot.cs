@@ -492,11 +492,131 @@ namespace ServerDeclara.Migrations
                             Id = 12,
                             Atributo = "IngIncrementoSeisPorciento",
                             Descripcion = "Incremento del 6%",
-                            Formula = "",
+                            Formula = "IFF((IngDependenciaCess + IngDependenciaNoCess + IngSalVacacional) > (BPC * 10), IngDependenciaCess * 0.06, 0)",
                             HistorialParametroId = 1,
                             IngresosDesde = 0.0,
                             IngresosHasta = 0.0,
                             Orden = 12,
+                            Tasa = 0.0,
+                            Tipo = "CALCULO",
+                            ValidezParametrosDesde = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ValidezParametrosHasta = new DateTime(2024, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 13,
+                            Atributo = "IngTotalDependencia",
+                            Descripcion = "Ingresos totales en realaciòn de dependencia",
+                            Formula = "IngDependenciaCess + IngDependenciaNoCess + IngSalVacacional + IngIncrementoSeisPorciento",
+                            HistorialParametroId = 1,
+                            IngresosDesde = 0.0,
+                            IngresosHasta = 0.0,
+                            Orden = 13,
+                            Tasa = 0.0,
+                            Tipo = "CALCULO",
+                            ValidezParametrosDesde = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ValidezParametrosHasta = new DateTime(2024, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 14,
+                            Atributo = "IngParaAnticipo",
+                            Descripcion = "Ingreso computable para anticipo",
+                            Formula = "IngTotalIndependiente + IngTotalDependencia + IngOtros",
+                            HistorialParametroId = 1,
+                            IngresosDesde = 0.0,
+                            IngresosHasta = 0.0,
+                            Orden = 14,
+                            Tasa = 0.0,
+                            Tipo = "CALCULO",
+                            ValidezParametrosDesde = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ValidezParametrosHasta = new DateTime(2024, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 15,
+                            Atributo = "DeduccionTotalDeducir",
+                            Descripcion = "Importe a deducir",
+                            Formula = "(DeduccionSDmenores * 20 * BPC + DeduccionCD * 40 * BPC) / 12 + (DeduccionSDMenoresCincuenta * 20 * BPC + DeduccionCDCincuenta * 40 * BPC) * 0.5 / 12",
+                            HistorialParametroId = 1,
+                            IngresosDesde = 0.0,
+                            IngresosHasta = 0.0,
+                            Orden = 15,
+                            Tasa = 0.0,
+                            Tipo = "CALCULO",
+                            ValidezParametrosDesde = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ValidezParametrosHasta = new DateTime(2024, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 16,
+                            Atributo = "DeduccionFondoSolidaridad",
+                            Descripcion = "Deduccion de fondo de solidaridad",
+                            Formula = "CantidadBPCParaFS * BPC",
+                            HistorialParametroId = 1,
+                            IngresosDesde = 0.0,
+                            IngresosHasta = 0.0,
+                            Orden = 16,
+                            Tasa = 0.0,
+                            Tipo = "CALCULO",
+                            ValidezParametrosDesde = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ValidezParametrosHasta = new DateTime(2024, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 17,
+                            Atributo = "DeduccionTotal",
+                            Descripcion = "Total de deducciones",
+                            Formula = "DeduccionTotalDeducir + DeduccionFondoSolidaridad + DeduccionFondoSolidaridadAdicional + DeduccionCJPPU + DeduccionJubilatorio + DeduccionFonasa + DeduccionFRL + DeduccionOtros",
+                            HistorialParametroId = 1,
+                            IngresosDesde = 0.0,
+                            IngresosHasta = 0.0,
+                            Orden = 17,
+                            Tasa = 0.0,
+                            Tipo = "CALCULO",
+                            ValidezParametrosDesde = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ValidezParametrosHasta = new DateTime(2024, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 18,
+                            Atributo = "DeduccionFondoSolidaridadAdicional",
+                            Descripcion = "Adicional fondo de solidaridad",
+                            Formula = "IFF(AdicionalFS = true,5/3 * BPC / 12, 0)",
+                            HistorialParametroId = 1,
+                            IngresosDesde = 0.0,
+                            IngresosHasta = 0.0,
+                            Orden = 18,
+                            Tasa = 0.0,
+                            Tipo = "CALCULO",
+                            ValidezParametrosDesde = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ValidezParametrosHasta = new DateTime(2024, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 19,
+                            Atributo = "AnticipoMensual",
+                            Descripcion = "Anticipo Mensual",
+                            Formula = "IFF(AnticipoNF = false, LiquidacionMes, LiquidacionMes * 0.95)",
+                            HistorialParametroId = 1,
+                            IngresosDesde = 0.0,
+                            IngresosHasta = 0.0,
+                            Orden = 19,
+                            Tasa = 0.0,
+                            Tipo = "CALCULO",
+                            ValidezParametrosDesde = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ValidezParametrosHasta = new DateTime(2024, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 20,
+                            Atributo = "TasaDeduccion",
+                            Descripcion = "Tasa liquidacion",
+                            Formula = "IFF(IngresosExc > (15 * BPC), 0.8, 0.14)",
+                            HistorialParametroId = 1,
+                            IngresosDesde = 0.0,
+                            IngresosHasta = 0.0,
+                            Orden = 20,
                             Tasa = 0.0,
                             Tipo = "CALCULO",
                             ValidezParametrosDesde = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -585,12 +705,17 @@ namespace ServerDeclara.Migrations
             modelBuilder.Entity("ServerDeclara.Datos.Parametro", b =>
                 {
                     b.HasOne("ServerDeclara.Datos.HistorialParametro", "HistorialParametro")
-                        .WithMany()
+                        .WithMany("Parametros")
                         .HasForeignKey("HistorialParametroId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("HistorialParametro");
+                });
+
+            modelBuilder.Entity("ServerDeclara.Datos.HistorialParametro", b =>
+                {
+                    b.Navigation("Parametros");
                 });
 #pragma warning restore 612, 618
         }

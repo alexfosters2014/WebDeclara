@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ServerDeclara.Datos.Datos_Iniciales;
-using ServerDeclara.Migrations;
 
 namespace ServerDeclara.Datos
 {

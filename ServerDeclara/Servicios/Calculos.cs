@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Metadata;
+using ServerDeclara.DTOs;
 using ServerDeclara.Utilidades;
 
 namespace ServerDeclara.Servicios
@@ -6,35 +7,34 @@ namespace ServerDeclara.Servicios
     public static class Calculos
     {
 
-        //public static double RentaMensual_Recusivo(List<Parametros> parametrosRenta, int indice, double ingAnticipo, double diferencia, double auxRenta, double impuestoValor, double BPC)
-        //{
-              
-        //    if (indice == parametros.Count)
-        //    {
-        //        return impuestoValor;
-        //    }
+        public static double RentaMensual_Recusivo(List<ParametroDTO> parametrosRenta, int indice, double ingAnticipo, double diferencia, double auxRenta, double impuestoValor, double BPC, int cantidadParametros)
+        {
 
-        //    if (indice == 0)
-        //    {
-        //        auxRenta = ingAnticipo;
-        //    }
-        //    else
-        //    {
-        //        auxRenta = auxRenta > diferencia ? auxRenta - diferencia : 0;
-        //    }
+            if (indice == cantidadParametros)
+            {
+                return impuestoValor;
+            }
 
-        //    diferencia = parametros[indice].RangoHasta * BPC - parametros[indice].RangoDesde * BPC;
+            if (indice == 0)
+            {
+                auxRenta = ingAnticipo;
+            }
+            else
+            {
+                auxRenta = auxRenta > diferencia ? auxRenta - diferencia : 0;
+            }
 
-        //    double ingresoMinimo = Math.Min(auxRenta, diferencia);
-        //    double valorImpuesto = ingresoMinimo * parametros[indice].Valor;
+            diferencia = parametrosRenta[indice].IngresosDesde * BPC - parametrosRenta[indice].IngresosHasta * BPC;
 
-        //    impuestoValor += Math.Round(valorImpuesto, 2);
+            double ingresoMinimo = Math.Min(auxRenta, diferencia);
+            double valorImpuesto = ingresoMinimo * parametrosRenta[indice].Tasa;
 
+            impuestoValor += Math.Round(valorImpuesto, 2);
 
-        //    indice++;
+            indice++;
 
-        //    return CaluloRentaMensual_Recusivo(parametros, indice, ingAnticipo, diferencia, auxRenta, impuestoValor);
+            return RentaMensual_Recusivo(parametrosRenta, indice, ingAnticipo, diferencia, auxRenta, impuestoValor, BPC, cantidadParametros);
 
-        //}
+        }
     }
 }
