@@ -187,10 +187,55 @@ namespace ServerDeclara.Datos.Datos_Iniciales
                                 IngresosHasta = 0,
                                 Tasa = 0,
                                 Atributo = "IngIncrementoSeisPorciento",
-                                Formula = "",
+                                Formula = "IFF((IngDependenciaCess + IngDependenciaNoCess + IngSalVacacional) > (BPC * 10), IngDependenciaCess * 0.06, 0)",
                                 Tipo = "CALCULO",
                                 HistorialParametroId = 1
-                            }
+                            },
+                              new Parametro()
+                              {
+                                  Id = 13,
+                                  Descripcion = "Ingresos totales en realaciòn de dependencia",
+                                  ValidezParametrosDesde = new DateTime(2024, 01, 01),
+                                  ValidezParametrosHasta = new DateTime(2024, 12, 31),
+                                  Orden = 13,
+                                  IngresosDesde = 0,
+                                  IngresosHasta = 0,
+                                  Tasa = 0,
+                                  Atributo = "IngTotalDependencia",
+                                  Formula = "IngDependenciaCess + IngDependenciaNoCess + IngSalVacacional + IngIncrementoSeisPorciento",
+                                  Tipo = "CALCULO",
+                                  HistorialParametroId = 1
+                              },
+                              new Parametro()
+                              {
+                                  Id = 14,
+                                  Descripcion = "Ingreso computable para anticipo",
+                                  ValidezParametrosDesde = new DateTime(2024, 01, 01),
+                                  ValidezParametrosHasta = new DateTime(2024, 12, 31),
+                                  Orden = 14,
+                                  IngresosDesde = 0,
+                                  IngresosHasta = 0,
+                                  Tasa = 0,
+                                  Atributo = "IngParaAnticipo",
+                                  Formula = "IngTotalIndependiente + IngTotalDependencia + IngOtros",
+                                  Tipo = "CALCULO",
+                                  HistorialParametroId = 1
+                              },
+                               new Parametro()
+                               {
+                                   Id = 15,
+                                   Descripcion = "Importe a deducir",
+                                   ValidezParametrosDesde = new DateTime(2024, 01, 01),
+                                   ValidezParametrosHasta = new DateTime(2024, 12, 31),
+                                   Orden = 15,
+                                   IngresosDesde = 0,
+                                   IngresosHasta = 0,
+                                   Tasa = 0,
+                                   Atributo = "DeduccionTotalDeducir",
+                                   Formula = "(DeduccionSDmenores * 20 * BPC + DeduccionCD * 40 * BPC) / 12 + (DeduccionSDMenoresCincuenta * 20 * BPC + DeduccionCDCincuenta * 40 * BPC) * 0.5 / 12",
+                                   Tipo = "CALCULO",
+                                   HistorialParametroId = 1
+                               }
 
 
               );

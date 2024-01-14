@@ -13,6 +13,8 @@ namespace ServerDeclara.DTOs
         public double AnticipoBimestre { get; set; } = 0;
 
         public bool AnticipoNF_SI_NO { get; set; } // NO-1 SI-0.95
+        public int HistorialParametroId { get; set; }
+        public HistorialParametroDTO HistorialParametro { get; set; }
 
     }
 }

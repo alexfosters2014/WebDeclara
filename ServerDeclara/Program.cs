@@ -23,6 +23,9 @@ builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddScoped<UsuarioServicio>();
 builder.Services.AddScoped<UsuarioRepositorio>();
 
+builder.Services.AddScoped<ParametroServicio>();
+builder.Services.AddScoped<ParametroRepositorio>();
+
 
 
 var app = builder.Build();

@@ -10,5 +10,7 @@
         public double AnticipoExcedente { get; set; } = 0;
         public double AnticipoBimestre { get; set; } = 0;
         public bool AnticipoNF_SI_NO { get; set; }
+        public int HistorialParametroId { get; set; }
+        public HistorialParametro HistorialParametro { get; set; }
     }
 }

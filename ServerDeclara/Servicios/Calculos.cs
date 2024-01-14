@@ -1,12 +1,14 @@
-﻿using ServerDeclara.Utilidades;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Metadata;
+using ServerDeclara.Utilidades;
 
 namespace ServerDeclara.Servicios
 {
     public static class Calculos
     {
 
-        //public static double RentaMensual_Recusivo(List<Parametros> parametrosRenta, int indice, double ingAnticipo, double diferencia, double auxRenta, double impuestoValor)
+        //public static double RentaMensual_Recusivo(List<Parametros> parametrosRenta, int indice, double ingAnticipo, double diferencia, double auxRenta, double impuestoValor, double BPC)
         //{
+              
         //    if (indice == parametros.Count)
         //    {
         //        return impuestoValor;
@@ -21,10 +23,10 @@ namespace ServerDeclara.Servicios
         //        auxRenta = auxRenta > diferencia ? auxRenta - diferencia : 0;
         //    }
 
-        //    diferencia = parametros[indice].RangoHasta - parametros[indice].RangoDesde;
+        //    diferencia = parametros[indice].RangoHasta * BPC - parametros[indice].RangoDesde * BPC;
 
         //    double ingresoMinimo = Math.Min(auxRenta, diferencia);
-        //    double valorImpuesto = ingresoMinimo * parametros[indice].Valor / 100;
+        //    double valorImpuesto = ingresoMinimo * parametros[indice].Valor;
 
         //    impuestoValor += Math.Round(valorImpuesto, 2);
 
