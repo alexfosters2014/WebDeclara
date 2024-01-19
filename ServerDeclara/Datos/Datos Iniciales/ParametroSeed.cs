@@ -16,7 +16,7 @@ namespace ServerDeclara.Datos.Datos_Iniciales
                   Descripcion = "0 A 7 BPC",
                   ValidezParametrosDesde=new DateTime(2024,01,01),
                   ValidezParametrosHasta=new DateTime(2024, 12, 31),
-                  Orden=1,
+                  Orden=3,
                   IngresosDesde=0,
                   IngresosHasta=7,
                   Tasa=0,
@@ -31,7 +31,7 @@ namespace ServerDeclara.Datos.Datos_Iniciales
                   Descripcion = "7 A 10 BPC",
                   ValidezParametrosDesde = new DateTime(2024, 01, 01),
                   ValidezParametrosHasta = new DateTime(2024, 12, 31),
-                  Orden = 2,
+                  Orden = 6,
                   IngresosDesde = 7,
                   IngresosHasta = 10,
                   Tasa = 0.1,
@@ -46,7 +46,7 @@ namespace ServerDeclara.Datos.Datos_Iniciales
                    Descripcion = "10 A 15 BPC",
                    ValidezParametrosDesde = new DateTime(2024, 01, 01),
                    ValidezParametrosHasta = new DateTime(2024, 12, 31),
-                   Orden = 3,
+                   Orden = 9,
                    IngresosDesde = 10,
                    IngresosHasta = 15,
                    Tasa = 0.15,
@@ -61,7 +61,7 @@ namespace ServerDeclara.Datos.Datos_Iniciales
                      Descripcion = "15 A 30 BPC",
                      ValidezParametrosDesde = new DateTime(2024, 01, 01),
                      ValidezParametrosHasta = new DateTime(2024, 12, 31),
-                     Orden = 4,
+                     Orden = 12,
                      IngresosDesde = 15,
                      IngresosHasta = 30,
                      Tasa = 0.24,
@@ -76,7 +76,7 @@ namespace ServerDeclara.Datos.Datos_Iniciales
                        Descripcion = "30 A 50 BPC",
                        ValidezParametrosDesde = new DateTime(2024, 01, 01),
                        ValidezParametrosHasta = new DateTime(2024, 12, 31),
-                       Orden = 5,
+                       Orden = 15,
                        IngresosDesde = 30,
                        IngresosHasta = 50,
                        Tasa = 0.25,
@@ -91,7 +91,7 @@ namespace ServerDeclara.Datos.Datos_Iniciales
                          Descripcion = "50 A 75 BPC",
                          ValidezParametrosDesde = new DateTime(2024, 01, 01),
                          ValidezParametrosHasta = new DateTime(2024, 12, 31),
-                         Orden = 6,
+                         Orden = 18,
                          IngresosDesde = 50,
                          IngresosHasta = 75,
                          Tasa = 0.27,
@@ -106,7 +106,7 @@ namespace ServerDeclara.Datos.Datos_Iniciales
                           Descripcion = "75 A 115 BPC",
                           ValidezParametrosDesde = new DateTime(2024, 01, 01),
                           ValidezParametrosHasta = new DateTime(2024, 12, 31),
-                          Orden = 7,
+                          Orden = 21,
                           IngresosDesde = 75,
                           IngresosHasta = 115,
                           Tasa = 0.31,
@@ -122,7 +122,7 @@ namespace ServerDeclara.Datos.Datos_Iniciales
                            Descripcion = "> BPC",
                            ValidezParametrosDesde = new DateTime(2024, 01, 01),
                            ValidezParametrosHasta = new DateTime(2024, 12, 31),
-                           Orden = 8,
+                           Orden = 24,
                            IngresosDesde = 115,
                            IngresosHasta = 20000,
                            Tasa = 0.36,
@@ -141,8 +141,8 @@ namespace ServerDeclara.Datos.Datos_Iniciales
                             IngresosDesde = 0,
                             IngresosHasta = 0,
                             Tasa = 5660,
-                            Atributo = "",
-                            Formula = "",
+                            Atributo = "BPC",
+                            Formula = "5660",
                             Tipo = "BPC",
                             HistorialParametroId = 1
                         },
@@ -187,7 +187,7 @@ namespace ServerDeclara.Datos.Datos_Iniciales
                                 IngresosHasta = 0,
                                 Tasa = 0,
                                 Atributo = "IngIncrementoSeisPorciento",
-                                Formula = "IFF((IngDependenciaCess + IngDependenciaNoCess + IngSalVacacional) > (BPC * 10), IngDependenciaCess * 0.06, 0)",
+                                Formula = "IIF((IngDependenciaCess + IngDependenciaNoCess + IngSalVacacional) > (BPC * 10), IngDependenciaCess * 0.06, 0)",
                                 Tipo = "CALCULO",
                                 HistorialParametroId = 1
                             },
@@ -247,7 +247,7 @@ namespace ServerDeclara.Datos.Datos_Iniciales
                                     IngresosHasta = 0,
                                     Tasa = 0,
                                     Atributo = "DeduccionFondoSolidaridad",
-                                    Formula = "CantidadBPCParaFS * BPC",
+                                    Formula = "CantidadBPCParaFS * BPC / 12",
                                     Tipo = "CALCULO",
                                     HistorialParametroId = 1
                                 },
@@ -277,7 +277,7 @@ namespace ServerDeclara.Datos.Datos_Iniciales
                                      IngresosHasta = 0,
                                      Tasa = 0,
                                      Atributo = "DeduccionFondoSolidaridadAdicional",
-                                     Formula = "IFF(AdicionalFS = true,5/3 * BPC / 12, 0)",
+                                     Formula = "IIF(AdicionalFS = true,5/3 * BPC / 12, 0)",
                                      Tipo = "CALCULO",
                                      HistorialParametroId = 1
                                  },
@@ -292,7 +292,7 @@ namespace ServerDeclara.Datos.Datos_Iniciales
                                       IngresosHasta = 0,
                                       Tasa = 0,
                                       Atributo = "AnticipoMensual",
-                                      Formula = "IFF(AnticipoNF = false, LiquidacionMes, LiquidacionMes * 0.95)",
+                                      Formula = "IIF(AnticipoNF = false, LiquidacionMes, LiquidacionMes * 0.95)",
                                       Tipo = "CALCULO",
                                       HistorialParametroId = 1
                                   },
@@ -307,10 +307,56 @@ namespace ServerDeclara.Datos.Datos_Iniciales
                                         IngresosHasta = 0,
                                         Tasa = 0,
                                         Atributo = "TasaDeduccion",
-                                        Formula = "IFF(IngresosExc > (15 * BPC), 0.8, 0.14)",
+                                        Formula = "IIF(TotalExcedenteIngresos > (15 * BPC), 0.08, 0.14)",
                                         Tipo = "CALCULO",
                                         HistorialParametroId = 1
-                                    }
+                                    },
+                                      new Parametro()
+                                      {
+                                          Id = 21,
+                                          Descripcion = "Ingresos exc. AG y SV",
+                                          ValidezParametrosDesde = new DateTime(2024, 01, 01),
+                                          ValidezParametrosHasta = new DateTime(2024, 12, 31),
+                                          Orden = 21,
+                                          IngresosDesde = 0,
+                                          IngresosHasta = 0,
+                                          Tasa = 0,
+                                          Atributo = "TotalExcedenteIngresos",
+                                          Formula = "IngParaAnticipo - IngIncrementoSeisPorciento - IngSalVacacional - DeduccionLegalIngresos",
+                                          Tipo = "CALCULO",
+                                          HistorialParametroId = 1
+                                      },
+                                        new Parametro()
+                                        {
+                                            Id = 22,
+                                            Descripcion = "Total deducible para liquidacion",
+                                            ValidezParametrosDesde = new DateTime(2024, 01, 01),
+                                            ValidezParametrosHasta = new DateTime(2024, 12, 31),
+                                            Orden = 22,
+                                            IngresosDesde = 0,
+                                            IngresosHasta = 0,
+                                            Tasa = 0,
+                                            Atributo = "TotalDeducible",
+                                            Formula = "DeduccionTotal * TasaDeduccion",
+                                            Tipo = "CALCULO",
+                                            HistorialParametroId = 1
+                                        },
+                                         new Parametro()
+                                         {
+                                             Id = 23,
+                                             Descripcion = "Liquidacion mes",
+                                             ValidezParametrosDesde = new DateTime(2024, 01, 01),
+                                             ValidezParametrosHasta = new DateTime(2024, 12, 31),
+                                             Orden = 23,
+                                             IngresosDesde = 0,
+                                             IngresosHasta = 0,
+                                             Tasa = 0,
+                                             Atributo = "LiquidacionMes",
+                                             Formula = "IIF((LiquidacionIngresos - TotalDeducible)>0,(LiquidacionIngresos -TotalDeducible),0)",
+                                             Tipo = "CALCULO",
+                                             HistorialParametroId = 1
+                                         }
+
 
 
               );

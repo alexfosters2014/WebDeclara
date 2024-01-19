@@ -1,4 +1,7 @@
 ﻿using ServerDeclara.Datos;
+using ServerDeclara.Servicios;
+using System.Data;
+using System.Xml.Linq;
 
 namespace ServerDeclara.DTOs
 {
@@ -16,5 +19,11 @@ namespace ServerDeclara.DTOs
         public int HistorialParametroId { get; set; }
         public HistorialParametroDTO HistorialParametro { get; set; }
 
+        public List<ParametroDTO> GetParametros()
+        {
+            return HistorialParametro.Parametros;
+        }
+       
     }
+
 }

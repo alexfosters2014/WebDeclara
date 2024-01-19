@@ -36,16 +36,16 @@ namespace ServerDeclara.DTOs
         public bool AnticipoNF { get; set; } //esto lo tengo que copiar de AnticipoNF_SI_NO del bimestre
 
         public double TotalExcedenteIngresos { get; set; }
-        public double TotalDeducciones { get; set; }
+        public double TotalDeducible { get; set; }
         public double BPC { get; set; }
         public double LiquidacionMes { get; set; }
 
+        public double TasaDeduccion { get; set; }
+
+        public double LiquidacionIngresos { get; set; }
 
 
-        public void CalcularLiquidacion()
-        {
-           // Calculos.RentaMensual_Recusivo(this);
-        }
+
 
 
     }

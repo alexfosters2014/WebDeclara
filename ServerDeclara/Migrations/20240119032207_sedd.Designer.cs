@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ServerDeclara.Datos;
 
@@ -11,9 +12,11 @@ using ServerDeclara.Datos;
 namespace ServerDeclara.Migrations
 {
     [DbContext(typeof(DeclaraContext))]
-    partial class DeclaraContextModelSnapshot : ModelSnapshot
+    [Migration("20240119032207_sedd")]
+    partial class sedd
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -662,21 +665,6 @@ namespace ServerDeclara.Migrations
                             IngresosDesde = 0.0,
                             IngresosHasta = 0.0,
                             Orden = 23,
-                            Tasa = 0.0,
-                            Tipo = "CALCULO",
-                            ValidezParametrosDesde = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ValidezParametrosHasta = new DateTime(2024, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        },
-                        new
-                        {
-                            Id = 24,
-                            Atributo = "AdicionalFondoSolidaridad",
-                            Descripcion = "Valor adicional Fondo de solidaridad",
-                            Formula = "IIF(AdicionalFS = true, 786, 0)",
-                            HistorialParametroId = 1,
-                            IngresosDesde = 0.0,
-                            IngresosHasta = 0.0,
-                            Orden = 24,
                             Tasa = 0.0,
                             Tipo = "CALCULO",
                             ValidezParametrosDesde = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),

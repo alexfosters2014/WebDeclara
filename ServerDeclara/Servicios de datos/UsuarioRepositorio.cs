@@ -67,7 +67,7 @@ namespace ServerDeclara.Servicios_de_datos
         {
             try
             {
-                bool usuarioBuscado = _db.Usuarios.Any(s => s.Email == mail);
+                bool usuarioBuscado = _db.Usuarios.Any(s => s.Email.ToLower() == mail.ToLower());
                 return usuarioBuscado;
             }
             catch (Exception)

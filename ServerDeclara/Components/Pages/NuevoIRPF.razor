@@ -8,7 +8,22 @@
        <article class="recuadro">
        
         <p>Cálculo a utilizar </p>
-        
+        <div class="d-flex justify-content-center">
+
+            @if (cantidadHistorialesParam > 0)
+            {
+                <select @onchange="OpcionDeCalculo" placeholder="Mes1" class="form-control">
+                    <option value="-1" selected>Elija un cálculo</option>
+
+                    @foreach (var item in historialParametros)
+                    {
+                        <option value="@item.Id">@item.Descripcion</option>
+                    }
+
+                </select>
+            }
+
+        </div>
 
     </article>
 
@@ -19,21 +34,9 @@
         <h5>Ingresos fuera de la relación de dependencia</h5>
 
         <p>Total ingresos brutos mensuales</p>
-        <div class="d-flex justify-content-center">
-
-            @if (cantidadHistorialesParam > 0)
-            {
-                <select @onchange="OpcionDeCalculo" placeholder="Mes1" class="form-control">
-                    <option value="-1" selected>Elija un cálculo</option>
-
-                    @foreach(var item in historialParametros)
-                    {
-                        <option value="@item.Id">@item.Descripcion</option>
-                    }
-                  
-                </select>
-            }
-           
+        <div class="d-flex justify-content-between">
+            <input type="number" step="0.1" placeholder="Mes1" class="form-control" @bind-value="ImpuestoBimensual.DeclaracionMes1.IngIndependiente" />
+            <input type="number" step="0.1" placeholder="Mes2" class="form-control" @bind-value="ImpuestoBimensual.DeclaracionMes2.IngIndependiente" />
         </div>
 
     </article>
@@ -113,7 +116,7 @@
 
             <select @onchange="CambioFSMes1" placeholder="Mes1" class="form-control">
                 <option value="0" selected>0 BPC</option>
-                @foreach (var tipoFS in Parametros.TipoFondoSolidaridad)
+                @foreach (var tipoFS in Util.ParamBPC_FS)
                 {
                     <option value="@tipoFS.Value">@tipoFS.Key</option>
                 }
@@ -121,7 +124,7 @@
 
             <select @onchange="CambioFSMes2" placeholder="Mes2" class="form-control">
                 <option value="0" selected>0 BPC</option>
-                @foreach (var tipoFS in Parametros.TipoFondoSolidaridad)
+                @foreach (var tipoFS in Util.ParamBPC_FS)
                 {
                     <option value="@tipoFS.Value">@tipoFS.Key</option>
                 }
@@ -215,7 +218,7 @@
 
     </article>
 
-        <button>Guardar</button>
+        <button @onclick="GenerarCalculos">Guardar</button>
 
 </section>
 
@@ -235,45 +238,47 @@
     void CambioFSMes1(ChangeEventArgs e)
     {
         double fsValor = double.Parse(e.Value.ToString());
-
-        double BPC = 2330; //cambiarlo de manera programatica
-
-        ImpuestoBimensual.DeclaracionMes1.DeduccionFondoSolidaridad = BPC * fsValor;
+        ImpuestoBimensual.DeclaracionMes1.CantidadBPCParaFS = fsValor;
     }
 
     void CambioFSMes2(ChangeEventArgs e)
     {
         double fsValor = double.Parse(e.Value.ToString());
-
-        double BPC = 2330; //cambiarlo de manera programatica
-
-        ImpuestoBimensual.DeclaracionMes2.DeduccionFondoSolidaridad = BPC * fsValor;
+        ImpuestoBimensual.DeclaracionMes2.CantidadBPCParaFS = fsValor;
     }
 
 
     private void AdicionalFS_MES1(ChangeEventArgs e)
     {
-        string valor = e.Value.ToString();
-        //tengo que obtener el valor del fondo del adicional de fondo de solidaridad
-        double valorAdicional = 0;
-
-        ImpuestoBimensual.DeclaracionMes1.DeduccionFondoSolidaridadAdicional = valor == "SI" ? valorAdicional : 0;
-
+        if (ImpuestoBimensual.HistorialParametro != null && ImpuestoBimensual.HistorialParametro.Parametros.Count > 0)
+        {
+            string valorAdicional_SI_NO = e.Value.ToString();
+            ImpuestoBimensual.DeclaracionMes1.AdicionalFS = valorAdicional_SI_NO == "SI" ? true : false;
+        }
+        else
+        {
+            //mensaje de eleccion de historial
+        }
+      
     }
+
+
     private void AdicionalFS_MES2(ChangeEventArgs e)
     {
-        string valor = e.Value.ToString();
-        //tengo que obtener el valor del fondo del adicional de fondo de solidaridad
-        double valorAdicional = 0;
-
-        ImpuestoBimensual.DeclaracionMes2.DeduccionFondoSolidaridadAdicional = valor == "SI" ? valorAdicional : 0;
+        if (ImpuestoBimensual.HistorialParametro != null && ImpuestoBimensual.HistorialParametro.Parametros.Count > 0)
+        {
+            string valorAdicional_SI_NO = e.Value.ToString();
+            ImpuestoBimensual.DeclaracionMes2.AdicionalFS = valorAdicional_SI_NO == "SI" ? true : false;
+        }
+        else
+        {
+            //mensaje de eleccion de historial
+        }
     }
     private void OpcionReduccionNF(ChangeEventArgs e)
     {
         double valorNF = double.Parse(e.Value.ToString());
         ImpuestoBimensual.AnticipoNF_SI_NO = valorNF == 1 ? false : true;
-        // ImpuestoBimensual.DeclaracionMes1.AnticipoMensual = 0 * valorNF;
-        // ImpuestoBimensual.DeclaracionMes2.AnticipoMensual = 0 * valorNF;
     }
     private void OpcionDeCalculo(ChangeEventArgs e)
     {
@@ -282,5 +287,12 @@
         {
             ImpuestoBimensual.HistorialParametro = historialParametros.SingleOrDefault(f => f.Id == historialId);
         }
+    }
+
+    private void GenerarCalculos()
+    {
+        //ImpuestoBimensual.GenerarCalculos();
+
+        BimensualIRPF_DTO impuesto = CalculosIRPFServicio.GenerarCalculos(ImpuestoBimensual);
     }
 }
