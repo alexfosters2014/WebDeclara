@@ -20,6 +20,7 @@ namespace ServerDeclara.Servicios
             bimensualDeclaracion.DeclaracionMes1 = LiquidacionMes1;
             bimensualDeclaracion.DeclaracionMes2 = LiquidacionMes2;
 
+            bimensualDeclaracion.CalcularAnticipoBimestre();
 
             return bimensualDeclaracion;
         }

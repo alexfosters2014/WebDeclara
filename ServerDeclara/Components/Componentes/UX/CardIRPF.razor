@@ -1,0 +1,45 @@
+﻿@using System.Globalization
+
+
+
+
+<section class="card-general">
+    <article>
+         @FormatearPeriodo()
+    </article>
+    <p class="@ColorAnticipo()">
+        @TextoAnticipo()
+    </p>
+    <div class="d-flex  justify-content-end card-general-submenu">
+        <a href="">
+            <img src="editar.png" alt="">
+        </a>
+    </div>
+</section>
+
+
+
+
+@code {
+    [Parameter] public BimensualIRPF_ViewList DeclaracionBimensual { get; set; }
+
+    private string FormatearPeriodo()
+    {
+        var formatoFechaEspanol = DateTimeFormatInfo.GetInstance(new System.Globalization.CultureInfo("es-ES"));
+
+        string fechaDesde = DeclaracionBimensual.Desde.ToString("MMMM", formatoFechaEspanol);
+        string fechaHasta = DeclaracionBimensual.Hasta.ToString("MMMM", formatoFechaEspanol);
+        string anio = DeclaracionBimensual.Desde.ToString("yyyy");
+
+        return fechaDesde + "-" + fechaHasta + " " + anio;
+    }
+
+    private string TextoAnticipo()
+    {
+        string texto = DeclaracionBimensual.AnticipoBimestre >= 0 ? "Anticipo a pagar " : "Excedente a favor ";
+        return texto + "$ " + DeclaracionBimensual.AnticipoBimestre;
+    }
+
+    private string ColorAnticipo() => DeclaracionBimensual.AnticipoBimestre >= 0 ? "color-rojo" : "color-verde";
+
+}

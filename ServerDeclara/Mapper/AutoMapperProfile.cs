@@ -15,6 +15,7 @@ namespace ServerDeclara.Mapper
             CreateMap<Parametro, ParametroDTO>().ReverseMap();
             CreateMap<HistorialParametro, HistorialParametroDTO>().ReverseMap();
             CreateMap<Usuario, UsuarioDTO>().ReverseMap();
+            CreateMap<BimensualIRPF_ViewList, BimensualRPF>().ReverseMap();
         }
     }
 }

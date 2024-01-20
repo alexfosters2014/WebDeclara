@@ -1,0 +1,26 @@
+﻿
+@page "/HistorialIRPF"
+@inject IRPFServicio _irpfServicio
+
+@if (LisadoBimensual.Count > 0)
+{
+    @foreach (var declaracion in LisadoBimensual)
+    {
+        <CardIRPF DeclaracionBimensual="declaracion" />
+    }
+}
+else
+{
+    <p>Aun no tiene ningúna declaración realizada</p>
+}
+
+
+@code {
+    List<BimensualIRPF_ViewList> LisadoBimensual = new();
+
+    protected async override Task OnInitializedAsync()
+    {
+        LisadoBimensual = await _irpfServicio.GetListado();
+    }
+
+}
