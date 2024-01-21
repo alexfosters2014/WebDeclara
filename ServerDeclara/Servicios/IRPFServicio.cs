@@ -7,11 +7,12 @@ namespace ServerDeclara.Servicios
     public class IRPFServicio
     {
         private readonly IRPFRepositorio IRPFRepositorio;
-        [Inject] UsuarioServicio _usuarioServicio {  get; set; }
+        private readonly UsuarioServicio _usuarioServicio;
 
-        public IRPFServicio(IRPFRepositorio iRPFRepositorio)
+        public IRPFServicio(IRPFRepositorio iRPFRepositorio, UsuarioServicio usuarioServicio)
         {
             IRPFRepositorio = iRPFRepositorio;
+            _usuarioServicio = usuarioServicio;
         }
 
         public async Task<List<BimensualIRPF_ViewList>> GetListado()

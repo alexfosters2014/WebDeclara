@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ServerDeclara.Datos;
 
@@ -11,9 +12,11 @@ using ServerDeclara.Datos;
 namespace ServerDeclara.Migrations
 {
     [DbContext(typeof(DeclaraContext))]
-    partial class DeclaraContextModelSnapshot : ModelSnapshot
+    [Migration("20240120200647_IPRFDesdeHasta")]
+    partial class IPRFDesdeHasta
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

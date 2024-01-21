@@ -15,7 +15,11 @@ namespace ServerDeclara.Utilidades
              { "2 BPC" , 2 },
         };
 
-       
+        public enum modoFormulario
+        {
+          EDICION,
+          NUEVO
+        }
 
     }
 }

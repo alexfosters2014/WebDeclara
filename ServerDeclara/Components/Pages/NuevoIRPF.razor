@@ -1,8 +1,18 @@
-﻿@page "/NuevoIRPF"
+﻿@page "/NuevoIRPF/{modoFormulario}"
 @inject ParametroServicio _parametroServicio
 
 <section class="boxIRPFEdicion" >
 
+
+    <article class="recuadro">
+
+        <p>Periodo de la declaración</p>
+        <div class="d-flex justify-content-between">
+            <input type="month"  class="form-control" @bind-value="ImpuestoBimensual.Desde" />
+            <input type="month"  class="form-control" @bind-value="ImpuestoBimensual.Hasta" />
+        </div>
+
+    </article>
      
 
        <article class="recuadro">
@@ -224,15 +234,22 @@
 
 
 
+
 @code {
     private BimensualIRPF_DTO ImpuestoBimensual = new();
     List<HistorialParametroDTO> historialParametros = new();
     int cantidadHistorialesParam = 0;
+    [Parameter] public string modoFormulario { get; set; }
 
     protected async override Task OnInitializedAsync()
     {
         historialParametros = await _parametroServicio.GetHistorialParametros();
         cantidadHistorialesParam = historialParametros.Count;
+        if (modoFormulario == Util.modoFormulario.NUEVO.ToString())
+        {
+            ImpuestoBimensual.Desde = DateTime.Today;
+            ImpuestoBimensual.Hasta = DateTime.Today;
+        }
     }
 
     void CambioFSMes1(ChangeEventArgs e)

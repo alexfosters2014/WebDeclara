@@ -1,6 +1,6 @@
-﻿
-@page "/HistorialIRPF"
+﻿@page "/HistorialIRPF"
 @inject IRPFServicio _irpfServicio
+@inject NavigationManager _nav
 
 @if (LisadoBimensual.Count > 0)
 {
@@ -14,6 +14,11 @@ else
     <p>Aun no tiene ningúna declaración realizada</p>
 }
 
+<div class="botonMas" @onclick="IrIRPFNuevo">
+    <img src="/imagenes/iconos/botonMas.png" alt="boton +" />
+</div>
+
+
 
 @code {
     List<BimensualIRPF_ViewList> LisadoBimensual = new();
@@ -23,4 +28,8 @@ else
         LisadoBimensual = await _irpfServicio.GetListado();
     }
 
+    private void IrIRPFNuevo()
+    {
+        _nav.NavigateTo("/NuevoIRPF/" + Util.modoFormulario.NUEVO.ToString());
+    }
 }

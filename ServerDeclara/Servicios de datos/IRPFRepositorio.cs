@@ -31,7 +31,7 @@ namespace ServerDeclara.Servicios_de_datos
                     return bimensualResultado;
                 }
                 else
-                {
+                { 
                     return null;
                 }
 
