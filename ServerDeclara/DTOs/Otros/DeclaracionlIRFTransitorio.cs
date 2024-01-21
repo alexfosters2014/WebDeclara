@@ -1,10 +1,7 @@
-﻿using ServerDeclara.Servicios;
-
-namespace ServerDeclara.DTOs
+﻿namespace ServerDeclara.DTOs.Otros
 {
-    public class DeclaracionMensualIRPFDTO
+    public class DeclaracionlIRFTransitorio
     {
-        public int Id { get; set; }
         public DateTime Fecha { get; set; }
         public int IngIndependiente { get; set; }
         public double DeduccionLegalIngresos { get; set; }
@@ -43,10 +40,5 @@ namespace ServerDeclara.DTOs
         public double TasaDeduccion { get; set; }
 
         public double LiquidacionIngresos { get; set; }
-
-
-
-
-
     }
 }

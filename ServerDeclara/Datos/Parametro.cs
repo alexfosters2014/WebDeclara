@@ -15,7 +15,8 @@ namespace ServerDeclara.Datos
         public string Formula { get; set; }
         public string Tipo { get; set; }
         public int Orden { get; set; }
+        public int HistorialParametroId { get; set; }
+        public HistorialParametro HistorialParametro { get; set; }
 
-      
     }
 }

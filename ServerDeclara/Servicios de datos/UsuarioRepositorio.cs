@@ -20,7 +20,7 @@ namespace ServerDeclara.Servicios_de_datos
         {
             try
             {
-                if (ExisteUsuario(usuario.Email))
+                if (await ExisteUsuario(usuario.Email))
                 {
                     Usuario usarioBuscado = await _db.Usuarios.SingleOrDefaultAsync(s => s.Email == usuario.Email && s.IdGoogle == usuario.IdGoogle);
 
@@ -63,12 +63,12 @@ namespace ServerDeclara.Servicios_de_datos
         }
 
 
-        public bool ExisteUsuario(string mail)
+        public async Task<bool> ExisteUsuario(string mail)
         {
             try
             {
-                bool usuarioBuscado = _db.Usuarios.Any(s => s.Email == mail);
-                return usuarioBuscado;
+                var usuarioBuscado = await _db.Usuarios.SingleOrDefaultAsync(s => s.Email.ToLower() == mail.ToLower());
+                return usuarioBuscado != null;
             }
             catch (Exception)
             {

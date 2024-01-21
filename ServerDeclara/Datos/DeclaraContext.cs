@@ -10,11 +10,13 @@ namespace ServerDeclara.Datos
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.ApplyConfiguration(new HistorialParametroSeed());
             modelBuilder.ApplyConfiguration(new ParametroSeed());
         }
 
 
         public DbSet<Usuario> Usuarios { get; set; }
+        public DbSet<HistorialParametro> HistorialParametros { get; set; }
         public DbSet<Parametro> Parametros { get; set; }
         public DbSet<EntradaIVADiario> EntradasIVAsDiarios { get; set; }
         public DbSet<DeclaracionMensualIRPF> DeclaracionsMensualesIRPFs { get; set; }

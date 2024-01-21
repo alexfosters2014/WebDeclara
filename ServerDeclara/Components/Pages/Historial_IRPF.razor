@@ -1,0 +1,36 @@
+﻿@page "/HistorialIRPF"
+@inject IRPFServicio _irpfServicio
+@inject NavigationManager _nav
+
+@if (LisadoBimensual.Count > 0)
+{
+    @foreach (var declaracion in LisadoBimensual)
+    {
+        <CardIRPF DeclaracionBimensual="declaracion" />
+    }
+}
+else
+{
+    <p>Aun no tiene ningúna declaración realizada</p>
+}
+
+<div class="botonMas" @onclick="IrIRPFNuevo">
+    <img src="/imagenes/iconos/botonMas.png" alt="boton +" />
+</div>
+
+<MargenVertical Altura="40px" />
+ 
+
+@code {
+    List<BimensualIRPF_ViewList> LisadoBimensual = new();
+
+    protected async override Task OnInitializedAsync()
+    {
+        LisadoBimensual = await _irpfServicio.GetListado();
+    }
+
+    private void IrIRPFNuevo()
+    {
+        _nav.NavigateTo("/NuevoIRPF/" + Util.modoFormulario.NUEVO.ToString());
+    }
+}
