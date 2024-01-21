@@ -25,15 +25,38 @@
 
             @if (cantidadHistorialesParam > 0)
             {
-                <select @onchange="OpcionDeCalculo" placeholder="Mes1" class="form-control">
-                    <option value="-1" selected>Elija un cálculo</option>
+                @if (modoFormulario == Util.modoFormulario.NUEVO.ToString())
+                {
+                    <select @onchange="OpcionDeCalculo" placeholder="Mes1" class="form-control">
+                        <option value="-1" selected>Elija un cálculo</option>
 
-                    @foreach (var item in historialParametros)
-                    {
-                        <option value="@item.Id">@item.Descripcion</option>
-                    }
+                        @foreach (var item in historialParametros)
+                        {
+                            <option value="@item.Id">@item.Descripcion</option>
+                        }
 
-                </select>
+                    </select>
+                }
+
+                @if (modoFormulario == Util.modoFormulario.EDICION.ToString())
+                {
+                    <select @onchange="OpcionDeCalculo" placeholder="Mes1" class="form-control">
+                        @foreach (var item in historialParametros)
+                        {
+                            @if (item.Id == ImpuestoBimensual.HistorialParametro.Id)
+                            {
+                                <option value="@item.Id" selected>@item.Descripcion</option>
+                            }
+                            else
+                            {
+                                <option value="@item.Id">@item.Descripcion</option>
+                            }
+                           
+                        }
+
+                    </select>
+                }
+              
             }
 
         </div>
@@ -126,37 +149,68 @@
 
         <p>Fondo de solidariadad</p>
         <div class="d-flex justify-content-between">
+              @if (modoFormulario == Util.modoFormulario.NUEVO.ToString())
+            {
+                <select @onchange="CambioFSMes1" placeholder="Mes1" class="form-control">
+                    <option value="0" selected>0 BPC</option>
+                    @foreach (var tipoFS in Util.ParamBPC_FS)
+                    {
+                        <option value="@tipoFS.Value">@tipoFS.Key</option>
+                    }
+                </select>
 
-            <select @onchange="CambioFSMes1" placeholder="Mes1" class="form-control">
-                <option value="0" selected>0 BPC</option>
-                @foreach (var tipoFS in Util.ParamBPC_FS)
-                {
-                    <option value="@tipoFS.Value">@tipoFS.Key</option>
-                }
+                <select @onchange="CambioFSMes2" placeholder="Mes2" class="form-control">
+                    <option value="0" selected>0 BPC</option>
+                    @foreach (var tipoFS in Util.ParamBPC_FS)
+                    {
+                        <option value="@tipoFS.Value">@tipoFS.Key</option>
+                    }
             </select>
+            }
+              @if (modoFormulario == Util.modoFormulario.EDICION.ToString())
+            {
+                <select @onchange="CambioFSMes1" placeholder="Mes1" class="form-control">
+                    @foreach (var tipoFS in Util.ParamBPC_FS)
+                    {
+                        @if (ImpuestoBimensual.DeclaracionMes1.CantidadBPCParaFS == tipoFS.Value)
+                        {
+                            <option value="@tipoFS.Value" selected>@tipoFS.Key</option>
+                        }
+                        else
+                        {
+                            <option value="@tipoFS.Value">@tipoFS.Key</option>
+                        }
+                        
+                    }
+                </select>
 
-            <select @onchange="CambioFSMes2" placeholder="Mes2" class="form-control">
-                <option value="0" selected>0 BPC</option>
-                @foreach (var tipoFS in Util.ParamBPC_FS)
-                {
-                    <option value="@tipoFS.Value">@tipoFS.Key</option>
-                }
-            </select>
+                <select @onchange="CambioFSMes2" placeholder="Mes2" class="form-control">
+                    @foreach (var tipoFS in Util.ParamBPC_FS)
+                    {
+                        @if (ImpuestoBimensual.DeclaracionMes2.CantidadBPCParaFS == tipoFS.Value)
+                        {
+                            <option value="@tipoFS.Value" selected>@tipoFS.Key</option>
+                        }
+                        else
+                        {
+                            <option value="@tipoFS.Value">@tipoFS.Key</option>
+                        }
+                    }
+                </select>
+            }
         </div>
 
 
         <p>Adicional Fondo Solidaridad</p>
         <div class="d-flex justify-content-between">
+   
+                <select @onchange="AdicionalFS_MES1" placeholder="Mes1" class="form-control">
+                    @GenerarHTML_AdicionalFSMES1()
+                </select>
 
-            <select @onchange="AdicionalFS_MES1" placeholder="Mes1" class="form-control">
-                <option value="SI" selected>SI</option>
-                <option value="NO" selected>NO</option>
-            </select>
-
-            <select @onchange="AdicionalFS_MES2" placeholder="Mes1" class="form-control">
-                <option value="SI" selected>SI</option>
-                <option value="NO" selected>NO</option>
-            </select>
+                <select @onchange="AdicionalFS_MES2" placeholder="Mes1" class="form-control">
+                    @GenerarHTML_AdicionalFSMES2()
+                </select>
         </div>
 
         <p>Aporte mensual a CJPPU o caja notarial</p>
@@ -210,8 +264,7 @@
         <div class="d-flex justify-content-between">
 
             <select @onchange="OpcionReduccionNF" placeholder="Mes1" class="form-control">
-                <option value="0.95" selected>SI</option>
-                <option value="1" selected>NO</option>
+                @GenerarHTML_ReduccionNF()
             </select>
         </div>
 
@@ -253,6 +306,11 @@
             ImpuestoBimensual.Desde = DateTime.Today;
             ImpuestoBimensual.Hasta = DateTime.Today;
             ImpuestoBimensual.Usuario = _usuarioServicio.GetUsuarioLogueado();
+        }
+
+        if (modoFormulario == Util.modoFormulario.EDICION.ToString())
+        {
+            ImpuestoBimensual = await _irpfServicio.ObtenerDeclaracion();
         }
     }
 
@@ -314,9 +372,63 @@
     {
         //ImpuestoBimensual.GenerarCalculos();
 
-        BimensualIRPF_DTO impuesto = CalculosIRPFServicio.GenerarCalculos(ImpuestoBimensual);
-        bool resultado = await _irpfServicio.CrearNuevaDeclaracion(impuesto);
+        BimensualIRPF_DTO impuestoBimensualCalculado = CalculosIRPFServicio.GenerarCalculos(ImpuestoBimensual);
+
+        if (modoFormulario == Util.modoFormulario.NUEVO.ToString())
+        {
+            bool resultado = await _irpfServicio.CrearNuevaDeclaracion(impuestoBimensualCalculado);
+        }
+
+        if (modoFormulario == Util.modoFormulario.EDICION.ToString())
+        {
+            bool resultado = await _irpfServicio.EditarDeclaracion(impuestoBimensualCalculado);
+        }
         //cartel de ok
         _nav.NavigateTo("/HistorialIRPF");
     }
+
+
+
+    private MarkupString GenerarHTML_AdicionalFSMES1()
+    {
+        // Puedes construir tu HTML como una cadena y luego convertirla a MarkupString
+        string html = "";
+
+        string AdicionalFS_SI = ImpuestoBimensual.DeclaracionMes1.AdicionalFS == true ? "selected" : "";
+        string AdicionalFS_NO = ImpuestoBimensual.DeclaracionMes1.AdicionalFS == false ? "selected" : "";
+
+        html += "<option value= 'SI' " + AdicionalFS_SI + "> SI </option>";
+        html += "<option value='NO' " + AdicionalFS_NO + ">NO</option>";
+
+        return new MarkupString(html);
+    }
+
+     private MarkupString GenerarHTML_AdicionalFSMES2()
+    {
+        // Puedes construir tu HTML como una cadena y luego convertirla a MarkupString
+        string html = "";
+
+        string AdicionalFS_SI = ImpuestoBimensual.DeclaracionMes2.AdicionalFS == true ? "selected" : "";
+        string AdicionalFS_NO = ImpuestoBimensual.DeclaracionMes2.AdicionalFS == false ? "selected" : "";
+
+        html += "<option value= 'SI' " + AdicionalFS_SI + "> SI </option>";
+        html += "<option value='NO' " + AdicionalFS_NO + ">NO</option>";
+
+        return new MarkupString(html);
+    }
+
+    private MarkupString GenerarHTML_ReduccionNF()
+    {
+        // Puedes construir tu HTML como una cadena y luego convertirla a MarkupString
+        string html = "";
+
+        string selected_SI = ImpuestoBimensual.AnticipoNF_SI_NO == true ? "selected" : "";
+        string selected_NO = ImpuestoBimensual.AnticipoNF_SI_NO == false ? "selected" : "";
+
+        html += "<option value='0.95' " + selected_SI + "> SI </option>";
+        html += "<option value='1' " + selected_NO + ">NO</option>";
+
+        return new MarkupString(html);
+    }
+
 }
