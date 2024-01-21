@@ -71,8 +71,8 @@
 
         <p>Total ingresos brutos mensuales</p>
         <div class="d-flex justify-content-between">
-            <input type="number" step="0.1" placeholder="Mes1" class="form-control" @bind-value="ImpuestoBimensual.DeclaracionMes1.IngIndependiente" />
-            <input type="number" step="0.1" placeholder="Mes2" class="form-control" @bind-value="ImpuestoBimensual.DeclaracionMes2.IngIndependiente" />
+            <input type="number" step="0.1" min="0" placeholder="Mes1" class="form-control" @bind-value="ImpuestoBimensual.DeclaracionMes1.IngIndependiente" />
+            <input type="number" step="0.1" min="0" placeholder="Mes2" class="form-control" @bind-value="ImpuestoBimensual.DeclaracionMes2.IngIndependiente" />
         </div>
 
     </article>
@@ -83,26 +83,26 @@
 
         <p>Ingresos nominales mensual gravados con CESS</p>
         <div class="d-flex justify-content-between">
-            <input type="number" step="0.1" placeholder="Mes1" class="form-control" @bind-value="ImpuestoBimensual.DeclaracionMes1.IngDependenciaCess" />
-            <input type="number" step="0.1" placeholder="Mes2" class="form-control" @bind-value="ImpuestoBimensual.DeclaracionMes2.IngDependenciaCess" />
+            <input type="number" step="0.1" min="0" placeholder="Mes1" class="form-control" @bind-value="ImpuestoBimensual.DeclaracionMes1.IngDependenciaCess" />
+            <input type="number" step="0.1" min="0" placeholder="Mes2" class="form-control" @bind-value="ImpuestoBimensual.DeclaracionMes2.IngDependenciaCess" />
         </div>
 
         <p>Ingresos mensuales no grabado con CESS (excl. SV)</p>
         <div class="d-flex justify-content-between">
-            <input type="number" step="0.1" placeholder="Mes1" class="form-control" @bind-value="ImpuestoBimensual.DeclaracionMes1.IngDependenciaNoCess" />
-            <input type="number" step="0.1" placeholder="Mes2" class="form-control" @bind-value="ImpuestoBimensual.DeclaracionMes2.IngDependenciaNoCess" />
+            <input type="number" step="0.1" min="0" placeholder="Mes1" class="form-control" @bind-value="ImpuestoBimensual.DeclaracionMes1.IngDependenciaNoCess" />
+            <input type="number" step="0.1" min="0" placeholder="Mes2" class="form-control" @bind-value="ImpuestoBimensual.DeclaracionMes2.IngDependenciaNoCess" />
         </div>
 
         <p>Salario vacacional</p>
         <div class="d-flex justify-content-between">
-            <input type="number" step="0.1" placeholder="Mes1" class="form-control" @bind-value="ImpuestoBimensual.DeclaracionMes1.IngSalVacacional" />
-            <input type="number" step="0.1" placeholder="Mes2" class="form-control" @bind-value="ImpuestoBimensual.DeclaracionMes2.IngSalVacacional" />
+            <input type="number" step="0.1" min="0" placeholder="Mes1" class="form-control" @bind-value="ImpuestoBimensual.DeclaracionMes1.IngSalVacacional" />
+            <input type="number" step="0.1" min="0" placeholder="Mes2" class="form-control" @bind-value="ImpuestoBimensual.DeclaracionMes2.IngSalVacacional" />
         </div>
 
         <p>Otros ingresos</p>
         <div class="d-flex justify-content-between">
-            <input type="number" step="0.1" placeholder="Mes1" class="form-control" @bind-value="ImpuestoBimensual.DeclaracionMes1.IngOtros" />
-            <input type="number" step="0.1" placeholder="Mes2" class="form-control" @bind-value="ImpuestoBimensual.DeclaracionMes2.IngOtros" />
+            <input type="number" step="0.1" min="0" placeholder="Mes1" class="form-control" @bind-value="ImpuestoBimensual.DeclaracionMes1.IngOtros" />
+            <input type="number" step="0.1" min="0" placeholder="Mes2" class="form-control" @bind-value="ImpuestoBimensual.DeclaracionMes2.IngOtros" />
         </div>
 
     </article>
@@ -117,26 +117,26 @@
 
         <p>Sin discapacidad (menores) 100%</p>
          <div class="d-flex justify-content-between">
-            <input type="number" step="0.1" placeholder="Mes1" class="form-control" @bind-value="ImpuestoBimensual.DeclaracionMes1.DeduccionSDmenores" />
-            <input type="number" step="0.1" placeholder="Mes2" class="form-control" @bind-value="ImpuestoBimensual.DeclaracionMes2.DeduccionSDmenores" />
+            <input type="number" step="0.1" min="0" placeholder="Mes1" class="form-control" @bind-value="ImpuestoBimensual.DeclaracionMes1.DeduccionSDmenores" />
+            <input type="number" step="0.1" min="0" placeholder="Mes2" class="form-control" @bind-value="ImpuestoBimensual.DeclaracionMes2.DeduccionSDmenores" />
         </div>
 
         <p>Con discapacidad 100%</p>
         <div class="d-flex justify-content-between">
-            <input type="number" step="0.1" placeholder="Mes1" class="form-control" @bind-value="ImpuestoBimensual.DeclaracionMes1.DeduccionCD" />
-            <input type="number" step="0.1" placeholder="Mes2" class="form-control" @bind-value="ImpuestoBimensual.DeclaracionMes2.DeduccionCD" />
+            <input type="number" step="0.1" min="0" placeholder="Mes1" class="form-control" @bind-value="ImpuestoBimensual.DeclaracionMes1.DeduccionCD" />
+            <input type="number" step="0.1" min="0" placeholder="Mes2" class="form-control" @bind-value="ImpuestoBimensual.DeclaracionMes2.DeduccionCD" />
         </div>
 
         <p>Sin discapacidad (menores) 50%</p>
         <div class="d-flex justify-content-between">
-            <input type="number" step="0.1" placeholder="Mes1" class="form-control" @bind-value="ImpuestoBimensual.DeclaracionMes1.DeduccionSDMenoresCincuenta" />
-            <input type="number" step="0.1" placeholder="Mes2" class="form-control" @bind-value="ImpuestoBimensual.DeclaracionMes2.DeduccionSDMenoresCincuenta" />
+            <input type="number" step="0.1" min="0" placeholder="Mes1" class="form-control" @bind-value="ImpuestoBimensual.DeclaracionMes1.DeduccionSDMenoresCincuenta" />
+            <input type="number" step="0.1" min="0" placeholder="Mes2" class="form-control" @bind-value="ImpuestoBimensual.DeclaracionMes2.DeduccionSDMenoresCincuenta" />
         </div>
 
         <p>Con discapacidad 50%</p>
         <div class="d-flex justify-content-between">
-            <input type="number" step="0.1" placeholder="Mes1" class="form-control" @bind-value="ImpuestoBimensual.DeclaracionMes1.DeduccionCDCincuenta" />
-            <input type="number" step="0.1" placeholder="Mes2" class="form-control" @bind-value="ImpuestoBimensual.DeclaracionMes2.DeduccionCDCincuenta" />
+            <input type="number" step="0.1" min="0" placeholder="Mes1" class="form-control" @bind-value="ImpuestoBimensual.DeclaracionMes1.DeduccionCDCincuenta" />
+            <input type="number" step="0.1" min="0" placeholder="Mes2" class="form-control" @bind-value="ImpuestoBimensual.DeclaracionMes2.DeduccionCDCincuenta" />
         </div>
 
     </article>
@@ -215,8 +215,8 @@
 
         <p>Aporte mensual a CJPPU o caja notarial</p>
         <div class="d-flex justify-content-between">
-            <input type="number" step="0.1" placeholder="Mes1" class="form-control" @bind-value="ImpuestoBimensual.DeclaracionMes1.DeduccionCJPPU" />
-            <input type="number" step="0.1" placeholder="Mes2" class="form-control" @bind-value="ImpuestoBimensual.DeclaracionMes2.DeduccionCJPPU" />
+            <input type="number" step="0.1" min="0" placeholder="Mes1" class="form-control" @bind-value="ImpuestoBimensual.DeclaracionMes1.DeduccionCJPPU" />
+            <input type="number" step="0.1" min="0" placeholder="Mes2" class="form-control" @bind-value="ImpuestoBimensual.DeclaracionMes2.DeduccionCJPPU" />
         </div>
 
     </article>
@@ -227,20 +227,20 @@
 
         <p>Aportes jubitalorios</p>
         <div class="d-flex justify-content-between">
-            <input type="number" step="0.1" placeholder="Mes1" class="form-control" @bind-value="ImpuestoBimensual.DeclaracionMes1.DeduccionJubilatorio" />
-            <input type="number" step="0.1" placeholder="Mes2" class="form-control" @bind-value="ImpuestoBimensual.DeclaracionMes2.DeduccionJubilatorio" />
+            <input type="number" step="0.1" min="0" placeholder="Mes1" class="form-control" @bind-value="ImpuestoBimensual.DeclaracionMes1.DeduccionJubilatorio" />
+            <input type="number" step="0.1" min="0" placeholder="Mes2" class="form-control" @bind-value="ImpuestoBimensual.DeclaracionMes2.DeduccionJubilatorio" />
         </div>
 
         <p>Aportes FONASA</p>
         <div class="d-flex justify-content-between">
-            <input type="number" step="0.1" placeholder="Mes1" class="form-control" @bind-value="ImpuestoBimensual.DeclaracionMes1.DeduccionFonasa" />
-            <input type="number" step="0.1" placeholder="Mes2" class="form-control" @bind-value="ImpuestoBimensual.DeclaracionMes2.DeduccionFonasa" />
+            <input type="number" step="0.1" min="0" placeholder="Mes1" class="form-control" @bind-value="ImpuestoBimensual.DeclaracionMes1.DeduccionFonasa" />
+            <input type="number" step="0.1" min="0" placeholder="Mes2" class="form-control" @bind-value="ImpuestoBimensual.DeclaracionMes2.DeduccionFonasa" />
         </div>
 
         <p>Aporte FRL</p>
         <div class="d-flex justify-content-between">
-            <input type="number" step="0.1" placeholder="Mes1" class="form-control" @bind-value="ImpuestoBimensual.DeclaracionMes1.DeduccionFRL" />
-            <input type="number" step="0.1" placeholder="Mes2" class="form-control" @bind-value="ImpuestoBimensual.DeclaracionMes2.DeduccionFRL" />
+            <input type="number" step="0.1" min="0" placeholder="Mes1" class="form-control" @bind-value="ImpuestoBimensual.DeclaracionMes1.DeduccionFRL" />
+            <input type="number" step="0.1" min="0" placeholder="Mes2" class="form-control" @bind-value="ImpuestoBimensual.DeclaracionMes2.DeduccionFRL" />
         </div>
 
     </article>
@@ -249,8 +249,8 @@
     
         <p>Otras deducciones (mensual)</p>
         <div class="d-flex justify-content-between">
-            <input type="number" step="0.1" placeholder="Mes1" class="form-control" @bind-value="ImpuestoBimensual.DeclaracionMes1.DeduccionOtros" />
-            <input type="number" step="0.1" placeholder="Mes2" class="form-control" @bind-value="ImpuestoBimensual.DeclaracionMes2.DeduccionOtros" />
+            <input type="number" step="0.1" min="0" placeholder="Mes1" class="form-control" @bind-value="ImpuestoBimensual.DeclaracionMes1.DeduccionOtros" />
+            <input type="number" step="0.1" min="0" placeholder="Mes2" class="form-control" @bind-value="ImpuestoBimensual.DeclaracionMes2.DeduccionOtros" />
         </div>
 
     </article>
@@ -271,8 +271,8 @@
 
         <p>Retenciones por terceros</p>
         <div class="d-flex justify-content-between">
-            <input type="number" step="0.1" placeholder="Mes1" class="form-control" @bind-value="ImpuestoBimensual.DeclaracionMes1.AnticipoRetenciones" />
-            <input type="number" step="0.1" placeholder="Mes2" class="form-control" @bind-value="ImpuestoBimensual.DeclaracionMes2.AnticipoRetenciones" />
+            <input type="number" step="0.1" min="0" placeholder="Mes1" class="form-control" @bind-value="ImpuestoBimensual.DeclaracionMes1.AnticipoRetenciones" />
+            <input type="number" step="0.1" min="0" placeholder="Mes2" class="form-control" @bind-value="ImpuestoBimensual.DeclaracionMes2.AnticipoRetenciones" />
         </div>
 
         <p>Excedente del bimestre anterior</p>
