@@ -24,5 +24,16 @@ namespace ServerDeclara.Servicios
             return listado;
 
         }
+        public async Task<bool> CrearNuevaDeclaracion(BimensualIRPF_DTO bimensualDTO)
+        {
+            bimensualDTO.Usuario = _usuarioServicio.GetUsuarioLogueado();
+
+            bool nuevo = await IRPFRepositorio.CrearNuevaDeclaracion(bimensualDTO);
+
+            return nuevo;
+
+        }
+
+
     }
 }

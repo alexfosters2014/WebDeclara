@@ -1,5 +1,8 @@
 ﻿@page "/NuevoIRPF/{modoFormulario}"
 @inject ParametroServicio _parametroServicio
+@inject UsuarioServicio _usuarioServicio
+@inject IRPFServicio _irpfServicio
+@inject NavigationManager _nav
 
 <section class="boxIRPFEdicion" >
 
@@ -249,6 +252,7 @@
         {
             ImpuestoBimensual.Desde = DateTime.Today;
             ImpuestoBimensual.Hasta = DateTime.Today;
+            ImpuestoBimensual.Usuario = _usuarioServicio.GetUsuarioLogueado();
         }
     }
 
@@ -276,7 +280,7 @@
         {
             //mensaje de eleccion de historial
         }
-      
+
     }
 
 
@@ -306,11 +310,13 @@
         }
     }
 
-    private void GenerarCalculos()
+    private async void GenerarCalculos()
     {
         //ImpuestoBimensual.GenerarCalculos();
 
         BimensualIRPF_DTO impuesto = CalculosIRPFServicio.GenerarCalculos(ImpuestoBimensual);
-        
+        bool resultado = await _irpfServicio.CrearNuevaDeclaracion(impuesto);
+        //cartel de ok
+        _nav.NavigateTo("/HistorialIRPF");
     }
 }
