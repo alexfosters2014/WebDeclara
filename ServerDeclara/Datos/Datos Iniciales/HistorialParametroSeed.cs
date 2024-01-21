@@ -13,7 +13,13 @@ namespace ServerDeclara.Datos.Datos_Iniciales
                      Id = 1,
                      Fecha= new DateTime(2024,01,01),
                      Descripcion = "Periodo enero-diciembre 2024"
-                }
+                },
+                  new HistorialParametro()
+                  {
+                      Id = 2,
+                      Fecha = new DateTime(2023, 01, 01),
+                      Descripcion = "Periodo enero-diciembre 2023"
+                  }
                 );
         }
     }

@@ -15,7 +15,7 @@ string conexionBaseDatosLocal = "ConnectionStrings:LocalBD";
 string conexionBaseDatosAzure = "ConnectionStrings:AzureBD";
 
 builder.Services.AddDbContext<DeclaraContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetValue<string>(conexionBaseDatosLocal)));
+    options.UseSqlServer(builder.Configuration.GetValue<string>(conexionBaseDatosLocal)), ServiceLifetime.Transient);
 
 
 builder.Services.AddAutoMapper(typeof(Program));

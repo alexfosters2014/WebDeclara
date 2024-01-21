@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using ServerDeclara.Datos;
 using ServerDeclara.DTOs;
+using ServerDeclara.DTOs.Otros;
 
 namespace ServerDeclara.Servicios_de_datos
 {
@@ -90,22 +91,34 @@ namespace ServerDeclara.Servicios_de_datos
                     BimensualRPF bimensualDatosAActualizar = await _db.BimensualesRPFs.Include(i => i.DeclaracionMes1)
                                                                                       .Include(i => i.DeclaracionMes2)
                                                                                       .Include(i => i.Usuario)
+                                                                                      .Include(i => i.HistorialParametro.Parametros)
                                                                                       .SingleOrDefaultAsync(s => s.Id == bimensualNuevosDatos.Id);
 
 
                     bimensualDatosAActualizar.Desde = bimensualNuevosDatos.Desde;
                     bimensualDatosAActualizar.Hasta = bimensualNuevosDatos.Hasta;
-                    bimensualDatosAActualizar.DeclaracionMes1 = bimensualNuevosDatos.DeclaracionMes1;
-                    bimensualDatosAActualizar.DeclaracionMes2 = bimensualNuevosDatos.DeclaracionMes2;
 
-                    bimensualDatosAActualizar.DeclaracionMes1.Fecha = bimensualNuevosDatos.Desde;
-                    bimensualDatosAActualizar.DeclaracionMes2.Fecha = bimensualNuevosDatos.Hasta;
+                    DeclaracionlIRFTransitorio transitorioMes1 = _mapper.Map<DeclaracionlIRFTransitorio>(bimensualNuevosDatos.DeclaracionMes1);
+                    bimensualDatosAActualizar.DeclaracionMes1 = _mapper.Map(transitorioMes1, bimensualDatosAActualizar.DeclaracionMes1);
+
+                    DeclaracionlIRFTransitorio transitorioMes2 = _mapper.Map<DeclaracionlIRFTransitorio>(bimensualNuevosDatos.DeclaracionMes2);
+                    bimensualDatosAActualizar.DeclaracionMes2 = _mapper.Map(transitorioMes2, bimensualDatosAActualizar.DeclaracionMes2);
 
                     bimensualDatosAActualizar.AnticipoBimestre = bimensualNuevosDatos.AnticipoBimestre;
                     bimensualDatosAActualizar.AnticipoExcedente = bimensualNuevosDatos.AnticipoExcedente;
                     bimensualDatosAActualizar.AnticipoNF_SI_NO = bimensualNuevosDatos.AnticipoNF_SI_NO;
-                    bimensualDatosAActualizar.HistorialParametro = bimensualNuevosDatos.HistorialParametro;
 
+                    if (bimensualDatosAActualizar.HistorialParametro.Id != bimensualNuevosDatos.HistorialParametro.Id)
+                    {
+                        bimensualDatosAActualizar.HistorialParametro = bimensualNuevosDatos.HistorialParametro;
+                        _db.Entry(bimensualDatosAActualizar.HistorialParametro).State = EntityState.Unchanged;
+                    }
+
+                    if (bimensualDatosAActualizar.HistorialParametro.Id != bimensualNuevosDatos.HistorialParametro.Id)
+                    {
+                        bimensualDatosAActualizar.HistorialParametro = bimensualNuevosDatos.HistorialParametro;
+                        _db.Entry(bimensualDatosAActualizar.HistorialParametro).State = EntityState.Unchanged;
+                    }
 
                     int cantidadEditados = await _db.SaveChangesAsync();
 
@@ -126,7 +139,8 @@ namespace ServerDeclara.Servicios_de_datos
 
         public async Task<BimensualIRPF_DTO> ObtenerDeclaracionBimensual(int idBimensual)
         {
-            var declaracion = await _db.BimensualesRPFs.Include(i => i.DeclaracionMes1)
+            var declaracion = await _db.BimensualesRPFs.AsNoTracking()
+                                                        .Include(i => i.DeclaracionMes1)
                                                         .Include(i => i.DeclaracionMes2)
                                                         .Include(i => i.Usuario)
                                                         .Include(i => i.HistorialParametro.Parametros)

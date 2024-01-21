@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using ServerDeclara.Datos;
 using ServerDeclara.DTOs;
+using ServerDeclara.DTOs.Otros;
 
 namespace ServerDeclara.Mapper
 {
@@ -16,6 +17,9 @@ namespace ServerDeclara.Mapper
             CreateMap<HistorialParametro, HistorialParametroDTO>().ReverseMap();
             CreateMap<Usuario, UsuarioDTO>().ReverseMap();
             CreateMap<BimensualIRPF_ViewList, BimensualRPF>().ReverseMap();
+            CreateMap<DeclaracionlIRFTransitorio, DeclaracionMensualIRPF>().ReverseMap();
+
+            
         }
     }
 }
