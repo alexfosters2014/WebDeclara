@@ -29,6 +29,9 @@ builder.Services.AddScoped<ParametroRepositorio>();
 builder.Services.AddScoped<IRPFServicio>();
 builder.Services.AddScoped<IRPFRepositorio>();
 
+builder.Services.AddScoped<IVAServicio>();
+builder.Services.AddScoped<IVARepositorio>();
+
 
 var app = builder.Build();
 

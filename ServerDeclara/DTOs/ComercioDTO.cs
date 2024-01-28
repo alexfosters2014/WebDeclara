@@ -5,7 +5,7 @@ namespace ServerDeclara.DTOs
     public class ComercioDTO
     {
         public int Id { get; set; }
-        public UsuarioDTO Usuario { get; set; } = new UsuarioDTO();
+        public Usuario Usuario { get; set; } = new Usuario();
         public string RazonSocial { get; set; } = string.Empty;
         public string NombreFantasia { get; set; } = string.Empty;
         public string RUT { get; set; } = string.Empty;

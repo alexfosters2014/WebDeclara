@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using ServerDeclara.Datos;
 using ServerDeclara.DTOs;
 using ServerDeclara.DTOs.Otros;
+using ServerDeclara.Utilidades;
 
 namespace ServerDeclara.Servicios_de_datos
 {
@@ -24,7 +25,9 @@ namespace ServerDeclara.Servicios_de_datos
             {
                 if (usuarioId > 0)
                 {
-                    List<BimensualRPF> bimensual = await _db.BimensualesRPFs.Where(w => w.Usuario.Id == usuarioId).ToListAsync();
+                    List<BimensualRPF> bimensual = await _db.BimensualesRPFs.Where(w => w.Usuario.Id == usuarioId)
+                                                                            .OrderByDescending(o => o.Desde)
+                                                                            .ToListAsync();
 
                     if (bimensual == null) return null;
 
@@ -53,6 +56,10 @@ namespace ServerDeclara.Servicios_de_datos
                     HistorialParametro historialParametro = await _db.HistorialParametros.SingleOrDefaultAsync(s => s.Id == bimensualDTO.HistorialParametro.Id);
                     BimensualRPF bimensual = _mapper.Map<BimensualRPF>(bimensualDTO);
 
+                    DateTime desde = bimensual.Desde;
+                    DateTime hasta = bimensual.Hasta;
+                    bimensual.Desde = Util.PrimerDiaDelMes(desde);
+                    bimensual.Hasta = Util.UltimoDiaDelMes(hasta);
                     
                     bimensual.Usuario = usuarioBuscado;
                     bimensual.HistorialParametro = historialParametro;

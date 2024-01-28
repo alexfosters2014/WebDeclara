@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ServerDeclara.Datos;
 
@@ -11,9 +12,11 @@ using ServerDeclara.Datos;
 namespace ServerDeclara.Migrations
 {
     [DbContext(typeof(DeclaraContext))]
-    partial class DeclaraContextModelSnapshot : ModelSnapshot
+    [Migration("20240123012551_BimensualIVA")]
+    partial class BimensualIVA
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -29,9 +32,6 @@ namespace ServerDeclara.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<double>("AnticipoBimestreIVA")
-                        .HasColumnType("float");
 
                     b.Property<DateTime>("Desde")
                         .HasColumnType("datetime2");
@@ -247,9 +247,6 @@ namespace ServerDeclara.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("BimensualIVAId")
-                        .HasColumnType("int");
-
                     b.Property<int?>("ComercioId")
                         .HasColumnType("int");
 
@@ -278,8 +275,6 @@ namespace ServerDeclara.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("BimensualIVAId");
 
                     b.HasIndex("ComercioId");
 
@@ -1137,10 +1132,6 @@ namespace ServerDeclara.Migrations
 
             modelBuilder.Entity("ServerDeclara.Datos.EntradaIVADiario", b =>
                 {
-                    b.HasOne("ServerDeclara.Datos.BimensualIVA", null)
-                        .WithMany("EntradasIVADiarios")
-                        .HasForeignKey("BimensualIVAId");
-
                     b.HasOne("ServerDeclara.Datos.Comercio", "Comercio")
                         .WithMany()
                         .HasForeignKey("ComercioId");
@@ -1163,11 +1154,6 @@ namespace ServerDeclara.Migrations
                         .IsRequired();
 
                     b.Navigation("HistorialParametro");
-                });
-
-            modelBuilder.Entity("ServerDeclara.Datos.BimensualIVA", b =>
-                {
-                    b.Navigation("EntradasIVADiarios");
                 });
 
             modelBuilder.Entity("ServerDeclara.Datos.HistorialParametro", b =>

@@ -1,17 +1,17 @@
-﻿@page "/HistorialIRPF"
-@inject IRPFServicio _irpfServicio
+﻿@page "/HistorialVA"
+@inject IVAServicio _IVAServicio
 @inject NavigationManager _nav
 
 @if (LisadoBimensual.Count > 0)
 {
     @foreach (var declaracion in LisadoBimensual)
     {
-        <CardIRPF DeclaracionBimensual="declaracion" />
+        <CardIVA DeclaracionBimensual="declaracion" />
     }
 }
 else
 {
-    <p>Aun no tiene ningúna declaración de IRPF realizada</p>
+    <p>Aun no tiene ningúna declaración de IVA realizada</p>
 }
 
 <div class="botonMas" @onclick="IrIRPFNuevo">
@@ -19,14 +19,14 @@ else
 </div>
 
 <MargenVertical Altura="40px" />
- 
+
 
 @code {
-    List<BimensualIRPF_ViewList> LisadoBimensual = new();
+    List<BimensualIVA_ViewList> LisadoBimensual = new();
 
     protected async override Task OnInitializedAsync()
     {
-        LisadoBimensual = await _irpfServicio.GetListado();
+        LisadoBimensual = await _IVAServicio.GetListado();
     }
 
     private void IrIRPFNuevo()

@@ -22,5 +22,6 @@ namespace ServerDeclara.Datos
         public DbSet<DeclaracionMensualIRPF> DeclaracionsMensualesIRPFs { get; set; }
         public DbSet<Comercio> Comercios { get; set; }
         public DbSet<BimensualRPF> BimensualesRPFs { get; set; }
+        public DbSet<BimensualIVA> BimensualesIVA { get; set; }
     }
 }
