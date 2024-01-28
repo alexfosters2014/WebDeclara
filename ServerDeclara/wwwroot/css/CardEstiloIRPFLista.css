@@ -10,13 +10,14 @@
 .card-general img {
     width: 35px;
     height: 35px;
+    margin: 0 4px 5px 0;
 }
 
 .card-general p {
     text-align: center;
     margin-top: 20px;
     margin-bottom: 20px;
-    padding: 0;
+    padding: 10px;
     font-weight: 500;
 }
 

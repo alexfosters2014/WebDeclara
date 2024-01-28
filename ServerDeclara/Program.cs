@@ -1,3 +1,4 @@
+using Blazored.Modal;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using ServerDeclara.Components;
@@ -17,6 +18,7 @@ string conexionBaseDatosAzure = "ConnectionStrings:AzureBD";
 builder.Services.AddDbContext<DeclaraContext>(options =>
     options.UseSqlServer(builder.Configuration.GetValue<string>(conexionBaseDatosLocal)), ServiceLifetime.Transient);
 
+builder.Services.AddBlazoredModal();
 
 builder.Services.AddAutoMapper(typeof(Program));
 

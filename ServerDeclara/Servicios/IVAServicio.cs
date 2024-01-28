@@ -1,4 +1,5 @@
 ﻿using ServerDeclara.DTOs;
+using ServerDeclara.DTOs.Otros;
 using ServerDeclara.Servicios_de_datos;
 
 namespace ServerDeclara.Servicios
@@ -37,8 +38,16 @@ namespace ServerDeclara.Servicios
 
         }
 
+        public async Task<bool> CrearNuevaDeclaracion(Periodo periodo)
+        {
+            periodo.UsuarioId = _usuarioServicio.GetUsuarioLogueado().Id;
 
-      
+            bool nuevo = await IVARepositorio.CrearNuevaDeclaracion(periodo);
+
+            return nuevo;
+
+        }
+
 
 
     }

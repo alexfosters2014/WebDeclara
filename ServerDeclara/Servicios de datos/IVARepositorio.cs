@@ -2,6 +2,8 @@
 using Microsoft.EntityFrameworkCore;
 using ServerDeclara.Datos;
 using ServerDeclara.DTOs;
+using ServerDeclara.DTOs.Otros;
+using ServerDeclara.Utilidades;
 
 namespace ServerDeclara.Servicios_de_datos
 {
@@ -57,7 +59,75 @@ namespace ServerDeclara.Servicios_de_datos
         }
 
 
+        public async Task<bool> CrearNuevaDeclaracion(Periodo periodo)
+        {
+            try
+            {
+                if (periodo != null && await NoExisteDeclaracion(periodo))
+                {
+                    BimensualIVA bimensual = new();
 
+                    Usuario usuarioBuscado = await _db.Usuarios.SingleOrDefaultAsync(s => s.Id == periodo.UsuarioId);
+                  
+                    DateTime desde = periodo.Desde;
+                    DateTime hasta = periodo.Hasta;
+                    bimensual.Desde = Util.PrimerDiaDelMes(desde);
+                    bimensual.Hasta = Util.UltimoDiaDelMes(hasta);
+                    bimensual.Usuario = usuarioBuscado;
+
+                    //_db.Entry(bimensual.HistorialParametro).State = EntityState.Unchanged;
+
+                    await _db.BimensualesIVA.AddAsync(bimensual);
+
+                    int cantidadNuevos = await _db.SaveChangesAsync();
+
+                    return cantidadNuevos > 0;
+                }
+                else
+                {
+                    return false;
+                }
+
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+
+        }
+
+
+
+
+        public async Task<bool> NoExisteDeclaracion(Periodo periodo)
+        {
+            try
+            {
+                bool resultado = false;
+                if (periodo != null)
+                {
+                    BimensualRPF bimensual = await _db.BimensualesRPFs.SingleOrDefaultAsync(w => w.Desde.Month == periodo.Desde.Month &&
+                                                                                                 w.Desde.Year == periodo.Desde.Year &&
+                                                                                                 w.Hasta.Month == periodo.Hasta.Month &&
+                                                                                                 w.Hasta.Year == periodo.Hasta.Year &&
+                                                                                                 w.Usuario.Id == periodo.UsuarioId);
+
+                    if (bimensual == null) return true;
+
+                    return resultado;
+                }
+                else
+                {
+                    return resultado;
+                }
+
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+
+        }
 
 
     }

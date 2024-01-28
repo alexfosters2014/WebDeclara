@@ -41,7 +41,7 @@
 
     private string TextoAnticipo()
     {
-        string texto = DeclaracionBimensual.AnticipoBimestreIVA >= 0 ? "Anticipo a pagar " : "Excedente a favor ";
+        string texto = DeclaracionBimensual.AnticipoBimestreIVA >= 0 ? "Anticipo de IVA a pagar " : "Excedente de IVA a  favor ";
         return texto + "$ " + DeclaracionBimensual.AnticipoBimestreIVA;
     }
 
