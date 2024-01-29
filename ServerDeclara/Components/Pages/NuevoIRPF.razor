@@ -202,15 +202,26 @@
 
 
         <p>Adicional Fondo Solidaridad</p>
-        <div class="d-flex justify-content-between">
+        <div class="d-flex justify-content-around">
    
-                <select @onchange="AdicionalFS_MES1" placeholder="Mes1" class="form-control">
+            <div>
+                <RadzenSwitch @bind-Value=@ImpuestoBimensual.DeclaracionMes1.AdicionalFS /><span> Mes 1</span>
+
+            </div>
+            
+
+                <div>
+                    <RadzenSwitch @bind-Value=@ImpuestoBimensual.DeclaracionMes2.AdicionalFS /><span> Mes 2</span>
+                </div>
+           
+
+           @*  <select @onchange="AdicionalFS_MES1" placeholder="Mes1" class="form-control">
                     @GenerarHTML_AdicionalFSMES1()
                 </select>
 
                 <select @onchange="AdicionalFS_MES2" placeholder="Mes1" class="form-control">
                     @GenerarHTML_AdicionalFSMES2()
-                </select>
+                </select> *@
         </div>
 
         <p>Aporte mensual a CJPPU o caja notarial</p>

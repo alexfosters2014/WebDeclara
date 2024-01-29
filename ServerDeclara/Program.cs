@@ -1,6 +1,7 @@
 using Blazored.Modal;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Radzen;
 using ServerDeclara.Components;
 using ServerDeclara.Datos;
 using ServerDeclara.Servicios;
@@ -21,6 +22,8 @@ builder.Services.AddDbContext<DeclaraContext>(options =>
 builder.Services.AddBlazoredModal();
 
 builder.Services.AddAutoMapper(typeof(Program));
+
+builder.Services.AddRadzenComponents();
 
 builder.Services.AddScoped<UsuarioServicio>();
 builder.Services.AddScoped<UsuarioRepositorio>();
