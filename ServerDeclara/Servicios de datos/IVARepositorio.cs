@@ -48,14 +48,22 @@ namespace ServerDeclara.Servicios_de_datos
 
         public async Task<BimensualIVADTO> ObtenerDeclaracionBimensual(int idBimensual)
         {
-            var declaracion = await _db.BimensualesIVA.AsNoTracking()
-                                                        .Include(i => i.Usuario)
-                                                        .Include(i => i.EntradasIVADiarios)
-                                                        .SingleOrDefaultAsync(s => s.Id == idBimensual);
+            try
+            {
+                var declaracion = await _db.BimensualesIVA.AsNoTracking()
+                                                                       .Include(i => i.Usuario)
+                                                                       .Include(i => i.EntradasIVADiarios)
+                                                                       .SingleOrDefaultAsync(s => s.Id == idBimensual);
 
-            BimensualIVADTO declaracionDTO = _mapper.Map<BimensualIVADTO>(declaracion);
+                BimensualIVADTO declaracionDTO = _mapper.Map<BimensualIVADTO>(declaracion);
 
-            return declaracionDTO;
+                return declaracionDTO;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+           
         }
 
 

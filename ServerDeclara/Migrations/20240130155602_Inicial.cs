@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ServerDeclara.Migrations
 {
     /// <inheritdoc />
-    public partial class InicialMigration : Migration
+    public partial class Inicial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -117,12 +117,36 @@ namespace ServerDeclara.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "BimensualesIVA",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UsuarioId = table.Column<int>(type: "int", nullable: false),
+                    Desde = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Hasta = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    AnticipoBimestreIVA = table.Column<double>(type: "float", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BimensualesIVA", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_BimensualesIVA_Usuarios_UsuarioId",
+                        column: x => x.UsuarioId,
+                        principalTable: "Usuarios",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "BimensualesRPFs",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     UsuarioId = table.Column<int>(type: "int", nullable: true),
+                    Desde = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Hasta = table.Column<DateTime>(type: "datetime2", nullable: false),
                     DeclaracionMes1Id = table.Column<int>(type: "int", nullable: true),
                     DeclaracionMes2Id = table.Column<int>(type: "int", nullable: true),
                     AnticipoExcedente = table.Column<double>(type: "float", nullable: false),
@@ -185,61 +209,103 @@ namespace ServerDeclara.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    UsuarioId = table.Column<int>(type: "int", nullable: true),
                     Fecha = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ComercioId = table.Column<int>(type: "int", nullable: true),
                     MontoTotal = table.Column<double>(type: "float", nullable: false),
                     MontoMasIVA = table.Column<double>(type: "float", nullable: false),
                     MontoIVA = table.Column<double>(type: "float", nullable: false),
                     MontoIvaRetenido = table.Column<double>(type: "float", nullable: false),
-                    NombreArchivoPDF = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    TipoIva = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    NombreArchivoPDF = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    EntradaIvaDiarioId = table.Column<int>(type: "int", nullable: true),
+                    BimensualIVAId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_EntradasIVAsDiarios", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_EntradasIVAsDiarios_BimensualesIVA_BimensualIVAId",
+                        column: x => x.BimensualIVAId,
+                        principalTable: "BimensualesIVA",
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_EntradasIVAsDiarios_Comercios_ComercioId",
                         column: x => x.ComercioId,
                         principalTable: "Comercios",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_EntradasIVAsDiarios_Usuarios_UsuarioId",
-                        column: x => x.UsuarioId,
-                        principalTable: "Usuarios",
+                        name: "FK_EntradasIVAsDiarios_EntradasIVAsDiarios_EntradaIvaDiarioId",
+                        column: x => x.EntradaIvaDiarioId,
+                        principalTable: "EntradasIVAsDiarios",
                         principalColumn: "Id");
                 });
 
             migrationBuilder.InsertData(
                 table: "HistorialParametros",
                 columns: new[] { "Id", "Descripcion", "Fecha" },
-                values: new object[] { 1, "Periodo enero-diciembre 2024", new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) });
+                values: new object[,]
+                {
+                    { 1, "Periodo enero-diciembre 2024", new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 2, "Periodo enero-diciembre 2023", new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) }
+                });
 
             migrationBuilder.InsertData(
                 table: "Parametros",
                 columns: new[] { "Id", "Atributo", "Descripcion", "Formula", "HistorialParametroId", "IngresosDesde", "IngresosHasta", "Orden", "Tasa", "Tipo", "ValidezParametrosDesde", "ValidezParametrosHasta" },
                 values: new object[,]
                 {
-                    { 1, "", "0 A 7 BPC", "", 1, 0.0, 7.0, 1, 0.0, "RENTA", new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified) },
-                    { 2, "", "7 A 10 BPC", "", 1, 7.0, 10.0, 2, 0.10000000000000001, "RENTA", new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified) },
-                    { 3, "", "10 A 15 BPC", "", 1, 10.0, 15.0, 3, 0.14999999999999999, "RENTA", new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified) },
-                    { 4, "", "15 A 30 BPC", "", 1, 15.0, 30.0, 4, 0.23999999999999999, "RENTA", new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified) },
-                    { 5, "", "30 A 50 BPC", "", 1, 30.0, 50.0, 5, 0.25, "RENTA", new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified) },
-                    { 6, "", "50 A 75 BPC", "", 1, 50.0, 75.0, 6, 0.27000000000000002, "RENTA", new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified) },
-                    { 7, "", "75 A 115 BPC", "", 1, 75.0, 115.0, 7, 0.31, "RENTA", new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified) },
-                    { 8, "", "> BPC", "", 1, 115.0, 20000.0, 8, 0.35999999999999999, "RENTA", new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified) },
-                    { 9, "", "BPC", "", 1, 0.0, 0.0, 9, 5660.0, "BPC", new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 1, "", "0 A 7 BPC", "", 1, 0.0, 7.0, 3, 0.0, "RENTA", new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 2, "", "7 A 10 BPC", "", 1, 7.0, 10.0, 6, 0.10000000000000001, "RENTA", new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 3, "", "10 A 15 BPC", "", 1, 10.0, 15.0, 9, 0.14999999999999999, "RENTA", new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 4, "", "15 A 30 BPC", "", 1, 15.0, 30.0, 12, 0.23999999999999999, "RENTA", new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 5, "", "30 A 50 BPC", "", 1, 30.0, 50.0, 15, 0.25, "RENTA", new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 6, "", "50 A 75 BPC", "", 1, 50.0, 75.0, 18, 0.27000000000000002, "RENTA", new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 7, "", "75 A 115 BPC", "", 1, 75.0, 115.0, 21, 0.31, "RENTA", new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 8, "", "> BPC", "", 1, 115.0, 20000.0, 24, 0.35999999999999999, "RENTA", new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 9, "BPC", "BPC", "5660", 1, 0.0, 0.0, 9, 5660.0, "BPC", new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified) },
                     { 10, "DeduccionLegalIngresos", "Deducción legal 30%", "IngIndependiente * -0.3", 1, 0.0, 0.0, 10, 0.0, "CALCULO", new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified) },
                     { 11, "IngTotalIndependiente", "Total ingresos fuera de la relación de dependencia", "IngIndependiente + DeduccionLegalIngresos", 1, 0.0, 0.0, 11, 0.0, "CALCULO", new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified) },
-                    { 12, "IngIncrementoSeisPorciento", "Incremento del 6%", "IFF((IngDependenciaCess + IngDependenciaNoCess + IngSalVacacional) > (BPC * 10), IngDependenciaCess * 0.06, 0)", 1, 0.0, 0.0, 12, 0.0, "CALCULO", new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 12, "IngIncrementoSeisPorciento", "Incremento del 6%", "IIF((IngDependenciaCess + IngDependenciaNoCess + IngSalVacacional) > (BPC * 10), IngDependenciaCess * 0.06, 0)", 1, 0.0, 0.0, 12, 0.0, "CALCULO", new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified) },
                     { 13, "IngTotalDependencia", "Ingresos totales en realaciòn de dependencia", "IngDependenciaCess + IngDependenciaNoCess + IngSalVacacional + IngIncrementoSeisPorciento", 1, 0.0, 0.0, 13, 0.0, "CALCULO", new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified) },
                     { 14, "IngParaAnticipo", "Ingreso computable para anticipo", "IngTotalIndependiente + IngTotalDependencia + IngOtros", 1, 0.0, 0.0, 14, 0.0, "CALCULO", new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified) },
                     { 15, "DeduccionTotalDeducir", "Importe a deducir", "(DeduccionSDmenores * 20 * BPC + DeduccionCD * 40 * BPC) / 12 + (DeduccionSDMenoresCincuenta * 20 * BPC + DeduccionCDCincuenta * 40 * BPC) * 0.5 / 12", 1, 0.0, 0.0, 15, 0.0, "CALCULO", new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified) },
-                    { 16, "DeduccionFondoSolidaridad", "Deduccion de fondo de solidaridad", "CantidadBPCParaFS * BPC", 1, 0.0, 0.0, 16, 0.0, "CALCULO", new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 16, "DeduccionFondoSolidaridad", "Deduccion de fondo de solidaridad", "CantidadBPCParaFS * BPC / 12", 1, 0.0, 0.0, 16, 0.0, "CALCULO", new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified) },
                     { 17, "DeduccionTotal", "Total de deducciones", "DeduccionTotalDeducir + DeduccionFondoSolidaridad + DeduccionFondoSolidaridadAdicional + DeduccionCJPPU + DeduccionJubilatorio + DeduccionFonasa + DeduccionFRL + DeduccionOtros", 1, 0.0, 0.0, 17, 0.0, "CALCULO", new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified) },
-                    { 18, "DeduccionFondoSolidaridadAdicional", "Adicional fondo de solidaridad", "IFF(AdicionalFS = true,5/3 * BPC / 12, 0)", 1, 0.0, 0.0, 18, 0.0, "CALCULO", new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified) },
-                    { 19, "AnticipoMensual", "Anticipo Mensual", "IFF(AnticipoNF = false, LiquidacionMes, LiquidacionMes * 0.95)", 1, 0.0, 0.0, 19, 0.0, "CALCULO", new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified) },
-                    { 20, "TasaDeduccion", "Tasa liquidacion", "IFF(IngresosExc > (15 * BPC), 0.8, 0.14)", 1, 0.0, 0.0, 20, 0.0, "CALCULO", new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified) }
+                    { 18, "DeduccionFondoSolidaridadAdicional", "Adicional fondo de solidaridad", "IIF(AdicionalFS = true,5/3 * BPC / 12, 0)", 1, 0.0, 0.0, 18, 0.0, "CALCULO", new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 19, "AnticipoMensual", "Anticipo Mensual", "IIF(AnticipoNF = false, LiquidacionMes, LiquidacionMes * 0.95)", 1, 0.0, 0.0, 19, 0.0, "CALCULO", new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 20, "TasaDeduccion", "Tasa liquidacion", "IIF(TotalExcedenteIngresos > (15 * BPC), 0.08, 0.14)", 1, 0.0, 0.0, 20, 0.0, "CALCULO", new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 21, "TotalExcedenteIngresos", "Ingresos exc. AG y SV", "IngParaAnticipo - IngIncrementoSeisPorciento - IngSalVacacional - DeduccionLegalIngresos", 1, 0.0, 0.0, 21, 0.0, "CALCULO", new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 22, "TotalDeducible", "Total deducible para liquidacion", "DeduccionTotal * TasaDeduccion", 1, 0.0, 0.0, 22, 0.0, "CALCULO", new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 23, "LiquidacionMes", "Liquidacion mes", "IIF((LiquidacionIngresos - TotalDeducible)>0,(LiquidacionIngresos -TotalDeducible),0)", 1, 0.0, 0.0, 23, 0.0, "CALCULO", new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 24, "", "0 A 7 BPC", "", 2, 0.0, 7.0, 3, 0.0, "RENTA", new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 25, "", "7 A 10 BPC", "", 2, 7.0, 10.0, 6, 0.10000000000000001, "RENTA", new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 26, "", "10 A 15 BPC", "", 2, 10.0, 15.0, 9, 0.14999999999999999, "RENTA", new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 27, "", "15 A 30 BPC", "", 2, 15.0, 30.0, 12, 0.23999999999999999, "RENTA", new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 28, "", "30 A 50 BPC", "", 2, 30.0, 50.0, 15, 0.25, "RENTA", new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 29, "", "50 A 75 BPC", "", 2, 50.0, 75.0, 18, 0.27000000000000002, "RENTA", new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 30, "", "75 A 115 BPC", "", 2, 75.0, 115.0, 21, 0.31, "RENTA", new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 31, "", "> BPC", "", 2, 115.0, 20000.0, 24, 0.35999999999999999, "RENTA", new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 32, "BPC", "BPC", "5660", 2, 0.0, 0.0, 9, 5660.0, "BPC", new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 33, "DeduccionLegalIngresos", "Deducción legal 30%", "IngIndependiente * -0.3", 2, 0.0, 0.0, 10, 0.0, "CALCULO", new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 34, "IngTotalIndependiente", "Total ingresos fuera de la relación de dependencia", "IngIndependiente + DeduccionLegalIngresos", 2, 0.0, 0.0, 11, 0.0, "CALCULO", new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 35, "IngIncrementoSeisPorciento", "Incremento del 6%", "IIF((IngDependenciaCess + IngDependenciaNoCess + IngSalVacacional) > (BPC * 10), IngDependenciaCess * 0.06, 0)", 2, 0.0, 0.0, 12, 0.0, "CALCULO", new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 36, "IngTotalDependencia", "Ingresos totales en realaciòn de dependencia", "IngDependenciaCess + IngDependenciaNoCess + IngSalVacacional + IngIncrementoSeisPorciento", 2, 0.0, 0.0, 13, 0.0, "CALCULO", new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 37, "IngParaAnticipo", "Ingreso computable para anticipo", "IngTotalIndependiente + IngTotalDependencia + IngOtros", 2, 0.0, 0.0, 14, 0.0, "CALCULO", new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 38, "DeduccionTotalDeducir", "Importe a deducir", "(DeduccionSDmenores * 20 * BPC + DeduccionCD * 40 * BPC) / 12 + (DeduccionSDMenoresCincuenta * 20 * BPC + DeduccionCDCincuenta * 40 * BPC) * 0.5 / 12", 2, 0.0, 0.0, 15, 0.0, "CALCULO", new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 39, "DeduccionFondoSolidaridad", "Deduccion de fondo de solidaridad", "CantidadBPCParaFS * BPC / 12", 2, 0.0, 0.0, 16, 0.0, "CALCULO", new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 40, "DeduccionTotal", "Total de deducciones", "DeduccionTotalDeducir + DeduccionFondoSolidaridad + DeduccionFondoSolidaridadAdicional + DeduccionCJPPU + DeduccionJubilatorio + DeduccionFonasa + DeduccionFRL + DeduccionOtros", 2, 0.0, 0.0, 17, 0.0, "CALCULO", new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 41, "DeduccionFondoSolidaridadAdicional", "Adicional fondo de solidaridad", "IIF(AdicionalFS = true,5/3 * BPC / 12, 0)", 2, 0.0, 0.0, 18, 0.0, "CALCULO", new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 42, "AnticipoMensual", "Anticipo Mensual", "IIF(AnticipoNF = false, LiquidacionMes, LiquidacionMes * 0.95)", 2, 0.0, 0.0, 19, 0.0, "CALCULO", new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 43, "TasaDeduccion", "Tasa liquidacion", "IIF(TotalExcedenteIngresos > (15 * BPC), 0.08, 0.10)", 2, 0.0, 0.0, 20, 0.0, "CALCULO", new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 44, "TotalExcedenteIngresos", "Ingresos exc. AG y SV", "IngParaAnticipo - IngIncrementoSeisPorciento - IngSalVacacional - DeduccionLegalIngresos", 2, 0.0, 0.0, 21, 0.0, "CALCULO", new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 45, "TotalDeducible", "Total deducible para liquidacion", "DeduccionTotal * TasaDeduccion", 2, 0.0, 0.0, 22, 0.0, "CALCULO", new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 46, "LiquidacionMes", "Liquidacion mes", "IIF((LiquidacionIngresos - TotalDeducible)>0,(LiquidacionIngresos -TotalDeducible),0)", 2, 0.0, 0.0, 23, 0.0, "CALCULO", new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified) }
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BimensualesIVA_UsuarioId",
+                table: "BimensualesIVA",
+                column: "UsuarioId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_BimensualesRPFs_DeclaracionMes1Id",
@@ -267,14 +333,19 @@ namespace ServerDeclara.Migrations
                 column: "UsuarioId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_EntradasIVAsDiarios_BimensualIVAId",
+                table: "EntradasIVAsDiarios",
+                column: "BimensualIVAId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_EntradasIVAsDiarios_ComercioId",
                 table: "EntradasIVAsDiarios",
                 column: "ComercioId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_EntradasIVAsDiarios_UsuarioId",
+                name: "IX_EntradasIVAsDiarios_EntradaIvaDiarioId",
                 table: "EntradasIVAsDiarios",
-                column: "UsuarioId");
+                column: "EntradaIvaDiarioId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Parametros_HistorialParametroId",
@@ -296,6 +367,9 @@ namespace ServerDeclara.Migrations
 
             migrationBuilder.DropTable(
                 name: "DeclaracionsMensualesIRPFs");
+
+            migrationBuilder.DropTable(
+                name: "BimensualesIVA");
 
             migrationBuilder.DropTable(
                 name: "Comercios");

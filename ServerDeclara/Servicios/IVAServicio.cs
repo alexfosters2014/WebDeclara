@@ -32,6 +32,8 @@ namespace ServerDeclara.Servicios
 
         public async Task<BimensualIVADTO> ObtenerDeclaracion()
         {
+            if (bimensualIdSeleccionado == 0) return null;
+
             BimensualIVADTO declaracionDTO = await IVARepositorio.ObtenerDeclaracionBimensual(bimensualIdSeleccionado);
 
             return declaracionDTO;

@@ -2,24 +2,42 @@
 @inject IVAServicio _ivaServicio
 
 <CardIVAVista Titulo="Ventas">
-    @foreach (var itemVenta in Ventas)
+    @if (Ventas != null && Ventas.Count > 0)
     {
-        <ItemCardIVA entradaIVA="itemVenta" />
+        @foreach (var itemVenta in Ventas)
+        {
+            <ItemCardIVA entradaIVA="itemVenta" />
+        }
+
+    }
+    else
+    {
+        <p>Todavia no tiene comprobante ingresado</p>
     }
 </CardIVAVista>
 
 <CardIVAVista Titulo="Compras">
-    @foreach (var itemCompra in Compras)
+    @if (Compras != null && Compras.Count > 0)
     {
-        <ItemCardIVA entradaIVA="itemCompra" />
+        @foreach (var itemCompra in Compras)
+        {
+            <ItemCardIVA entradaIVA="itemCompra" />
+        }
+
+    }
+    else
+    {
+        <p>Todavia no tiene comprobante ingresado</p>
     }
 </CardIVAVista>
 
 <CardIVAVista Titulo="Monto IVA a pagar">
-    <p>Hola</p>
+    <p>IVA a pagar: $@bimensualIVA.AnticipoBimestreIVA</p>
 </CardIVAVista>
 
-
+<div class="botonMas" @onclick="IrNuevoComprobante">
+    <img src="/imagenes/iconos/botonMas.png" alt="boton +" />
+</div>
 
 @code {
     int declaracionIVAId = 0;
@@ -36,13 +54,15 @@
 
     private async Task Actualizar()
     {
-        //traer el bimensual de la BD
-
+        bimensualIVA = await _ivaServicio.ObtenerDeclaracion();
 
         Compras = bimensualIVA.EntradasIVADiarios.Where(w => w.TipoIva == Util.TipoIva.COMPRA.ToString()).ToList();
         Ventas = bimensualIVA.EntradasIVADiarios.Where(w => w.TipoIva == Util.TipoIva.VENTA.ToString()).ToList();
     }
 
 
-
+    private void IrNuevoComprobante(MouseEventArgs e)
+    {
+        throw new NotImplementedException();
+    }
 }
