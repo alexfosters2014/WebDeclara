@@ -3,21 +3,61 @@
 @inject IVAServicio _IVAServicio
 
 
-<section class="card-vista">
-    <div class="row">
-        <span>@Titulo</span>
+
+<section class="card-general">
+    <article>
+        @FormatearPeriodo()
+    </article>
+    <p class="@ColorAnticipo()">
+        @TextoAnticipo()
+    </p>
+    <div class="d-flex  justify-content-end card-general-submenu">
+        <a href="" @onclick="() => EditarCambiosDeclaracion(DeclaracionBimensual.Id)" @onclick:preventDefault>
+            <img src="/imagenes/iconos/editar.png" alt="">
+        </a>
+
+        <a href="" @onclick="() => AgregarNuevoIVA(DeclaracionBimensual.Id)" @onclick:preventDefault>
+            <img src="/imagenes/iconos/botonMas.png" alt="">
+        </a>
+
     </div>
-
-    @contenidoHTML
-
 </section>
 
 
 
+
 @code {
-    [Parameter] public RenderFragment contenidoHTML { get; set; }
-    [Parameter] public string Titulo { get; set; }
+    [Parameter] public BimensualIVA_ViewList DeclaracionBimensual { get; set; }
+
+    private string FormatearPeriodo()
+    {
+        var formatoFechaEspanol = DateTimeFormatInfo.GetInstance(new System.Globalization.CultureInfo("es-ES"));
+
+        string fechaDesde = DeclaracionBimensual.Desde.ToString("MMMM", formatoFechaEspanol);
+        string fechaHasta = DeclaracionBimensual.Hasta.ToString("MMMM", formatoFechaEspanol);
+        string anio = DeclaracionBimensual.Desde.ToString("yyyy");
+
+        return fechaDesde + "-" + fechaHasta + " " + anio;
+    }
+
+    private string TextoAnticipo()
+    {
+        string texto = DeclaracionBimensual.AnticipoBimestreIVA >= 0 ? "Anticipo de IVA a pagar " : "Excedente de IVA a  favor ";
+        return texto + "$ " + DeclaracionBimensual.AnticipoBimestreIVA;
+    }
+
+    private string ColorAnticipo() => DeclaracionBimensual.AnticipoBimestreIVA >= 0 ? "color-rojo" : "color-verde";
 
 
+    private void EditarCambiosDeclaracion(int idBimensual)
+    {
+        _IVAServicio.SetIdBimensual(idBimensual);
+        _nav.NavigateTo("/gestionIVA");
+    }
+
+    private void AgregarNuevoIVA(int idBimensual)
+    {
+        // _irpfServicio.SetIdBimensual(idBimensual);
+        // _nav.NavigateTo("/NuevoIRPF/" + Util.modoFormulario.EDICION.ToString());
+    }
 }
-

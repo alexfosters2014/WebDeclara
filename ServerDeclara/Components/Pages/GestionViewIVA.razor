@@ -1,20 +1,48 @@
 ﻿@page "/gestionIVA"
+@inject IVAServicio _ivaServicio
 
+<CardIVAVista Titulo="Ventas">
+    @foreach (var itemVenta in Ventas)
+    {
+        <ItemCardIVA entradaIVA="itemVenta" />
+    }
+</CardIVAVista>
 
-<section class="card-vista">
-    <div class="row">
-        <span>@Titulo</span>
-    </div>
+<CardIVAVista Titulo="Compras">
+    @foreach (var itemCompra in Compras)
+    {
+        <ItemCardIVA entradaIVA="itemCompra" />
+    }
+</CardIVAVista>
 
-  @contenidoHTML
-
-</section>
+<CardIVAVista Titulo="Monto IVA a pagar">
+    <p>Hola</p>
+</CardIVAVista>
 
 
 
 @code {
-    [Parameter] public RenderFragment contenidoHTML { get; set; }
-    [Parameter] public string Titulo { get; set; }
+    int declaracionIVAId = 0;
+    BimensualIVADTO bimensualIVA = new();
+
+    List<EntradaIVADiarioDTO> Compras = new();
+    List<EntradaIVADiarioDTO> Ventas = new();
+
+    protected async override Task OnInitializedAsync()
+    {
+        declaracionIVAId = _ivaServicio.GetIdBimensual();
+        await Actualizar();
+    }
+
+    private async Task Actualizar()
+    {
+        //traer el bimensual de la BD
+
+
+        Compras = bimensualIVA.EntradasIVADiarios.Where(w => w.TipoIva == Util.TipoIva.COMPRA.ToString()).ToList();
+        Ventas = bimensualIVA.EntradasIVADiarios.Where(w => w.TipoIva == Util.TipoIva.VENTA.ToString()).ToList();
+    }
+
 
 
 }

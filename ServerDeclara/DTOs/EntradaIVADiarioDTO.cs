@@ -6,7 +6,7 @@ namespace ServerDeclara.DTOs
     {
         public int Id { get; set; }
         public DateTime Fecha { get; set; }
-        public virtual Comercio Comercio { get; set; } = new Comercio();
+        public virtual ComercioDTO Comercio { get; set; } = new ComercioDTO();
         public double MontoTotal { get; set; }
         public double MontoMasIVA { get; set; }
         public double MontoIVA { get; set; }

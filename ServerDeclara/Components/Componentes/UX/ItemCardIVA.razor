@@ -1,0 +1,37 @@
+﻿<section class="row item-iva justify-content-center">
+    <article class="col-5 d-flex flex-column align-items-center justify-content-center">
+        <p>@entradaIVA.Fecha</p>
+        <p>Constructora sudamericana sd...</p>
+    </article>
+
+    <article class="col-4 d-flex align-items-center justify-content-center">
+        <table>
+            <tr>
+                <td>Monto: </td>
+                <td>$@entradaIVA.MontoMasIVA</td>
+            </tr>
+            <tr>
+                <td>IVA: </td>
+                <td>$@entradaIVA.MontoIVA</td>
+            </tr>
+            <tr>
+                <td>IVA ret: </td>
+                <td>$@entradaIVA.MontoIvaRetenido</td>
+            </tr>
+        </table>
+    </article>
+
+    <article class="col-3 d-flex align-items-center justify-content-center">
+        <img src="//imagenes/iconos/ojo.png" alt="">
+    </article>
+</section>
+
+@code {
+    [Parameter] public EntradaIVADiarioDTO entradaIVA { get; set; }
+
+
+    private string NombreEmpresa() => entradaIVA.Comercio.RazonSocial.Length > 25 ? entradaIVA.Comercio.RazonSocial.Substring(0,25) + "..." : entradaIVA.Comercio.RazonSocial;
+
+
+
+}

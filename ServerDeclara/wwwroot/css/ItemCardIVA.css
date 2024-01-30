@@ -1,0 +1,25 @@
+﻿
+.item-iva {
+    background-color: grey;
+    border-radius: 20px;
+    background-color: white;
+    box-shadow: 2px 2px 5px 0px rgba(200, 200, 200, 1);
+    font-weight: 500;
+}
+
+    .item-iva img {
+        height: auto;
+        width: 100%;
+    }
+
+    .item-iva p {
+        margin: 1px 0;
+        color: blueviolet;
+        font: weight 600px;
+        text-align: center;
+    }
+
+    .item-iva table tr td:first-child {
+        color: orangered;
+        font-size: 0.8rem;
+    }

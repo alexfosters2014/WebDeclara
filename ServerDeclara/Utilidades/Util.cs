@@ -21,6 +21,12 @@ namespace ServerDeclara.Utilidades
           NUEVO
         }
 
+        public enum TipoIva
+        {
+            COMPRA,
+            VENTA
+        }
+
         public static DateTime UltimoDiaDelMes(DateTime fecha)  // Obtener el primer día del mes siguiente y restar un día
         {       
                 DateTime primerDiaDelMesSiguiente = new DateTime(fecha.Year, fecha.Month, 1).AddMonths(1);
