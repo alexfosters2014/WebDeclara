@@ -1,0 +1,29 @@
+﻿.card-vista {
+    padding: 0 12px 12px 12px;
+    margin: 35px 25px 25px 25px;
+    border-radius: 15px;
+    box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+    background-color: #EAEAEA;
+}
+
+.card-vista img {
+    width: 35px;
+    height: 35px;
+}
+
+.card-vista p {
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding: 0;
+    font-weight: 500;
+}
+
+.card-vista span {
+    background-color: #B176CE;
+    margin: 0;
+    border-radius: 15px 15px 0 0;
+    padding: 10px 5px;
+    text-align: center;
+    color: white;
+}

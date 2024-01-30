@@ -1,4 +1,20 @@
 ﻿@page "/gestionIVA"
+
+
+<section class="card-vista">
+    <div class="row">
+        <span>@Titulo</span>
+    </div>
+
+  @contenidoHTML
+
+</section>
+
+
+
 @code {
+    [Parameter] public RenderFragment contenidoHTML { get; set; }
+    [Parameter] public string Titulo { get; set; }
+
 
 }
