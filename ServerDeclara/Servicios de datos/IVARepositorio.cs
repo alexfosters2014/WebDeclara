@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using ServerDeclara.Datos;
 using ServerDeclara.DTOs;
@@ -135,6 +136,17 @@ namespace ServerDeclara.Servicios_de_datos
                 return false;
             }
 
+        }
+
+        public async Task<List<ComercioDTO>> GetComerciosPorUsuario(int usuarioId)
+        {
+            List<ComercioDTO> listado = new();
+
+            var listadoBD = await _db.Comercios.Where(w => w.Usuario.Id == usuarioId && !w.Suspendido).ToListAsync();
+            
+            listado = _mapper.Map<List<ComercioDTO>>(listadoBD);
+
+            return listado;
         }
 
 

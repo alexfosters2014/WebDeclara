@@ -1,7 +1,7 @@
 ﻿@using System.Globalization
 @inject NavigationManager _nav
 @inject IVAServicio _IVAServicio
-
+@inject IJSRuntime _js
 
 
 <section class="card-general">
@@ -55,9 +55,11 @@
         _nav.NavigateTo("/gestionIVA");
     }
 
-    private void AgregarNuevoIVA(int idBimensual)
+    private async Task AgregarNuevoIVA(int idBimensual)
     {
-        // _irpfServicio.SetIdBimensual(idBimensual);
-        // _nav.NavigateTo("/NuevoIRPF/" + Util.modoFormulario.EDICION.ToString());
+        _IVAServicio.SetIdBimensual(idBimensual);
+        _nav.NavigateTo("/NuevoComprobante/");
+      
+        // texto = await _js.InvokeAsync<string>("LeerVoz");
     }
 }

@@ -1,5 +1,96 @@
-﻿<h3>Component</h3>
+﻿@page "/NuevoComprobante"
+@inject IVAServicio _ivaServicio
+@inject IJSRuntime _js
+
+<div class="d-flex justify-content-center align-content-center">
+    <p class="@escuchaEmpresa">Empresa</p>
+    <p>@escuchaEmpresa</p>
+    <p class="@escuchaFecha">Fecha</p>
+    <p class="@escuchaMonto">Monto</p>
+    <p class="@escuchaIVA">IVA</p>
+</div>
 
 @code {
+    string escuchaEmpresa = "";
+    string escuchaFecha = "";
+    string escuchaMonto = "";
+    string escuchaIVA = "";
 
+    List<ComercioDTO> Comercios = new();
+    EntradaIVADiarioDTO nuevaEntradaIVA = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        Comercios = await _ivaServicio.GetListadoComerciosPorUsuario();
+
+        await Escucha();
+    }
+
+    private async Task Escucha()
+    {
+        await EscucharEmpresa();
+
+        await EscucharFecha();
+
+
+
+    }
+
+    private async Task EscucharFecha()
+    {
+        string textoDeEscucha = "";
+
+        IconoEscucha("fecha");
+
+        textoDeEscucha = await _js.InvokeAsync<string>("LeerVoz");
+
+        if (string.IsNullOrEmpty(textoDeEscucha)) return;
+
+        DateTime fecha = ProcesadorVoz.ProcesarFechaPorVoz(textoDeEscucha);
+
+        if (fecha != DateTime.MinValue) nuevaEntradaIVA.Fecha = fecha;
+    }
+
+    private async Task EscucharEmpresa()
+    {
+        string textoDeEscucha = "";
+
+        IconoEscucha("empresa");
+
+        textoDeEscucha = await _js.InvokeAsync<string>("LeerVoz");
+
+        if (string.IsNullOrEmpty(textoDeEscucha)) return;
+
+        ComercioDTO comercioBuscado = ProcesadorVoz.BusquedaComercioPorRazonSocial(textoDeEscucha, Comercios);
+
+        if (comercioBuscado != null) nuevaEntradaIVA.Comercio = comercioBuscado;
+    }
+
+    private void IconoEscucha(string foco)
+    {
+
+        escuchaEmpresa = "";
+        escuchaFecha = "";
+        escuchaMonto = "";
+        escuchaIVA = "";
+
+        switch (foco)
+        {
+            case "empresa":
+                escuchaEmpresa = "beforeIconEscucha";
+                break;
+            case "fecha":
+                escuchaFecha = "beforeIconEscucha";
+                break;
+            case "monto":
+                escuchaMonto = "beforeIconEscucha";
+                break;
+            case "iva":
+                escuchaIVA = "beforeIconEscucha";
+                break;
+            default:
+                break;
+        }
+
+    }
 }

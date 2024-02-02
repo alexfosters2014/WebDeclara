@@ -7,19 +7,58 @@
     font-weight: 500;
 }
 
-    .item-iva img {
-        height: auto;
-        width: 100%;
+.item-iva img {
+    height: auto;
+    width: 100%;
+}
+
+.item-iva p {
+    margin: 1px 0;
+    color: blueviolet;
+    font: weight 600px;
+    text-align: center;
+}
+
+.item-iva table tr td:first-child {
+    color: orangered;
+    font-size: 0.8rem;
+}
+
+.item-iva table tr td:last-child {
+    color: #3C3C3C;
+}
+
+.fuente-pequeña {
+    font-size: 0.9rem;
+    color: #3C3C3C !important;
+}
+
+.beforeIconEscucha{
+    font-size:1.5rem;
+    color:darkslateblue;
+}
+
+    .beforeIconEscucha::after {
+        content: '';
+        display: inline-block;
+        width: 30px; /* Ajusta el ancho según sea necesario */
+        height: 30px; /* Ajusta la altura según sea necesario */
+        background: url('/imagenes/iconos/microfono.png') bottom/contain no-repeat; /* Reemplaza con la ruta a tu icono personalizado */
+        margin-left: 10px; /* Espacio opcional a la derecha del icono */
+        transition: transform 0.5s ease-in-out;
+        animation: escalar 1.2s infinite;
     }
 
-    .item-iva p {
-        margin: 1px 0;
-        color: blueviolet;
-        font: weight 600px;
-        text-align: center;
+@keyframes escalar {
+    0% {
+        transform: scale(1);
     }
 
-    .item-iva table tr td:first-child {
-        color: orangered;
-        font-size: 0.8rem;
+    50% {
+        transform: scale(1.2);
     }
+
+    100% {
+        transform: scale(1);
+    }
+}

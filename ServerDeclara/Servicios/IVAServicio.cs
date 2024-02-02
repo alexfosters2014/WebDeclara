@@ -6,13 +6,13 @@ namespace ServerDeclara.Servicios
 {
     public class IVAServicio
     {
-        private readonly IVARepositorio IVARepositorio;
+        private readonly IVARepositorio _IVARepositorio;
         private readonly UsuarioServicio _usuarioServicio;
         private int bimensualIdSeleccionado = 0;
 
         public IVAServicio(IVARepositorio iVARepositorio, UsuarioServicio usuarioServicio)
         {
-            IVARepositorio = iVARepositorio;
+            _IVARepositorio = iVARepositorio;
             _usuarioServicio = usuarioServicio;
         }
 
@@ -24,7 +24,7 @@ namespace ServerDeclara.Servicios
         {
             int usuarioId = _usuarioServicio.GetUsuarioLogueado().Id;
 
-            var listado = await IVARepositorio.GetListadoBimensual(usuarioId);
+            var listado = await _IVARepositorio.GetListadoBimensual(usuarioId);
 
             return listado;
 
@@ -34,7 +34,7 @@ namespace ServerDeclara.Servicios
         {
             if (bimensualIdSeleccionado == 0) return null;
 
-            BimensualIVADTO declaracionDTO = await IVARepositorio.ObtenerDeclaracionBimensual(bimensualIdSeleccionado);
+            BimensualIVADTO declaracionDTO = await _IVARepositorio.ObtenerDeclaracionBimensual(bimensualIdSeleccionado);
 
             return declaracionDTO;
 
@@ -44,12 +44,25 @@ namespace ServerDeclara.Servicios
         {
             periodo.UsuarioId = _usuarioServicio.GetUsuarioLogueado().Id;
 
-            bool nuevo = await IVARepositorio.CrearNuevaDeclaracion(periodo);
+            bool nuevo = await _IVARepositorio.CrearNuevaDeclaracion(periodo);
 
             return nuevo;
 
         }
 
+        public async Task<List<ComercioDTO>> GetListadoComerciosPorUsuario()
+        {
+            try
+            {
+                int usuarioId = _usuarioServicio.GetUsuarioLogueado().Id;
+                return await _IVARepositorio.GetComerciosPorUsuario(usuarioId);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
 
 
     }
