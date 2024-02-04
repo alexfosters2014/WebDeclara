@@ -61,7 +61,7 @@
 
         if (string.IsNullOrEmpty(textoDeEscucha)) return;
 
-        ComercioDTO comercioBuscado = ProcesadorVoz.BusquedaComercioPorRazonSocial(textoDeEscucha, Comercios);
+        ComercioDTO comercioBuscado = await ProcesadorVoz.BusquedaComercioPorRazonSocial(textoDeEscucha, Comercios);
 
         if (comercioBuscado != null) nuevaEntradaIVA.Comercio = comercioBuscado;
     }

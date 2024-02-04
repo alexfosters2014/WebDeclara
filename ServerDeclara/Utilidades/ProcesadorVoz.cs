@@ -1,114 +1,76 @@
 ﻿using ServerDeclara.DTOs;
 using System.Linq;
+using OpenAI.ObjectModels.RequestModels;
+using OpenAI.ObjectModels;
+using OpenAI.Managers;
+using OpenAI;
+using Microsoft.AspNetCore.Components.Forms;
 
 namespace ServerDeclara.Utilidades
 {
     public static class ProcesadorVoz
     {
 
-        public static ComercioDTO BusquedaComercioPorRazonSocial(string razonSocial, List<ComercioDTO> comercios)
+        public static async Task<ComercioDTO> BusquedaComercioPorRazonSocial(string razonSocial, List<ComercioDTO> comercios)
         {
             ComercioDTO comercioBuscado = null;
             razonSocial = razonSocial.ToLower();
 
-            comercioBuscado = ProcesadorVoz.BusquedaContains(razonSocial,comercios);
-
-            if (comercioBuscado != null) return comercioBuscado;
-
-            comercioBuscado = ProcesadorVoz.BusquedaPorPalabras(razonSocial, comercios);
-
-            if (comercioBuscado != null) return comercioBuscado;
-
-            comercioBuscado = ProcesadorVoz.BusquedaLevenshtein(razonSocial, comercios);
+            comercioBuscado = await BusquedaChatGPTComercio(razonSocial,comercios);
 
             if (comercioBuscado != null) return comercioBuscado;
 
             return comercioBuscado;
         }
 
-        private static ComercioDTO BusquedaContains(string razonSocial, List<ComercioDTO> comercios)
+       
+
+        private static async Task<ComercioDTO> BusquedaChatGPTComercio(string razonSocial, List<ComercioDTO> comercios)
         {
             ComercioDTO comercioBuscado = null;
-            string[] textoSplit = razonSocial.Split(" ");
-            foreach (var comercio in comercios)
+            string comercioStr = string.Empty;
+            string apiKey = "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";
 
-                for (int i = 0; i < textoSplit.Length; i++)
+            string listaComerciosStr = comercios.Select(com => com.RazonSocial)
+                                                .Aggregate((acumulado, valorActual) => acumulado + ", " + valorActual);
+
+            
+
+            var openAiService = new OpenAIService(new OpenAiOptions()
+            {
+                ApiKey = apiKey,
+            });
+
+
+
+            string prompt = "del siguiente listado (" + listaComerciosStr + ") necesito saber "+
+                            "que item es el mas parecido a al siguiente texto: "+ razonSocial +
+                            ". devolveme el item de la lista anterior entre corchetes rectos";
+
+
+            var completionResult = await openAiService.ChatCompletion.CreateCompletion(
+                new ChatCompletionCreateRequest()
                 {
-                    bool similitud = comercio.RazonSocial.ToLower().Contains(textoSplit[i]);
-                    if (similitud)
+                    Messages = new List<ChatMessage>()
                     {
-                        comercioBuscado = comercio;
-                        return comercioBuscado;
-                    }
-                }
+                        ChatMessage.FromUser(prompt)
+                    },
+                    Model = Models.Gpt_3_5_Turbo_16k
+                });
+
+            if (completionResult.Successful) {
+                string response = completionResult.Choices.First().Message.Content;
+
+                string caracterInicio = "[";
+                string caracterFin = "]";
+                comercioStr = FiltrarRespuestaGPT(response, caracterInicio, caracterFin);
+            }
+            if (comercioStr != string.Empty)
+            {
+                comercioBuscado = BusquedaContains(comercioStr, comercios);
+            }
             return comercioBuscado;
         }
-
-
-        private static ComercioDTO BusquedaPorPalabras(string razonSocial, List<ComercioDTO> comercios)
-        {
-            ComercioDTO comercioBuscado = null;
-            string[] razonSocialSplit = razonSocial.Split(" ");
-
-            foreach (var comercio in comercios)
-            {
-                string[] comercioSplit = comercio.RazonSocial.ToLower().Split(" ");
-
-                if (CoincidenciasPalabras(razonSocialSplit,comercioSplit) > 0)
-                {
-                    comercioBuscado = comercio;
-                    return comercioBuscado;
-                }
-            }
-
-            return comercioBuscado;
-        }
-
-        private static int CoincidenciasPalabras(string[] comparador, string[] comercio)
-        {
-            int coincidencias = 0;
-            List<string> listaDePalabras = new() { "de", "del", "el", "la", "las", "los" };
-
-            for (int i = 0; i < comercio.Length; i++)
-            {
-                comercio[i] = comercio[i].Trim();
-            }
-
-            for (int i = 0; i < comparador.Length; i++)
-            {
-                comparador[i] = comparador[i].Trim();
-            }
-
-            for (int i = 0; i < comercio.Length; i++)
-            {
-                for (int j = 0; j < comparador.Length; i++)
-                {
-                    if (comercio[i] == comparador[j])
-                    {
-                        {
-                            bool estaEnLaLista = listaDePalabras.Any(p => string.Equals(p, comercio[i], StringComparison.OrdinalIgnoreCase));
-
-                            if (!estaEnLaLista)
-                            {
-                                coincidencias++;
-                            }
-                        }
-                    }
-                }
-            }
-
-            return coincidencias;
-        }
-
-        private static ComercioDTO BusquedaLevenshtein(string razonSocial, List<ComercioDTO> comercios)
-        {
-            //coincidencia <= 2 
-            ComercioDTO comercioBuscado = null;
-
-
-            return comercioBuscado;
-        }
-
 
         public static DateTime ProcesarFechaPorVoz(string texto)
         {
@@ -131,6 +93,31 @@ namespace ServerDeclara.Utilidades
         private static bool HaySoloNumeros(string texto)
         {
             return texto.All(char.IsNumber);
+        }
+
+        private static string FiltrarRespuestaGPT(string respuesta, string caracterInicio, string caracterFin)
+        {
+            string filtro = string.Empty;
+
+            int indiceInicio = respuesta.IndexOf(caracterInicio);
+            int indiceFin = respuesta.IndexOf(caracterFin);
+
+            // Verificar si ambos corchetes están presentes en la cadena
+            if (indiceInicio != -1 && indiceFin != -1 && indiceFin > indiceInicio)
+            {
+                // Extraer el valor entre corchetes utilizando Substring
+                filtro = respuesta.Substring(indiceInicio + 1, indiceFin - indiceInicio - 1);
+               
+            }
+            return filtro;
+        }
+
+        private static ComercioDTO BusquedaContains(string razonSocial, List<ComercioDTO> comercios)
+        {
+            ComercioDTO comercioBuscado = null;
+
+            comercioBuscado = comercios.FirstOrDefault(f => f.RazonSocial.ToLower() == razonSocial.ToLower());
+            return comercioBuscado;
         }
     }
 }
