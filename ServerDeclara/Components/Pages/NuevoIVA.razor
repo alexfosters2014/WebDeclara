@@ -2,12 +2,19 @@
 @inject IVAServicio _ivaServicio
 @inject IJSRuntime _js
 
-<div class="d-flex justify-content-center align-content-center">
+<div style="text-align:center">
     <p class="@escuchaEmpresa">Empresa</p>
-    <p>@escuchaEmpresa</p>
+    <p style="color:red">@(nuevaEntradaIVA.Comercio != null ? nuevaEntradaIVA.Comercio.RazonSocial : "No encontrado")</p>
+
     <p class="@escuchaFecha">Fecha</p>
+    <p style="color:red">@(nuevaEntradaIVA.Fecha != DateTime.MinValue ? nuevaEntradaIVA.Fecha : "Sin fecha")</p>
+
+
     <p class="@escuchaMonto">Monto</p>
+    <p style="color:red">@nuevaEntradaIVA.MontoMasIVA</p>
+
     <p class="@escuchaIVA">IVA</p>
+    <p style="color:red">@nuevaEntradaIVA.MontoIVA</p>
 </div>
 
 @code {
@@ -32,7 +39,10 @@
 
         await EscucharFecha();
 
+        //en realidad es monto SIN IVA
+        nuevaEntradaIVA.MontoMasIVA = await EscucharValorNumerico("monto");
 
+        nuevaEntradaIVA.MontoIVA = await EscucharValorNumerico("iva");
 
     }
 
@@ -40,7 +50,7 @@
     {
         string textoDeEscucha = "";
 
-        IconoEscucha("fecha");
+        await IconoEscucha("fecha");
 
         textoDeEscucha = await _js.InvokeAsync<string>("LeerVoz");
 
@@ -55,7 +65,7 @@
     {
         string textoDeEscucha = "";
 
-        IconoEscucha("empresa");
+        await IconoEscucha("empresa");
 
         textoDeEscucha = await _js.InvokeAsync<string>("LeerVoz");
 
@@ -64,9 +74,24 @@
         ComercioDTO comercioBuscado = await ProcesadorVoz.BusquedaComercioPorRazonSocial(textoDeEscucha, Comercios);
 
         if (comercioBuscado != null) nuevaEntradaIVA.Comercio = comercioBuscado;
+
     }
 
-    private void IconoEscucha(string foco)
+    private async Task<double> EscucharValorNumerico(string tipoIcono)
+    {
+        string textoDeEscucha = "";
+
+        await IconoEscucha(tipoIcono);
+
+        textoDeEscucha = await _js.InvokeAsync<string>("LeerVoz");
+
+        if (string.IsNullOrEmpty(textoDeEscucha)) return 0;
+
+        double valor = ProcesadorVoz.ProcesarValoresPorVoz(textoDeEscucha);
+
+        return valor;
+    }
+    private async Task IconoEscucha(string foco)
     {
 
         escuchaEmpresa = "";
@@ -91,6 +116,6 @@
             default:
                 break;
         }
-
+        StateHasChanged();
     }
 }

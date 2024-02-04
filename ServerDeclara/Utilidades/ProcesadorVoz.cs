@@ -23,13 +23,11 @@ namespace ServerDeclara.Utilidades
             return comercioBuscado;
         }
 
-       
-
         private static async Task<ComercioDTO> BusquedaChatGPTComercio(string razonSocial, List<ComercioDTO> comercios)
         {
             ComercioDTO comercioBuscado = null;
             string comercioStr = string.Empty;
-            string apiKey = "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";
+            string apiKey = "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";
 
             string listaComerciosStr = comercios.Select(com => com.RazonSocial)
                                                 .Aggregate((acumulado, valorActual) => acumulado + ", " + valorActual);
@@ -65,6 +63,7 @@ namespace ServerDeclara.Utilidades
                 string caracterFin = "]";
                 comercioStr = FiltrarRespuestaGPT(response, caracterInicio, caracterFin);
             }
+
             if (comercioStr != string.Empty)
             {
                 comercioBuscado = BusquedaContains(comercioStr, comercios);
@@ -78,12 +77,31 @@ namespace ServerDeclara.Utilidades
 
             string textoSinEspacio = TextoSinEspacios(texto);
 
-            if (textoSinEspacio.Length != 8 && !HaySoloNumeros(texto)) return fecha;
+            if (textoSinEspacio.Length != 8 && !HaySoloNumeros(textoSinEspacio)) return fecha;
 
             string formatoEsperado = "ddMMyyyy";
             DateTime.TryParseExact(textoSinEspacio, formatoEsperado, null, System.Globalization.DateTimeStyles.None, out fecha);
 
             return fecha;
+        }
+
+        public static double ProcesarValoresPorVoz(string texto)
+        {
+            string textoSinEspacio = TextoSinEspacios(texto);
+
+            if (!HaySoloNumeros(texto)) return 0;
+
+            try
+            {
+                double valorNumero = 0;
+                double.TryParse(textoSinEspacio, out valorNumero);
+                return valorNumero;
+            }
+            catch (Exception)
+            {
+                return 0;
+            }
+
         }
 
         private static string TextoSinEspacios(string texto)
