@@ -2,26 +2,70 @@
 @inject IVAServicio _ivaServicio
 @inject IJSRuntime _js
 
-<div style="text-align:center">
-    <p class="@escuchaEmpresa">Empresa</p>
-    <p style="color:red">@(nuevaEntradaIVA.Comercio != null ? nuevaEntradaIVA.Comercio.RazonSocial : "No encontrado")</p>
+@if (!ModoManual)
+{
+    <div style="text-align:center">
+        <p class="@escuchaEmpresa">Empresa</p>
+        <p style="color:red">@(nuevaEntradaIVA.Comercio != null ? nuevaEntradaIVA.Comercio.RazonSocial : "No encontrado")</p>
 
-    <p class="@escuchaFecha">Fecha</p>
-    <p style="color:red">@(nuevaEntradaIVA.Fecha != DateTime.MinValue ? nuevaEntradaIVA.Fecha : "Sin fecha")</p>
+        <p class="@escuchaFecha">Fecha</p>
+        <p style="color:red">@(nuevaEntradaIVA.Fecha != DateTime.MinValue ? nuevaEntradaIVA.Fecha : "Sin fecha")</p>
 
 
-    <p class="@escuchaMonto">Monto</p>
-    <p style="color:red">@nuevaEntradaIVA.MontoMasIVA</p>
+        <p class="@escuchaMonto">Monto</p>
+        <p style="color:red">@nuevaEntradaIVA.MontoMasIVA</p>
 
-    <p class="@escuchaIVA">IVA</p>
-    <p style="color:red">@nuevaEntradaIVA.MontoIVA</p>
-</div>
+        <p class="@escuchaIVA">IVA</p>
+        <p style="color:red">@nuevaEntradaIVA.MontoIVA</p>
+
+        <p class="@escuchaCompraVenta">Tipo de IVA (Compra o Venta)</p>
+        <p style="color:red">@(nuevaEntradaIVA.TipoIva != "" ? nuevaEntradaIVA.TipoIva : "")</p>
+    </div>
+
+}
+else
+{
+    <section class="d-flex flex-column justify-content-center p-4">
+       
+       
+            <select @onchange="SeleccionarComercioManual" placeholder="Mes1" class="form-control">
+            <option value="0" selected>Elija un comercio</option>
+                @foreach (var item in Comercios)
+                {
+                    @if (nuevaEntradaIVA.Comercio != null && item.Id == nuevaEntradaIVA.Comercio.Id)
+                    {
+                        <option value="@item.Id" selected>@item.RUT - @item.RazonSocial</option>
+                    }
+                    else
+                    {
+                    <option value="@item.Id">@item.RUT - @item.RazonSocial</option>
+                    }
+                }
+            </select>
+
+        <input type="date" @bind-value="nuevaEntradaIVA.Fecha" />
+
+        <input type="number" @bind-value="nuevaEntradaIVA.MontoMasIVA" />
+
+        <input type="number" @bind-value="nuevaEntradaIVA.MontoIVA" />
+
+        <input type="text" @bind-value="nuevaEntradaIVA.TipoIva" />
+        }
+
+
+    </section>
+}
+
+
 
 @code {
+    int? idComercio;
+    bool ModoManual = false;
     string escuchaEmpresa = "";
     string escuchaFecha = "";
     string escuchaMonto = "";
     string escuchaIVA = "";
+    string escuchaCompraVenta = "";
 
     List<ComercioDTO> Comercios = new();
     EntradaIVADiarioDTO nuevaEntradaIVA = new();
@@ -44,6 +88,9 @@
 
         nuevaEntradaIVA.MontoIVA = await EscucharValorNumerico("iva");
 
+        await EscucharCompraVenta();
+
+        ModoManual = true;
     }
 
     private async Task EscucharFecha()
@@ -91,6 +138,25 @@
 
         return valor;
     }
+
+    private async Task EscucharCompraVenta()
+    {
+        string textoDeEscucha = "";
+
+        await IconoEscucha("compra-venta");
+
+        textoDeEscucha = await _js.InvokeAsync<string>("LeerVoz");
+
+        if (string.IsNullOrEmpty(textoDeEscucha)) return;
+
+        string compraVenta = ProcesadorVoz.ProcesarCompraVentaPorVoz(textoDeEscucha);
+
+        if (compraVenta != "")
+        {
+            nuevaEntradaIVA.TipoIva = compraVenta;
+        }
+    }
+
     private async Task IconoEscucha(string foco)
     {
 
@@ -98,6 +164,7 @@
         escuchaFecha = "";
         escuchaMonto = "";
         escuchaIVA = "";
+        escuchaCompraVenta = "";
 
         switch (foco)
         {
@@ -113,9 +180,20 @@
             case "iva":
                 escuchaIVA = "beforeIconEscucha";
                 break;
+            case "compra-venta":
+                escuchaCompraVenta = "beforeIconEscucha";
+                break;
             default:
                 break;
         }
         StateHasChanged();
+    }
+    private void SeleccionarComercioManual(ChangeEventArgs e)
+    {
+        int idComercio = int.Parse(e.Value.ToString());
+        if (idComercio > 0)
+        {
+            nuevaEntradaIVA.Comercio = Comercios.FirstOrDefault(f => f.Id == idComercio);
+        }
     }
 }

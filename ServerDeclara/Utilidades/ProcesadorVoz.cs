@@ -27,7 +27,7 @@ namespace ServerDeclara.Utilidades
         {
             ComercioDTO comercioBuscado = null;
             string comercioStr = string.Empty;
-            string apiKey = "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";
+            string apiKey = "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";
 
             string listaComerciosStr = comercios.Select(com => com.RazonSocial)
                                                 .Aggregate((acumulado, valorActual) => acumulado + ", " + valorActual);
@@ -102,6 +102,26 @@ namespace ServerDeclara.Utilidades
                 return 0;
             }
 
+        }
+
+        public static string ProcesarCompraVentaPorVoz(string texto)
+        {
+            string resultado = "";
+            string textoSinEspacio = TextoSinEspacios(texto);
+            string compra = "compras";
+            string venta = "ventas";
+
+            if (compra.ToLower().Contains(textoSinEspacio.ToLower()))
+            {
+                resultado = Util.TipoIva.COMPRA.ToString();
+            }
+
+
+            if (venta.Contains(textoSinEspacio))
+            {
+                resultado = Util.TipoIva.VENTA.ToString();
+            }
+            return resultado;
         }
 
         private static string TextoSinEspacios(string texto)
