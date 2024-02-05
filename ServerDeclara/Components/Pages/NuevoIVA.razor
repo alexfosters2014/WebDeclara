@@ -18,6 +18,8 @@
         <p class="@escuchaIVA">IVA</p>
         <p style="color:red">@nuevaEntradaIVA.MontoIVA</p>
 
+      
+
         <p class="@escuchaCompraVenta">Tipo de IVA (Compra o Venta)</p>
         <p style="color:red">@(nuevaEntradaIVA.TipoIva != "" ? nuevaEntradaIVA.TipoIva : "")</p>
     </div>
@@ -45,9 +47,15 @@ else
 
         <input type="date" @bind-value="nuevaEntradaIVA.Fecha" />
 
-        <input type="number" @bind-value="nuevaEntradaIVA.MontoMasIVA" />
+        
 
         <input type="number" @bind-value="nuevaEntradaIVA.MontoIVA" />
+
+        @if (nuevaEntradaIVA.TipoIva == Util.TipoIva.VENTA.ToString())
+        {
+            <p>IVA retenido por venta</p>
+            <input type="number" @bind-value="nuevaEntradaIVA.MontoIvaRetenido" />
+        }}
 
         <input type="text" @bind-value="nuevaEntradaIVA.TipoIva" />
         }
