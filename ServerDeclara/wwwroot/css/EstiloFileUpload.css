@@ -1,26 +1,17 @@
-﻿.seleccionPDF {
-    position: relative;
-    display: inline-block;
+﻿.input-file{
+    display:none;
 }
 
-.seleccionPDF::before {
-    background-color: #5678EF;
-    color: white;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 3px;
-    content: 'Seleccionar'; /* testo por defecto */
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
+
+.label-file {
+    display: inline-block;
+    cursor: pointer;
 }
 
-.seleccionPDF input[type="file"] {
-    opacity: 0;
-    width: 200px;
-    height: 32px;
-    display: inline-block;
+.label-file img {
+    width: 60px; /* Ancho deseado de la imagen */
+    height: 60px; /* Alto deseado de la imagen */
+    /* Otras propiedades de estilo según sea necesario */
 }
+
+

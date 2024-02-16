@@ -65,15 +65,12 @@ else
             <div class="d-flex m-3">
                 @* <img src="/imagenes/iconos/fotoIcon.png" alt="Tomar foto" class="imagen_boton" /> *@
                 @* <img src="/imagenes/iconos/UploadIcon.png" alt="Exportar PDF" class="imagen_boton" @onclick=""/> *@
-            <label for="pdfUpload">
+
+            <InputFile OnChange="@SubirPDF" name="foto" id="pdfUpload" class="input-file"/>
+              <label for="pdfUpload" class="label-file">
+                <img src="/imagenes/iconos/UploadIcon.png" alt="Seleccionar PDF" />
+              </label>
                 
-            </label>
-
-
-            <div class="seleccionPDF" id="pdfUpload">
-                <input type="file" name="src-file1" aria-label="Archivo">
-                <InputFile OnChange="@SubirPDF" name="foto" id="pdfUpload" />
-            </div>
 
             @if (!string.IsNullOrEmpty(nuevaEntradaIVA.NombreArchivoPDF))
             {
