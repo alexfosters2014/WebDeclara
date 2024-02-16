@@ -2,12 +2,12 @@
 @page "/"
 @inject NavigationManager _nav
 @inject UsuarioServicio _usuarioServicio
+@inject IJSRuntime _js
 
 
 <PageTitle></PageTitle>
 
 <button @onclick="AutentificarmeEnDuro">Iniciar Sesión con Google</button>
-
 
 @code{
 
@@ -31,4 +31,11 @@
             _nav.NavigateTo("/Principal");
         }
     }
+
+    
+
+
+
+
+
 }

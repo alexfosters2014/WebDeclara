@@ -1,35 +1,37 @@
 ﻿@page "/NuevoComprobante"
 @inject IVAServicio _ivaServicio
+@inject BlobAzureServicio _blobService
 @inject IJSRuntime _js
+@inject IConfiguration _config;
+
 
 @if (!ModoManual)
 {
-    <div style="text-align:center">
-        <p class="@escuchaEmpresa">Empresa</p>
-        <p style="color:red">@(nuevaEntradaIVA.Comercio != null ? nuevaEntradaIVA.Comercio.RazonSocial : "No encontrado")</p>
+    <div class="contenedor-iva">
+        <div>
+            <p class="@escuchaEmpresa">Empresa</p>
+            <p style="color:red">@(nuevaEntradaIVA.Comercio != null ? nuevaEntradaIVA.Comercio.RazonSocial : "No encontrado")</p>
 
-        <p class="@escuchaFecha">Fecha</p>
-        <p style="color:red">@(nuevaEntradaIVA.Fecha != DateTime.MinValue ? nuevaEntradaIVA.Fecha : "Sin fecha")</p>
+            <p class="@escuchaFecha">Fecha</p>
+            <p style="color:red">@(nuevaEntradaIVA.Fecha != DateTime.MinValue ? nuevaEntradaIVA.Fecha : "Sin fecha")</p>
 
 
-        <p class="@escuchaMonto">Monto</p>
-        <p style="color:red">@nuevaEntradaIVA.MontoMasIVA</p>
+            <p class="@escuchaMonto">Monto</p>
+            <p style="color:red">@nuevaEntradaIVA.MontoMasIVA</p>
 
-        <p class="@escuchaIVA">IVA</p>
-        <p style="color:red">@nuevaEntradaIVA.MontoIVA</p>
+            <p class="@escuchaIVA">IVA</p>
+            <p style="color:red">@nuevaEntradaIVA.MontoIVA</p>
 
-      
-
-        <p class="@escuchaCompraVenta">Tipo de IVA (Compra o Venta)</p>
-        <p style="color:red">@(nuevaEntradaIVA.TipoIva != "" ? nuevaEntradaIVA.TipoIva : "")</p>
+            <p class="@escuchaCompraVenta">Tipo de IVA (Compra o Venta)</p>
+            <p style="color:red">@(nuevaEntradaIVA.TipoIva != "" ? nuevaEntradaIVA.TipoIva : "")</p>
+        </div>
     </div>
 
 }
 else
 {
-    <section class="d-flex flex-column justify-content-center p-4">
-       
-       
+    <section class="contenedor-iva">
+
             <select @onchange="SeleccionarComercioManual" placeholder="Mes1" class="form-control">
             <option value="0" selected>Elija un comercio</option>
                 @foreach (var item in Comercios)
@@ -45,21 +47,43 @@ else
                 }
             </select>
 
-        <input type="date" @bind-value="nuevaEntradaIVA.Fecha" />
+            <label>Fecha</label>
+            <input type="date" @bind-value="nuevaEntradaIVA.Fecha" class="form-control" />
 
-        
+            <input type="number" @bind-value="nuevaEntradaIVA.MontoMasIVA" class="form-control" />
 
-        <input type="number" @bind-value="nuevaEntradaIVA.MontoIVA" />
+            <input type="number" @bind-value="nuevaEntradaIVA.MontoIVA" class="form-control" />
 
-        @if (nuevaEntradaIVA.TipoIva == Util.TipoIva.VENTA.ToString())
-        {
-            <p>IVA retenido por venta</p>
-            <input type="number" @bind-value="nuevaEntradaIVA.MontoIvaRetenido" />
-        }}
+            @if (nuevaEntradaIVA.TipoIva == Util.TipoIva.VENTA.ToString())
+            {
+                <p>IVA retenido por venta</p>
+                <input type="number" @bind-value="nuevaEntradaIVA.MontoIvaRetenido" class="form-control" />
+            }
 
-        <input type="text" @bind-value="nuevaEntradaIVA.TipoIva" />
-        }
+            <input type="text" @bind-value="nuevaEntradaIVA.TipoIva" />
 
+            <div class="d-flex m-3">
+                @* <img src="/imagenes/iconos/fotoIcon.png" alt="Tomar foto" class="imagen_boton" /> *@
+                @* <img src="/imagenes/iconos/UploadIcon.png" alt="Exportar PDF" class="imagen_boton" @onclick=""/> *@
+            <label for="pdfUpload">
+                
+            </label>
+
+
+            <div class="seleccionPDF" id="pdfUpload">
+                <input type="file" name="src-file1" aria-label="Archivo">
+                <InputFile OnChange="@SubirPDF" name="foto" id="pdfUpload" />
+            </div>
+
+            @if (!string.IsNullOrEmpty(nuevaEntradaIVA.NombreArchivoPDF))
+            {
+                <a href="@ObtenerURL()">Ver PDF</a>
+            }
+
+         </div>
+           
+
+            <button>Guardar</button>
 
     </section>
 }
@@ -75,11 +99,14 @@ else
     string escuchaIVA = "";
     string escuchaCompraVenta = "";
 
+    string UrlPdf = "";
+
     List<ComercioDTO> Comercios = new();
     EntradaIVADiarioDTO nuevaEntradaIVA = new();
 
     protected override async Task OnInitializedAsync()
     {
+        UrlPdf = _config["AzureBlobStorage:UrlVisorPDF"];
         Comercios = await _ivaServicio.GetListadoComerciosPorUsuario();
 
         await Escucha();
@@ -204,4 +231,53 @@ else
             nuevaEntradaIVA.Comercio = Comercios.FirstOrDefault(f => f.Id == idComercio);
         }
     }
+
+    private async Task SubirPDF(InputFileChangeEventArgs e)
+    {
+        try
+        {
+            IBrowserFile file;
+            byte[] pdfData;
+
+            file = e.File;
+
+            if (file != null)
+            {
+                using (var memoryStream = new MemoryStream())
+                {
+                    await file.OpenReadStream(file.Size).CopyToAsync(memoryStream);
+                    pdfData = memoryStream.ToArray();
+                    //string imagenBase64 = Convert.ToBase64String(imageData);
+                }
+                if (pdfData.Length > 0)
+                {
+                    string nombreArchivoSubido = await _blobService.SubirPDF(pdfData);
+                    if (!string.IsNullOrEmpty(nombreArchivoSubido))
+                    {
+                        nuevaEntradaIVA.NombreArchivoPDF = nombreArchivoSubido;
+                        //mensaje subido correctamente
+                        StateHasChanged();
+                    }
+                            else
+                            {
+                                //no se pudi subir correctamente
+                            }
+
+                        }
+                        else
+                        {
+                            //dar aviso que no se subió
+                        }
+                    }
+                }
+                catch (Exception)
+                {
+                    //dar aviso que no se subió
+                }
+
+            }
+
+            private string ObtenerURL() => (UrlPdf + nuevaEntradaIVA.NombreArchivoPDF);
+
+
 }

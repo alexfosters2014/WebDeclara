@@ -59,7 +59,7 @@ namespace ServerDeclara.Servicios
             }
             catch (Exception)
             {
-
+                
                 throw;
             }
         }

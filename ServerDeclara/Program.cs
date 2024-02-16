@@ -25,6 +25,8 @@ builder.Services.AddAutoMapper(typeof(Program));
 
 builder.Services.AddRadzenComponents();
 
+builder.Services.AddScoped<BlobAzureServicio>();
+
 builder.Services.AddScoped<UsuarioServicio>();
 builder.Services.AddScoped<UsuarioRepositorio>();
 
@@ -36,6 +38,8 @@ builder.Services.AddScoped<IRPFRepositorio>();
 
 builder.Services.AddScoped<IVAServicio>();
 builder.Services.AddScoped<IVARepositorio>();
+
+
 
 
 var app = builder.Build();

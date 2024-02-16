@@ -5,6 +5,7 @@ using OpenAI.ObjectModels;
 using OpenAI.Managers;
 using OpenAI;
 using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.IdentityModel.Tokens;
 
 namespace ServerDeclara.Utilidades
 {
@@ -27,10 +28,12 @@ namespace ServerDeclara.Utilidades
         {
             ComercioDTO comercioBuscado = null;
             string comercioStr = string.Empty;
-            string apiKey = "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";
+            string apiKey = "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";
 
+        if (comercios.Count > 0)
+        {
             string listaComerciosStr = comercios.Select(com => com.RazonSocial)
-                                                .Aggregate((acumulado, valorActual) => acumulado + ", " + valorActual);
+                                            .Aggregate((acumulado, valorActual) => acumulado + ", " + valorActual);
 
             
 
@@ -39,36 +42,41 @@ namespace ServerDeclara.Utilidades
                 ApiKey = apiKey,
             });
 
+           
+                    string prompt = "del siguiente listado (" + listaComerciosStr + ") necesito saber " +
+                               "que item es el mas parecido a al siguiente texto: " + razonSocial +
+                               ". devolveme el item de la lista anterior entre corchetes rectos";
+            
 
-
-            string prompt = "del siguiente listado (" + listaComerciosStr + ") necesito saber "+
-                            "que item es el mas parecido a al siguiente texto: "+ razonSocial +
-                            ". devolveme el item de la lista anterior entre corchetes rectos";
-
-
-            var completionResult = await openAiService.ChatCompletion.CreateCompletion(
-                new ChatCompletionCreateRequest()
-                {
-                    Messages = new List<ChatMessage>()
+                var completionResult = await openAiService.ChatCompletion.CreateCompletion(
+                    new ChatCompletionCreateRequest()
                     {
-                        ChatMessage.FromUser(prompt)
-                    },
-                    Model = Models.Gpt_3_5_Turbo_16k
-                });
+                        Messages = new List<ChatMessage>()
+                        {
+                            ChatMessage.FromUser(prompt)
+                        },
+                        Model = Models.Gpt_3_5_Turbo_16k
+                    });
 
-            if (completionResult.Successful) {
-                string response = completionResult.Choices.First().Message.Content;
+                if (completionResult.Successful) {
+                    string response = completionResult.Choices.First().Message.Content;
 
-                string caracterInicio = "[";
-                string caracterFin = "]";
-                comercioStr = FiltrarRespuestaGPT(response, caracterInicio, caracterFin);
+                    string caracterInicio = "[";
+                    string caracterFin = "]";
+                    comercioStr = FiltrarRespuestaGPT(response, caracterInicio, caracterFin);
+                }
+
+                if (comercioStr != string.Empty)
+                {
+                    comercioBuscado = BusquedaContains(comercioStr, comercios);
+                }
+                return comercioBuscado;
+
             }
-
-            if (comercioStr != string.Empty)
+            else
             {
-                comercioBuscado = BusquedaContains(comercioStr, comercios);
+                return null;
             }
-            return comercioBuscado;
         }
 
         public static DateTime ProcesarFechaPorVoz(string texto)
