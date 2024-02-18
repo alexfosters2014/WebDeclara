@@ -1,6 +1,5 @@
 ﻿@inject IConfiguration _config
 
-
 <section class="row item-iva justify-content-center">
     <article class="col-5 d-flex flex-column align-items-center justify-content-center p-0">
         <p class="fuente-pequeña">@entradaIVA.Fecha.ToString("dd/MM/yyyy")</p>
@@ -30,14 +29,16 @@
 
     <article class="col-3 d-flex flex-column align-items-center justify-content-start p-2">
         <p>@entradaIVA.Comprobante</p>
-         <a href="@ObtenerURL()" class="verPDF">
-        <img src="/imagenes/iconos/ojo.png" alt="" >
+        <a href="@ObtenerURL()">
+            <img src="/imagenes/iconos/ojo.png" alt="" class="verPDF">
         </a>
     </article>
 </section>
 
 @code {
     [Parameter] public EntradaIVADiarioDTO entradaIVA { get; set; }
+    [CascadingParameter] IModalService Modal { get; set; } = default!;
+
     string urlPDF = "";
 
     protected async override Task OnInitializedAsync()
@@ -53,7 +54,10 @@
         return razonSocial;
     }
 
-    private string ObtenerURL() => (urlPDF + entradaIVA.NombreArchivoPDF);
-
+    private string ObtenerURL()
+    {
+        string verURL = urlPDF + entradaIVA.NombreArchivoPDF;
+        return verURL;
+    }
 
 }

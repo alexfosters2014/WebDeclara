@@ -12,6 +12,7 @@ namespace ServerDeclara.Datos
         {
             modelBuilder.ApplyConfiguration(new HistorialParametroSeed());
             modelBuilder.ApplyConfiguration(new ParametroSeed());
+            modelBuilder.ApplyConfiguration(new UsuarioSeed());
         }
 
 

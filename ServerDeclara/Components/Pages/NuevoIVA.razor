@@ -97,7 +97,7 @@ else
 
             @if (!string.IsNullOrEmpty(nuevaEntradaIVA.NombreArchivoPDF))
             {
-                <a href="@ObtenerURL()" class="verPDF">
+                <a href="@ObtenerURL()" >
                     <img src="/imagenes/iconos/ojo.png" alt="ver PDF" class="imagen_boton">
                 </a>
             }
@@ -136,7 +136,11 @@ else
     {
         UrlPdf = _config["AzureBlobStorage:UrlVisorPDF"];
         await ActualizaListadoComercios();
-        await Escucha();
+        if (!ModoManual)
+        {
+            await Escucha();
+        }
+       
     }
 
     private async Task ActualizaListadoComercios()
@@ -310,7 +314,12 @@ else
 
     }
 
-    private string ObtenerURL() => (UrlPdf + nuevaEntradaIVA.NombreArchivoPDF);
+    private string ObtenerURL()
+    {
+        string verURL = UrlPdf + nuevaEntradaIVA.NombreArchivoPDF;
+        return verURL;
+    }
+       
 
     private async Task AgregarNuevoComercio()
     {

@@ -1,4 +1,7 @@
-﻿using Azure.Storage.Blobs;
+﻿using Azure.Storage;
+using Azure.Storage.Blobs;
+using Azure.Storage.Blobs.Models;
+using Azure.Storage.Sas;
 using iText.IO.Image;
 using iText.Kernel.Geom;
 using iText.Kernel.Pdf;
@@ -121,7 +124,29 @@ namespace ServerDeclara.Servicios
             }
         }
 
+        public async Task<byte[]> ObtenerPDF(string pdfNombre)
+        {
+            try
+            {
+                BlobContainerClient blobContainer = new BlobContainerClient(conexionAzureBlob, nombreStorageBlob);
+                BlobClient blob = blobContainer.GetBlobClient(pdfNombre);
 
+                BlobDownloadResult downloadResult = await blob.DownloadContentAsync();
+
+                using MemoryStream stream = new MemoryStream();
+
+                byte[] pdfByte = downloadResult.Content.ToArray();
+
+                //string PdfUrl = Convert.ToBase64String(pdfByte);
+
+                return pdfByte;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            
+        }
 
 
 

@@ -54,10 +54,18 @@ namespace ServerDeclara.Servicios_de_datos
         {
             try
             {
-                var declaracion = await _db.BimensualesIVA.AsNoTracking()
-                                                                       .Include(i => i.Usuario)
-                                                                       .Include(i => i.EntradasIVADiarios).ThenInclude(t => t.Comercio)
-                                                                       .SingleOrDefaultAsync(s => s.Id == idBimensual);
+                var declaracion = await _db.BimensualesIVA.Include(i => i.Usuario)
+                                                          .Include(i => i.EntradasIVADiarios).ThenInclude(t => t.Comercio)
+                                                          .SingleOrDefaultAsync(s => s.Id == idBimensual);
+
+
+                double valorAnticipoNuevo = ObtenerAnticipoBimensual(declaracion);
+                if (valorAnticipoNuevo != declaracion.AnticipoBimestreIVA)
+                {
+                    declaracion.AnticipoBimestreIVA = valorAnticipoNuevo;
+                await _db.SaveChangesAsync();
+                }
+                
 
                 BimensualIVADTO declaracionDTO = _mapper.Map<BimensualIVADTO>(declaracion);
 
@@ -70,6 +78,19 @@ namespace ServerDeclara.Servicios_de_datos
            
         }
 
+        private double ObtenerAnticipoBimensual(BimensualIVA bimensual)
+        {
+            double anticipo = 0;
+            var comprobantes = bimensual.EntradasIVADiarios;
+
+            double totalCompra = comprobantes.Where(c => c.TipoIva == Util.TipoIva.COMPRA.ToString()).Sum(sum => sum.MontoIVA);
+            double totalVenta = comprobantes.Where(c => c.TipoIva == Util.TipoIva.VENTA.ToString()).Sum(sum => sum.MontoIVA);
+            double totalVentaRetenido = comprobantes.Where(c => c.TipoIva == Util.TipoIva.VENTA.ToString()).Sum(sum => sum.MontoIvaRetenido);
+
+            anticipo = totalVenta - totalCompra - totalVentaRetenido;
+
+            return anticipo;
+        }
 
         public async Task<bool> CrearNuevaDeclaracion(Periodo periodo)
         {
@@ -158,6 +179,9 @@ namespace ServerDeclara.Servicios_de_datos
 
                 var bimensual = await _db.BimensualesIVA.SingleOrDefaultAsync(s => s.Id == entradaNueva.BimensualIVAId);
                 entradaNueva.BimensualIVA = bimensual;
+
+                var comercio = await _db.Comercios.SingleOrDefaultAsync(s => s.Id == entradaNueva.Comercio.Id);
+                entradaNueva.Comercio = comercio;
 
                 _db.Entry(entradaNueva.BimensualIVA).State = EntityState.Unchanged;
                 _db.Entry(entradaNueva.Comercio).State = EntityState.Unchanged;

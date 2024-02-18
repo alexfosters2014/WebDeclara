@@ -18,11 +18,14 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
-string conexionBaseDatosLocal = "ConnectionStrings:LocalBD";
-string conexionBaseDatosAzure = "ConnectionStrings:AzureBD";
+#if DEBUG
+string conexionBaseDatos = "ConnectionStrings:LocalBD";
+#else
+string conexionBaseDatos = "ConnectionStrings:AzureBD";
+#endif
 
 builder.Services.AddDbContext<DeclaraContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetValue<string>(conexionBaseDatosLocal)), ServiceLifetime.Transient);
+    options.UseSqlServer(builder.Configuration.GetValue<string>(conexionBaseDatos)), ServiceLifetime.Transient);
 
 builder.Services.AddBlazoredModal();
 builder.Services.AddBlazoredToast();
