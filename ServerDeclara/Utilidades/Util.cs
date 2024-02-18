@@ -21,6 +21,14 @@ namespace ServerDeclara.Utilidades
           NUEVO
         }
 
+        public enum Operacion
+        {
+            OK,
+            DUPLICADO,
+            ADVERTENCIA,
+            ERROR
+        }
+
         public enum TipoIva
         {
             COMPRA,

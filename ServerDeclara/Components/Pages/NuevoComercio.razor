@@ -1,0 +1,42 @@
+﻿@inject UsuarioServicio _usuarioServicio
+@inject ComercioServicio _comercioServicio
+
+<div class="recuadro">
+
+    <label>RUT</label>
+    <input @bind-value="comercioNuevo.RUT" class="form-control" />
+
+    <label>Razón social</label>
+    <input @bind-value="comercioNuevo.RazonSocial" class="form-control" />
+
+    <label>Nombre fantasia</label>
+    <input @bind-value="comercioNuevo.NombreFantasia" class="form-control" />
+
+    <label>Porcentaje de retención (solo IVA Venta)</label>
+    <input @bind-value="comercioNuevo.Porcentaje" class="form-control" />
+
+    <button class="boton-general" @onclick="GuardarNuevo">Guardar</button>
+
+</div>
+
+@code {
+    ComercioDTO comercioNuevo = new();
+    [CascadingParameter] BlazoredModalInstance BlazoredModal { get; set; } = default!;
+
+    private async Task GuardarNuevo()
+    {
+        try
+        {
+            comercioNuevo.Usuario =  _usuarioServicio.GetUsuarioLogueado();
+            comercioNuevo.Suspendido = false;
+
+            bool comercioIngresado = await _comercioServicio.NuevoComercio(comercioNuevo);
+            await BlazoredModal.CloseAsync(ModalResult.Ok());
+        }
+        catch (Exception ex)
+        {
+           //mensaje
+        }
+    }
+
+}

@@ -1,4 +1,7 @@
 using Blazored.Modal;
+using Blazored.Toast;
+using FluentValidation;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Radzen;
@@ -6,6 +9,8 @@ using ServerDeclara.Components;
 using ServerDeclara.Datos;
 using ServerDeclara.Servicios;
 using ServerDeclara.Servicios_de_datos;
+using ServerDeclara.Validadores;
+using static OpenAI.ObjectModels.SharedModels.IOpenAiModels;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,10 +25,12 @@ builder.Services.AddDbContext<DeclaraContext>(options =>
     options.UseSqlServer(builder.Configuration.GetValue<string>(conexionBaseDatosLocal)), ServiceLifetime.Transient);
 
 builder.Services.AddBlazoredModal();
+builder.Services.AddBlazoredToast();
 
 builder.Services.AddAutoMapper(typeof(Program));
 
 builder.Services.AddRadzenComponents();
+
 
 builder.Services.AddScoped<BlobAzureServicio>();
 
@@ -39,7 +46,8 @@ builder.Services.AddScoped<IRPFRepositorio>();
 builder.Services.AddScoped<IVAServicio>();
 builder.Services.AddScoped<IVARepositorio>();
 
-
+builder.Services.AddScoped<ComercioServicio>();
+builder.Services.AddScoped<ComercioRepositorio>();
 
 
 var app = builder.Build();

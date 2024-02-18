@@ -12,7 +12,9 @@
     <PackageReference Include="Azure.Storage.Blobs" Version="12.19.1" />
     <PackageReference Include="Betalgo.OpenAI" Version="7.4.5" />
     <PackageReference Include="Blazored.Modal" Version="7.2.0" />
+    <PackageReference Include="Blazored.Toast" Version="4.1.0" />
     <PackageReference Include="BouncyCastle.NetCore" Version="2.2.1" />
+    <PackageReference Include="FluentValidation" Version="11.9.0" />
     <PackageReference Include="itext7" Version="8.0.3" />
     <PackageReference Include="itext7.bouncy-castle-adapter" Version="8.0.3" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.0" />

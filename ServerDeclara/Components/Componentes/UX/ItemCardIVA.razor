@@ -1,10 +1,13 @@
-﻿<section class="row item-iva justify-content-center">
+﻿@inject IConfiguration _config
+
+
+<section class="row item-iva justify-content-center">
     <article class="col-5 d-flex flex-column align-items-center justify-content-center p-0">
-        <p class="fuente-pequeña">@entradaIVA.Fecha</p>
-        <p>Constructora sudamericana sd...</p>
+        <p class="fuente-pequeña">@entradaIVA.Fecha.ToString("dd/MM/yyyy")</p>
+        <p>@NombreEmpresa()</p>
     </article>
 
-    <article class="col-4 d-flex align-items-center justify-content-center p-0">
+    <article class="col-4 d-flex align-items-center justify-content-start p-0">
         <table>
             <tr>
                 <td>Monto: </td>
@@ -14,24 +17,43 @@
                 <td>IVA: </td>
                 <td>$@entradaIVA.MontoIVA</td>
             </tr>
-            <tr>
-                <td>IVA ret: </td>
-                <td>$@entradaIVA.MontoIvaRetenido</td>
-            </tr>
+            @if (entradaIVA.MontoIvaRetenido > 0)
+            {
+                <tr>
+                    <td>IVA ret: </td>
+                    <td>$@entradaIVA.MontoIvaRetenido</td>
+                </tr>
+            }
+           
         </table>
     </article>
 
-    <article class="col-3 d-flex align-items-center justify-content-center p-2">
-        <img src="//imagenes/iconos/ojo.png" alt="">
+    <article class="col-3 d-flex flex-column align-items-center justify-content-start p-2">
+        <p>@entradaIVA.Comprobante</p>
+         <a href="@ObtenerURL()" class="verPDF">
+        <img src="/imagenes/iconos/ojo.png" alt="" >
+        </a>
     </article>
 </section>
 
 @code {
     [Parameter] public EntradaIVADiarioDTO entradaIVA { get; set; }
+    string urlPDF = "";
 
+    protected async override Task OnInitializedAsync()
+    {
+        urlPDF = _config["AzureBlobStorage:UrlVisorPDF"];
+    }
 
-    private string NombreEmpresa() => entradaIVA.Comercio.RazonSocial.Length > 25 ? entradaIVA.Comercio.RazonSocial.Substring(0,25) + "..." : entradaIVA.Comercio.RazonSocial;
+    private string NombreEmpresa(){
+        string razonSocial = entradaIVA.Comercio.RazonSocial.Length > 25 ? 
+                                                entradaIVA.Comercio.RazonSocial.Substring(0,25) + "..." : 
+                                                entradaIVA.Comercio.RazonSocial;
 
+        return razonSocial;
+    }
+
+    private string ObtenerURL() => (urlPDF + entradaIVA.NombreArchivoPDF);
 
 
 }

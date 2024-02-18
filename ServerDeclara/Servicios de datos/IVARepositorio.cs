@@ -1,10 +1,13 @@
 ﻿using AutoMapper;
+using FluentValidation.Results;
+using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using ServerDeclara.Datos;
 using ServerDeclara.DTOs;
 using ServerDeclara.DTOs.Otros;
 using ServerDeclara.Utilidades;
+using ServerDeclara.Validadores;
 
 namespace ServerDeclara.Servicios_de_datos
 {
@@ -53,7 +56,7 @@ namespace ServerDeclara.Servicios_de_datos
             {
                 var declaracion = await _db.BimensualesIVA.AsNoTracking()
                                                                        .Include(i => i.Usuario)
-                                                                       .Include(i => i.EntradasIVADiarios)
+                                                                       .Include(i => i.EntradasIVADiarios).ThenInclude(t => t.Comercio)
                                                                        .SingleOrDefaultAsync(s => s.Id == idBimensual);
 
                 BimensualIVADTO declaracionDTO = _mapper.Map<BimensualIVADTO>(declaracion);
@@ -107,7 +110,6 @@ namespace ServerDeclara.Servicios_de_datos
 
 
 
-
         public async Task<bool> NoExisteDeclaracion(Periodo periodo)
         {
             try
@@ -138,17 +140,39 @@ namespace ServerDeclara.Servicios_de_datos
 
         }
 
-        public async Task<List<ComercioDTO>> GetComerciosPorUsuario(int usuarioId)
+       
+
+        public async Task<bool> CrearEntradaComprobanteIVA(EntradaIVADiarioDTO entradaIVA)
         {
-            List<ComercioDTO> listado = new();
+            try
+            {
+                ValidadorIVA validador = new ValidadorIVA(_db);
+                ValidationResult resultado = await validador.ValidateAsync(entradaIVA);
 
-            var listadoBD = await _db.Comercios.Where(w => w.Usuario.Id == usuarioId && !w.Suspendido).ToListAsync();
-            
-            listado = _mapper.Map<List<ComercioDTO>>(listadoBD);
+                if (!resultado.IsValid)
+                {
+                    throw new Exception(string.Join(",", resultado.Errors.Select(e => e.ErrorMessage)));
+                }
 
-            return listado;
+                EntradaIVADiario entradaNueva = _mapper.Map<EntradaIVADiario>(entradaIVA);
+
+                var bimensual = await _db.BimensualesIVA.SingleOrDefaultAsync(s => s.Id == entradaNueva.BimensualIVAId);
+                entradaNueva.BimensualIVA = bimensual;
+
+                _db.Entry(entradaNueva.BimensualIVA).State = EntityState.Unchanged;
+                _db.Entry(entradaNueva.Comercio).State = EntityState.Unchanged;
+
+                await _db.EntradasIVAsDiarios.AddAsync(entradaNueva);
+
+                int cantidadNuevos = await _db.SaveChangesAsync();
+
+                return cantidadNuevos > 0;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
-
 
     }
 }

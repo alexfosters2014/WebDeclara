@@ -1,4 +1,10 @@
 ﻿.imagen_boton{
     height:60px;
-    width:auto;
+    width:60px;
+}
+
+.imagen_boton_chico {
+    height: 30px;
+    width: 30px;
+    margin-left: 10px;
 }

@@ -50,19 +50,24 @@ namespace ServerDeclara.Servicios
 
         }
 
-        public async Task<List<ComercioDTO>> GetListadoComerciosPorUsuario()
+
+        public async Task<bool> CrearNuevoComprobanteIVA(EntradaIVADiarioDTO comprobante)
         {
             try
             {
-                int usuarioId = _usuarioServicio.GetUsuarioLogueado().Id;
-                return await _IVARepositorio.GetComerciosPorUsuario(usuarioId);
+                bool nuevo = await _IVARepositorio.CrearEntradaComprobanteIVA(comprobante);
+
+                return nuevo;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                
-                throw;
+
+                throw new Exception(ex.Message);
             }
+           
+
         }
+
 
 
     }
