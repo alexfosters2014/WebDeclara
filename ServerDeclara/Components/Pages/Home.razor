@@ -3,33 +3,69 @@
 @inject NavigationManager _nav
 @inject UsuarioServicio _usuarioServicio
 @inject IJSRuntime _js
-
+@inject IToastService _toastServicio
 
 <PageTitle></PageTitle>
 
-<button @onclick="AutentificarmeEnDuro">Iniciar Sesión con Google</button>
+<p>@id_token</p>
+<p>@mail</p>
+<p>@id</p>
+
+<button @onclick="AutentificarmeConGoogle">Iniciar Sesión con Google</button>
 
 @code{
+    [Parameter]
+    [SupplyParameterFromQuery]
+    public string id_token { get; set; }
 
-    private void AutentificarmeConGoogle()
+    string mail;
+    string id;
+
+    protected async override Task OnInitializedAsync()
     {
-        var url = "https://accounts.google.com/o/oauth2/v2/auth?";
-        url += "client_id=446867793846-0rp377qf18vd0ineseiftohhb7mi0852.apps.googleusercontent.com";
-        url += "&redirect_uri=https://localhost:7123/";
-        url += "&response_type=id_token";
-        url += "&scope=openid%20profile%20email&nonce=RANDOM_NONCE&state=RANDOM_STATE";
+        if (!string.IsNullOrEmpty(id_token))
+        {
+            //token jwt
+            var tupla = JWTServicio.GetClaimsFromToken(id_token);
+            mail = tupla.mail;
+            id = tupla.id;
+            await AutentificarmeEnDuro(tupla.mail, tupla.id);
+        }
+    }
 
-        _nav.NavigateTo(url);
+    private async void AutentificarmeConGoogle()
+    {
+        // var url = "https://accounts.google.com/o/oauth2/v2/auth?";
+        // url += "client_id=306259551712-7972udthqs21p1lfb4dovegufboroqo4.apps.googleusercontent.com";
+        // url += "&redirect_uri=https://declaraapp.azurewebsites.net";
+        // url += "&response_type=id_token";
+        // url += "&scope=openid%20profile%20email&nonce=RANDOM_NONCE&state=RANDOM_STATE";
+
+        // _nav.NavigateTo(url);
+        await AutentificarmeEnDuro("alexfosters2014@gmail.com", "123456");
 
     }
 
-    private async Task AutentificarmeEnDuro()
+    private async Task AutentificarmeEnDuro(string mail, string idGoogle)
     {
-        bool autentificado = await _usuarioServicio.LoginRegistro("alexfosters2014@gmail.com", "123456");
-        if (autentificado)
+        try
         {
-            _nav.NavigateTo("/Principal");
+            bool autentificado = await _usuarioServicio.LoginRegistro(mail, idGoogle);
+            if (autentificado)
+            {
+                _toastServicio.ShowSuccess("bienvenido");
+                _nav.NavigateTo("/Principal");
+            }
+            else
+            {
+                _toastServicio.ShowInfo("Verificar usuario");
+            }
         }
+        catch (Exception ex)
+        {
+            _toastServicio.ShowInfo(ex.Message);
+        }
+       
     }
 
     

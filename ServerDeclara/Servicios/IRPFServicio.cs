@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using ServerDeclara.DTOs;
 using ServerDeclara.Servicios_de_datos;
+using ServerDeclara.Utilidades;
 
 namespace ServerDeclara.Servicios
 {
@@ -9,6 +10,7 @@ namespace ServerDeclara.Servicios
         private readonly IRPFRepositorio IRPFRepositorio;
         private readonly UsuarioServicio _usuarioServicio;
         private int bimensualIdSeleccionado = 0;
+        private string modoCreacionIRPF = Util.modoFormulario.NUEVO.ToString();
 
         public IRPFServicio(IRPFRepositorio iRPFRepositorio, UsuarioServicio usuarioServicio)
         {
@@ -19,6 +21,13 @@ namespace ServerDeclara.Servicios
         public void SetIdBimensual(int IdBimensual) => bimensualIdSeleccionado = IdBimensual;
 
         public int GetIdBimensual() => bimensualIdSeleccionado;
+
+        public void SetModoCreacionIPRF(string modoCreacion)
+        {
+            modoCreacionIRPF = modoCreacion;
+        }
+
+        public string GetModoCreacionIRPF() => modoCreacionIRPF;
 
         public async Task<List<BimensualIRPF_ViewList>> GetListado()
         {
@@ -54,6 +63,16 @@ namespace ServerDeclara.Servicios
             return declaracionDTO;
 
         }
+
+        public async Task<BimensualIRPF_DTO> CopiaDeclaracion()
+        {
+            BimensualIRPF_DTO declaracionDTO = await IRPFRepositorio.CopiaDeclaracionBimensual(bimensualIdSeleccionado);
+
+            return declaracionDTO;
+
+        }
+
+
 
 
     }

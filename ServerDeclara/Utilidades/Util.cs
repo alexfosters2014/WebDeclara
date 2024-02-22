@@ -18,7 +18,8 @@ namespace ServerDeclara.Utilidades
         public enum modoFormulario
         {
           EDICION,
-          NUEVO
+          NUEVO,
+          COPIA
         }
 
         public enum Operacion
@@ -47,6 +48,12 @@ namespace ServerDeclara.Utilidades
         {
             DateTime primerDiaDelMes = new DateTime(fecha.Year, fecha.Month, 1);
             return primerDiaDelMes;
+        }
+
+        public enum Vistas
+        {
+            GESTION_IVA,
+            LISTADO_BIMENSUAL_IVA
         }
 
     }

@@ -1,0 +1,16 @@
+﻿
+
+<h4>@Texto</h4>
+
+<button @onclick="Cancelar">No</button>
+<button @onclick="Confirmar">Confirmar</button>
+
+
+@code {
+    [Parameter] public string Texto { get; set; }
+    [CascadingParameter] BlazoredModalInstance BlazoredModal { get; set; } = default!;
+
+
+    private async Task Confirmar() => await BlazoredModal.CloseAsync(ModalResult.Ok());
+    private async Task Cancelar() => await BlazoredModal.CancelAsync();
+}

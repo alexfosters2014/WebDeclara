@@ -51,15 +51,20 @@
 
     private void EditarCambiosDeclaracion(int idBimensual)
     {
-        _IVAServicio.SetIdBimensual(idBimensual);
+        SetBimensualId(idBimensual);
         _nav.NavigateTo("/gestionIVA");
     }
 
     private async Task AgregarNuevoIVA(int idBimensual)
     {
-        _IVAServicio.SetIdBimensual(idBimensual);
-        _nav.NavigateTo("/NuevoComprobante/");
-      
+        SetBimensualId(idBimensual);
+        _nav.NavigateTo($"/NuevoComprobante/{Util.Vistas.LISTADO_BIMENSUAL_IVA.ToString()}");
+
         // texto = await _js.InvokeAsync<string>("LeerVoz");
+    }
+
+    private void SetBimensualId(int idBimensual)
+    {
+        _IVAServicio.SetIdBimensual(idBimensual);
     }
 }

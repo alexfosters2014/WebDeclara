@@ -323,6 +323,11 @@
         {
             ImpuestoBimensual = await _irpfServicio.ObtenerDeclaracion();
         }
+        if (modoFormulario == Util.modoFormulario.COPIA.ToString())
+        {
+            ImpuestoBimensual = await _irpfServicio.CopiaDeclaracion();
+            modoFormulario = Util.modoFormulario.EDICION.ToString();
+        }
     }
 
     void CambioFSMes1(ChangeEventArgs e)

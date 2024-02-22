@@ -14,7 +14,7 @@ else
     <p>Aun no tiene ningúna declaración de IVA realizada</p>
 }
 
-<div class="botonMas" @onclick="ModalDeclaracionBimesrte">
+<div class="botonMas" @onclick="ModalDeclaracionBimestre">
     <img src="/imagenes/iconos/botonMas.png" alt="boton +" />
 </div>
 
@@ -43,7 +43,7 @@ else
         _nav.NavigateTo("/NuevoIRPF/" + Util.modoFormulario.NUEVO.ToString());
     }
 
-    private async Task ModalDeclaracionBimesrte()
+    private async Task ModalDeclaracionBimestre()
     {
         try
         {

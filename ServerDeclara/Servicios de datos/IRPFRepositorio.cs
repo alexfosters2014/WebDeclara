@@ -188,6 +188,39 @@ namespace ServerDeclara.Servicios_de_datos
 
         }
 
+        public async Task<BimensualIRPF_DTO> CopiaDeclaracionBimensual(int idBimensual)
+        {
+            var declaracionACopiar = await _db.BimensualesRPFs.AsNoTracking()
+                                                        .Include(i => i.DeclaracionMes1)
+                                                        .Include(i => i.DeclaracionMes2)
+                                                        .Include(i => i.Usuario)
+                                                        .Include(i => i.HistorialParametro.Parametros)
+                                                        .SingleOrDefaultAsync(s => s.Id == idBimensual);
+
+
+            declaracionACopiar.Id = 0;
+            declaracionACopiar.Desde = DateTime.MinValue;
+            declaracionACopiar.Hasta = DateTime.MinValue;
+
+            declaracionACopiar.DeclaracionMes1.Id = 0;
+            declaracionACopiar.DeclaracionMes2.Id = 0;
+
+            declaracionACopiar.Usuario = await _db.Usuarios.SingleOrDefaultAsync(s => s.Id == declaracionACopiar.Usuario.Id);
+            declaracionACopiar.HistorialParametro = await _db.HistorialParametros.SingleOrDefaultAsync(s => s.Id == declaracionACopiar.HistorialParametro.Id);
+
+            _db.Entry(declaracionACopiar.Usuario).State = EntityState.Unchanged;
+            _db.Entry(declaracionACopiar.HistorialParametro).State = EntityState.Unchanged;
+
+            var entidad = await _db.BimensualesRPFs.AddAsync(declaracionACopiar);
+
+            await _db.SaveChangesAsync();
+
+            BimensualIRPF_DTO declaracionDTO = _mapper.Map<BimensualIRPF_DTO>(entidad.Entity);
+
+            return declaracionDTO;
+        }
+
+
 
 
     }

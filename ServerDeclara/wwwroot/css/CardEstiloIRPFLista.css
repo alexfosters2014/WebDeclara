@@ -39,6 +39,12 @@
     right: 2px;
 }
 
+.card-general-submenu-2 {
+    position: absolute;
+    bottom: 2px;
+    right: 40px;
+}
+
 .color-rojo {
     color: red;
 }

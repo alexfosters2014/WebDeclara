@@ -1,4 +1,4 @@
-﻿@page "/NuevoComprobante/"
+﻿@page "/NuevoComprobante/{VistaSeleccionada}"
 @inject IVAServicio _ivaServicio
 @inject ComercioServicio _comercioServicio
 @inject IVAServicio _ivaServicio
@@ -34,7 +34,7 @@
 }
 else
 {
-    <section class="recuadro">
+    <section class="recuadro recuadro-margin">
 
             <label>Comercio</label>
         <div class="row">
@@ -73,7 +73,7 @@ else
               <label>Monto total sin IVA</label>
             <input type="number" @bind-value="nuevaEntradaIVA.MontoMasIVA" class="form-control" />
 
-        <label>Monto de IVA</label>
+            <label>Monto de IVA</label>
             <input type="number" @bind-value="nuevaEntradaIVA.MontoIVA" class="form-control" />
 
        
@@ -82,12 +82,11 @@ else
             <label>IVA retenido por venta</label>
                 <input type="number" @bind-value="nuevaEntradaIVA.MontoIvaRetenido" class="form-control" />
             }
-               <label>Tipo de comprobante</label>
-            <input type="text" @bind-value="nuevaEntradaIVA.TipoIva" />
+             <label>Tipo de comprobante</label>
+             <GrupoBotonesTipoIva valor="@nuevaEntradaIVA.TipoIva" CambioValorTipoIva="CambioValorTipoIva" />
+
 
             <div class="d-flex m-3">
-                @* <img src="/imagenes/iconos/fotoIcon.png" alt="Tomar foto" class="imagen_boton" /> *@
-                @* <img src="/imagenes/iconos/UploadIcon.png" alt="Exportar PDF" class="imagen_boton" @onclick=""/> *@
 
             <InputFile OnChange="@SubirPDF" name="foto" id="pdfUpload" class="input-file"/>
               <label for="pdfUpload" class="label-file">
@@ -105,18 +104,14 @@ else
             <button @onclick="GuardarNuevoComprobante">Guardar</button>
 
          </div>
-           
-
-           
 
     </section>
-}
+
 
 
 
 @code {
-    [Parameter] public int bimensualId { get; set; }
-
+    [Parameter] public string VistaSeleccionada { get; set; }
     [CascadingParameter] IModalService Modal { get; set; } = default!;
 
     int? idComercio;
@@ -140,12 +135,16 @@ else
         {
             await Escucha();
         }
-       
+
     }
 
     private async Task ActualizaListadoComercios()
     {
         Comercios = await _comercioServicio.GetListadoComerciosPorUsuario();
+
+        if (nuevaEntradaIVA.Fecha == DateTime.MinValue) nuevaEntradaIVA.Fecha = DateTime.Today;
+        if (string.IsNullOrEmpty(nuevaEntradaIVA.TipoIva)) nuevaEntradaIVA.TipoIva = Util.TipoIva.COMPRA.ToString();
+
         StateHasChanged();
     }
 
@@ -319,7 +318,7 @@ else
         string verURL = UrlPdf + nuevaEntradaIVA.NombreArchivoPDF;
         return verURL;
     }
-       
+
 
     private async Task AgregarNuevoComercio()
     {
@@ -341,13 +340,26 @@ else
 
             var resultado = await _ivaServicio.CrearNuevoComprobanteIVA(nuevaEntradaIVA);
 
-            _nav.NavigateTo("gestionIVA");
+            if (VistaSeleccionada == Util.Vistas.GESTION_IVA.ToString())
+            {
+                _nav.NavigateTo("gestionIVA");
+            }
+            else
+            {
+                _nav.NavigateTo("HistorialVA");
+            }
+
         }
         catch (Exception ex)
         {
             _toastServicio.ShowWarning(ex.Message);
         }
-       
+    }
+
+    async Task CambioValorTipoIva(string valorTipoIva)
+    {
+        nuevaEntradaIVA.TipoIva = valorTipoIva;
+    }
 
     }
 }

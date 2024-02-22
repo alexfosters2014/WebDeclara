@@ -15,6 +15,12 @@
             <img src="/imagenes/iconos/editar.png" alt="">
         </a>
     </div>
+
+    <div class="d-flex  justify-content-end card-general-submenu-2">
+        <a href="" @onclick="() => CrearCopia(DeclaracionBimensual.Id)" @onclick:preventDefault>
+            <img src="/imagenes/iconos/copiar.png" alt="">
+        </a>
+    </div>
 </section>
 
 
@@ -22,6 +28,7 @@
 
 @code {
     [Parameter] public BimensualIRPF_ViewList DeclaracionBimensual { get; set; }
+    [CascadingParameter] IModalService Modal { get; set; } = default!;
 
     private string FormatearPeriodo()
     {
@@ -48,4 +55,24 @@
         _irpfServicio.SetIdBimensual(idBimensual);
         _nav.NavigateTo("/NuevoIRPF/" + Util.modoFormulario.EDICION.ToString());
     }
+
+    private async Task CrearCopia(int idBimensual)
+    {
+        var parametros = new ModalParameters();
+        parametros.Add(nameof(DialogoConfirmacion.Texto), "Desea crear una copia de esta declaración?");
+
+        var dialogo = Modal.Show<DialogoConfirmacion>("Copia", parametros);
+
+         var result = await dialogo.Result;
+
+            if (result.Confirmed)
+            {
+                _irpfServicio.SetIdBimensual(idBimensual);
+                _nav.NavigateTo("/NuevoIRPF/" + Util.modoFormulario.COPIA.ToString());
+
+            }
+       
+    }
+
+   
 }

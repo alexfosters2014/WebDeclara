@@ -8,3 +8,27 @@
     width: 30px;
     margin-left: 10px;
 }
+
+.grupo_boton_seleccionado {
+    background-color: #A2C4EE !important;
+    color: blue;
+}
+.selectorTipoIva button {
+    border-style: none;
+    border: 1px solid #C6CBD2;
+    padding: 10px;
+    width: 100px;
+    text-align: center;
+}
+
+.colorBlanco {
+    background-color: snow;
+}
+
+.selectorTipoIva button:first-child {
+    border-radius: 50% 0 0 50%;
+}
+
+.selectorTipoIva button:last-child {
+    border-radius: 0 50% 50% 0;
+}
