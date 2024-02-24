@@ -1,0 +1,29 @@
+﻿@page "/EdicionParametros"
+@inject ParametroServicio _parametroServicio
+
+
+@if (historialParamentro != null && historialParamentro.Parametros.Count > 0)
+{
+    @foreach (var param in historialParamentro.Parametros)
+    {
+     
+    }
+}
+
+
+@code{
+    
+    private HistorialParametroDTO historialParamentro = null;
+
+    protected async override Task OnInitializedAsync()
+    {
+        historialParamentro = _parametroServicio.GetParametroSeleccionado();
+
+    }
+
+
+
+
+
+
+}

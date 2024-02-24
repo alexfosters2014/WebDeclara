@@ -7,6 +7,7 @@ namespace ServerDeclara.Servicios
     {
         private List<HistorialParametroDTO> historialParametrosDTO { get; set; }
         private readonly ParametroRepositorio parametroRepositorio;
+        private HistorialParametroDTO parametroSeleccionado { get; set; }
 
         public ParametroServicio(ParametroRepositorio parametroRepositorio)
         {
@@ -17,6 +18,18 @@ namespace ServerDeclara.Servicios
         {
             return historialParametrosDTO;
         }
+
+        public HistorialParametroDTO GetParametroSeleccionado()
+        {
+            return parametroSeleccionado;
+        }
+
+        public async Task SetParametroSeleccionado(HistorialParametroDTO historialParam)
+        {
+            parametroSeleccionado = historialParam;
+        }
+
+
 
         public async Task<List<HistorialParametroDTO>> GetHistorialParametros()
         {
