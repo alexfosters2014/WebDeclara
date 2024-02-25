@@ -32,3 +32,26 @@
 .selectorTipoIva button:last-child {
     border-radius: 0 50% 50% 0;
 }
+
+textarea {
+    min-width: 100%;
+    width: 100%;
+    resize: none; /* Evita que se pueda redimensionar */
+    box-sizing: border-box;
+}
+.input-small{
+    width:50%;
+}
+
+button {
+    border: none;
+    color: white;
+    padding: 10px 24px;
+    cursor: pointer;
+    border-radius: 7px;
+    background-color: #007bff;
+}
+
+button:hover {
+    background: #0b7dda;
+}

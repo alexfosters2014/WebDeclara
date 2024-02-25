@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
+using iText.Commons.Actions.Contexts;
 using Microsoft.EntityFrameworkCore;
 using ServerDeclara.Datos;
 using ServerDeclara.DTOs;
+using ServerDeclara.DTOs.Otros;
 
 namespace ServerDeclara.Servicios_de_datos
 {
@@ -31,6 +33,30 @@ namespace ServerDeclara.Servicios_de_datos
 
 
        }
+
+        public async Task<bool> EditarParametro(HistorialParametroDTO historialParam)
+        {
+            try
+            {
+                //var historialParametro = _mapper.Map<HistorialParametro>(historialParam);
+
+                var historialParamBD = await _db.HistorialParametros.Include(i => i.Parametros)
+                                                                    .SingleOrDefaultAsync(s => s.Id == historialParam.Id);
+
+                _mapper.Map(historialParam, historialParamBD);
+
+                await _db.SaveChangesAsync();
+
+                return true;
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+
+
+        }
 
     }
 }

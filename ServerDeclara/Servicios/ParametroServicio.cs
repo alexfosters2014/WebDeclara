@@ -37,5 +37,20 @@ namespace ServerDeclara.Servicios
             historialParametrosDTO = await parametroRepositorio.GetParametros();
             return historialParametrosDTO;
         }
+
+        public async Task<bool> EditarParametros(HistorialParametroDTO historialParam)
+        {
+
+            try
+            {
+                bool actualizado = await parametroRepositorio.EditarParametro(historialParam);
+                return actualizado;
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }

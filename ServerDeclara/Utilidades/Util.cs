@@ -56,5 +56,13 @@ namespace ServerDeclara.Utilidades
             LISTADO_BIMENSUAL_IVA
         }
 
+        public enum TipoListadoIRPF
+        {
+           RENTA,
+           BPC,
+           CALCULO
+        }
+
+
     }
 }

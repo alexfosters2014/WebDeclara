@@ -1,0 +1,23 @@
+﻿
+
+<div class="recuadro">
+    <p>@parametroDTO.Atributo</p>
+
+<textarea @bind="parametroDTO.Formula">
+
+</textarea>
+
+    <button @onclick="Confirmar">Guardar</button>
+</div>
+
+
+@code {
+    [Parameter] public ParametroDTO parametroDTO { get; set; }
+    [CascadingParameter] BlazoredModalInstance BlazoredModal { get; set; } = default!;
+
+
+    private async Task Confirmar() => await BlazoredModal.CloseAsync(ModalResult.Ok(parametroDTO));
+    private async Task Cancelar() => await BlazoredModal.CancelAsync();
+
+
+}

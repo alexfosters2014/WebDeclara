@@ -20,7 +20,8 @@ namespace ServerDeclara.Mapper
             CreateMap<BimensualIVA_ViewList, BimensualIVA>().ReverseMap();
             CreateMap<BimensualIVA, BimensualIVADTO>().ReverseMap();
             CreateMap<DeclaracionlIRFTransitorio, DeclaracionMensualIRPF>().ReverseMap();
-
+            CreateMap<ParametroTransitorio, ParametroDTO>().ReverseMap();
+            CreateMap<ParametroTransitorio, Parametro>().ReverseMap();
 
         }
     }
