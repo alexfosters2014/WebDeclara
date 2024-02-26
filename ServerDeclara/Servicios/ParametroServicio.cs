@@ -1,4 +1,5 @@
 ﻿using ServerDeclara.DTOs;
+using ServerDeclara.DTOs.Otros;
 using ServerDeclara.Servicios_de_datos;
 
 namespace ServerDeclara.Servicios
@@ -52,5 +53,24 @@ namespace ServerDeclara.Servicios
                 throw new Exception(ex.Message);
             }
         }
+
+        public async Task<HistorialParametroDTO> CopiaParametros(HistorialParametroDTO historialParam, DataCopiaParametro paramCopia)
+        {
+
+            try
+            {
+                var copiaRealizada = await parametroRepositorio.CopiaParametro(historialParam, paramCopia);
+                return copiaRealizada;
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception(ex.Message);
+            }
+        }
+
+
+
+
     }
 }

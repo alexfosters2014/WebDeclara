@@ -17,9 +17,9 @@ namespace ServerDeclara.Utilidades
 
         public enum modoFormulario
         {
-          EDICION,
-          NUEVO,
-          COPIA
+            EDICION,
+            NUEVO,
+            COPIA
         }
 
         public enum Operacion
@@ -37,11 +37,11 @@ namespace ServerDeclara.Utilidades
         }
 
         public static DateTime UltimoDiaDelMes(DateTime fecha)  // Obtener el primer día del mes siguiente y restar un día
-        {       
-                DateTime primerDiaDelMesSiguiente = new DateTime(fecha.Year, fecha.Month, 1).AddMonths(1);
-                DateTime ultimoDiaDelMes = primerDiaDelMesSiguiente.AddDays(-1);
+        {
+            DateTime primerDiaDelMesSiguiente = new DateTime(fecha.Year, fecha.Month, 1).AddMonths(1);
+            DateTime ultimoDiaDelMes = primerDiaDelMesSiguiente.AddDays(-1);
 
-                return ultimoDiaDelMes;
+            return ultimoDiaDelMes;
         }
 
         public static DateTime PrimerDiaDelMes(DateTime fecha)  // Obtener el primer día del mes siguiente y restar un día
@@ -58,11 +58,15 @@ namespace ServerDeclara.Utilidades
 
         public enum TipoListadoIRPF
         {
-           RENTA,
-           BPC,
-           CALCULO
+            RENTA,
+            BPC,
+            CALCULO
         }
 
+        public static Dictionary<int, string> Mes = new Dictionary<int, string>()
+        {
+            {1,"Enero" }, {2,"Febrero"}, {3,"Marzo"}, {4,"Abril"}, {5,"Mayo"}, {6,"Junio"}, {7,"Julio"}, {8,"Agosto"}, {9,"Setiembre"}, {10,"Octubre"}, {11,"Noviembre"}, {12,"Diciembre"}
+        };
 
     }
 }

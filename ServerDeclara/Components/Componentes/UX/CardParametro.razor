@@ -1,0 +1,63 @@
+﻿@inject NavigationManager _nav
+@inject ParametroServicio _parametroServicio
+
+
+<section class="card-general">
+   @*  <article>
+        @HistorialParametro.Fecha
+    </article> *@
+    <p>
+        @HistorialParametro.Descripcion
+    </p>
+    <div class="d-flex  justify-content-end card-general-submenu">
+        <a href="" @onclick="EditarParametros" @onclick:preventDefault>
+            <img src="/imagenes/iconos/editar.png" alt="">
+        </a>
+
+        <a href="" @onclick="CopiarParametros" @onclick:preventDefault>
+            <img src="/imagenes/iconos/copiar.png" alt="">
+        </a>
+
+
+    </div>
+</section>
+
+
+@code {
+    [Parameter] public HistorialParametroDTO HistorialParametro { get; set; }
+    [CascadingParameter] IModalService Modal { get; set; } = default!;
+
+    private async Task EditarParametros()
+    {
+        await _parametroServicio.SetParametroSeleccionado(HistorialParametro);
+        _nav.NavigateTo("/EdicionParametros");
+    }
+
+    private async Task CopiarParametros()
+    {
+
+        var parametros = new ModalParameters();
+        parametros.Add(nameof(DialogoConfirmParam.Texto), "Desea crear una copia de este parámetro?");
+
+        var dialogo = Modal.Show<DialogoConfirmParam>("Copia", parametros);
+
+        var result = await dialogo.Result;
+
+        if (result.Confirmed)
+        {
+            DataCopiaParametro paramCopia = (DataCopiaParametro)result.Data;
+
+            HistorialParametroDTO nuevoCopiado = await _parametroServicio.CopiaParametros(HistorialParametro, paramCopia);
+
+            if (nuevoCopiado != null)
+            {
+                await _parametroServicio.SetParametroSeleccionado(nuevoCopiado);
+                _nav.NavigateTo("/EdicionParametros");
+            }
+        }
+
+
+    }
+
+
+}

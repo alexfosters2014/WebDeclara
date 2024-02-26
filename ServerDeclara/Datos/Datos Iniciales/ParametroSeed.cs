@@ -23,7 +23,7 @@ namespace ServerDeclara.Datos.Datos_Iniciales
                   Atributo="",
                   Formula="",
                   Tipo="RENTA",
-                  HistorialParametroId=1
+                  HistorialParametroId=2
               }, 
               new Parametro()
               {
@@ -38,7 +38,7 @@ namespace ServerDeclara.Datos.Datos_Iniciales
                   Atributo = "",
                   Formula = "",
                   Tipo = "RENTA",
-                  HistorialParametroId = 1
+                  HistorialParametroId = 2
               },
                new Parametro()
                {
@@ -53,7 +53,7 @@ namespace ServerDeclara.Datos.Datos_Iniciales
                    Atributo = "",
                    Formula = "",
                    Tipo = "RENTA",
-                   HistorialParametroId = 1
+                   HistorialParametroId = 2
                },
                  new Parametro()
                  {
@@ -68,7 +68,7 @@ namespace ServerDeclara.Datos.Datos_Iniciales
                      Atributo = "",
                      Formula = "",
                      Tipo = "RENTA",
-                     HistorialParametroId = 1
+                     HistorialParametroId = 2
                  },
                    new Parametro()
                    {
@@ -83,7 +83,7 @@ namespace ServerDeclara.Datos.Datos_Iniciales
                        Atributo = "",
                        Formula = "",
                        Tipo = "RENTA",
-                       HistorialParametroId = 1
+                       HistorialParametroId = 2
                    },
                      new Parametro()
                      {
@@ -98,7 +98,7 @@ namespace ServerDeclara.Datos.Datos_Iniciales
                          Atributo = "",
                          Formula = "",
                          Tipo = "RENTA",
-                         HistorialParametroId = 1
+                         HistorialParametroId = 2
                      },
                       new Parametro()
                       {
@@ -113,7 +113,7 @@ namespace ServerDeclara.Datos.Datos_Iniciales
                           Atributo = "",
                           Formula = "",
                           Tipo = "RENTA",
-                          HistorialParametroId = 1
+                          HistorialParametroId = 2
                       },
 
                        new Parametro()
@@ -129,7 +129,7 @@ namespace ServerDeclara.Datos.Datos_Iniciales
                            Atributo = "",
                            Formula = "",
                            Tipo = "RENTA",
-                           HistorialParametroId = 1
+                           HistorialParametroId = 2
                        },
                         new Parametro()
                         {
@@ -144,7 +144,7 @@ namespace ServerDeclara.Datos.Datos_Iniciales
                             Atributo = "BPC",
                             Formula = "5660",
                             Tipo = "BPC",
-                            HistorialParametroId = 1
+                            HistorialParametroId = 2
                         },
                          new Parametro()
                          {
@@ -159,7 +159,7 @@ namespace ServerDeclara.Datos.Datos_Iniciales
                              Atributo = "DeduccionLegalIngresos",
                              Formula = "IngIndependiente * -0.3",
                              Tipo = "CALCULO",
-                             HistorialParametroId = 1
+                             HistorialParametroId = 2
                          },
                             new Parametro()
                             {
@@ -174,7 +174,7 @@ namespace ServerDeclara.Datos.Datos_Iniciales
                                 Atributo = "IngTotalIndependiente",
                                 Formula = "IngIndependiente + DeduccionLegalIngresos",
                                 Tipo = "CALCULO",
-                                HistorialParametroId = 1
+                                HistorialParametroId = 2
                             },
                             new Parametro()
                             {
@@ -189,7 +189,7 @@ namespace ServerDeclara.Datos.Datos_Iniciales
                                 Atributo = "IngIncrementoSeisPorciento",
                                 Formula = "IIF((IngDependenciaCess + IngDependenciaNoCess + IngSalVacacional) > (BPC * 10), IngDependenciaCess * 0.06, 0)",
                                 Tipo = "CALCULO",
-                                HistorialParametroId = 1
+                                HistorialParametroId = 2
                             },
                               new Parametro()
                               {
@@ -204,7 +204,7 @@ namespace ServerDeclara.Datos.Datos_Iniciales
                                   Atributo = "IngTotalDependencia",
                                   Formula = "IngDependenciaCess + IngDependenciaNoCess + IngSalVacacional + IngIncrementoSeisPorciento",
                                   Tipo = "CALCULO",
-                                  HistorialParametroId = 1
+                                  HistorialParametroId = 2
                               },
                               new Parametro()
                               {
@@ -219,7 +219,7 @@ namespace ServerDeclara.Datos.Datos_Iniciales
                                   Atributo = "IngParaAnticipo",
                                   Formula = "IngTotalIndependiente + IngTotalDependencia + IngOtros",
                                   Tipo = "CALCULO",
-                                  HistorialParametroId = 1
+                                  HistorialParametroId = 2
                               },
                                new Parametro()
                                {
@@ -234,7 +234,7 @@ namespace ServerDeclara.Datos.Datos_Iniciales
                                    Atributo = "DeduccionTotalDeducir",
                                    Formula = "(DeduccionSDmenores * 20 * BPC + DeduccionCD * 40 * BPC) / 12 + (DeduccionSDMenoresCincuenta * 20 * BPC + DeduccionCDCincuenta * 40 * BPC) * 0.5 / 12",
                                    Tipo = "CALCULO",
-                                   HistorialParametroId = 1
+                                   HistorialParametroId = 2
                                },
                                 new Parametro()
                                 {
@@ -249,7 +249,7 @@ namespace ServerDeclara.Datos.Datos_Iniciales
                                     Atributo = "DeduccionFondoSolidaridad",
                                     Formula = "CantidadBPCParaFS * BPC / 12",
                                     Tipo = "CALCULO",
-                                    HistorialParametroId = 1
+                                    HistorialParametroId = 2
                                 },
                                 new Parametro()
                                 {
@@ -264,7 +264,7 @@ namespace ServerDeclara.Datos.Datos_Iniciales
                                     Atributo = "DeduccionTotal",
                                     Formula = "DeduccionTotalDeducir + DeduccionFondoSolidaridad + DeduccionFondoSolidaridadAdicional + DeduccionCJPPU + DeduccionJubilatorio + DeduccionFonasa + DeduccionFRL + DeduccionOtros",
                                     Tipo = "CALCULO",
-                                    HistorialParametroId = 1
+                                    HistorialParametroId = 2
                                 },
                                  new Parametro()
                                  {
@@ -279,7 +279,7 @@ namespace ServerDeclara.Datos.Datos_Iniciales
                                      Atributo = "DeduccionFondoSolidaridadAdicional",
                                      Formula = "IIF(AdicionalFS = true,5/3 * BPC / 12, 0)",
                                      Tipo = "CALCULO",
-                                     HistorialParametroId = 1
+                                     HistorialParametroId = 2
                                  },
                                   new Parametro()
                                   {
@@ -294,7 +294,7 @@ namespace ServerDeclara.Datos.Datos_Iniciales
                                       Atributo = "AnticipoMensual",
                                       Formula = "IIF(AnticipoNF = false, LiquidacionMes, LiquidacionMes * 0.95)",
                                       Tipo = "CALCULO",
-                                      HistorialParametroId = 1
+                                      HistorialParametroId = 2
                                   },
                                     new Parametro()
                                     {
@@ -309,7 +309,7 @@ namespace ServerDeclara.Datos.Datos_Iniciales
                                         Atributo = "TasaDeduccion",
                                         Formula = "IIF(TotalExcedenteIngresos > (15 * BPC), 0.08, 0.14)",
                                         Tipo = "CALCULO",
-                                        HistorialParametroId = 1
+                                        HistorialParametroId = 2
                                     },
                                       new Parametro()
                                       {
@@ -324,7 +324,7 @@ namespace ServerDeclara.Datos.Datos_Iniciales
                                           Atributo = "TotalExcedenteIngresos",
                                           Formula = "IngParaAnticipo - IngIncrementoSeisPorciento - IngSalVacacional - DeduccionLegalIngresos",
                                           Tipo = "CALCULO",
-                                          HistorialParametroId = 1
+                                          HistorialParametroId = 2
                                       },
                                         new Parametro()
                                         {
@@ -339,7 +339,7 @@ namespace ServerDeclara.Datos.Datos_Iniciales
                                             Atributo = "TotalDeducible",
                                             Formula = "DeduccionTotal * TasaDeduccion",
                                             Tipo = "CALCULO",
-                                            HistorialParametroId = 1
+                                            HistorialParametroId = 2
                                         },
                                          new Parametro()
                                          {
@@ -354,7 +354,7 @@ namespace ServerDeclara.Datos.Datos_Iniciales
                                              Atributo = "LiquidacionMes",
                                              Formula = "IIF((LiquidacionIngresos - TotalDeducible)>0,(LiquidacionIngresos -TotalDeducible),0)",
                                              Tipo = "CALCULO",
-                                             HistorialParametroId = 1
+                                             HistorialParametroId = 2
                                          } );
 
 
@@ -375,7 +375,7 @@ namespace ServerDeclara.Datos.Datos_Iniciales
                 Atributo = "",
                 Formula = "",
                 Tipo = "RENTA",
-                HistorialParametroId = 2
+                HistorialParametroId = 1
             },
             new Parametro()
             {
@@ -390,7 +390,7 @@ namespace ServerDeclara.Datos.Datos_Iniciales
                 Atributo = "",
                 Formula = "",
                 Tipo = "RENTA",
-                HistorialParametroId = 2
+                HistorialParametroId = 1
             },
              new Parametro()
              {
@@ -405,7 +405,7 @@ namespace ServerDeclara.Datos.Datos_Iniciales
                  Atributo = "",
                  Formula = "",
                  Tipo = "RENTA",
-                 HistorialParametroId = 2
+                 HistorialParametroId = 1
              },
                new Parametro()
                {
@@ -420,7 +420,7 @@ namespace ServerDeclara.Datos.Datos_Iniciales
                    Atributo = "",
                    Formula = "",
                    Tipo = "RENTA",
-                   HistorialParametroId = 2
+                   HistorialParametroId = 1
                },
                  new Parametro()
                  {
@@ -435,7 +435,7 @@ namespace ServerDeclara.Datos.Datos_Iniciales
                      Atributo = "",
                      Formula = "",
                      Tipo = "RENTA",
-                     HistorialParametroId = 2
+                     HistorialParametroId = 1
                  },
                    new Parametro()
                    {
@@ -450,7 +450,7 @@ namespace ServerDeclara.Datos.Datos_Iniciales
                        Atributo = "",
                        Formula = "",
                        Tipo = "RENTA",
-                       HistorialParametroId = 2
+                       HistorialParametroId = 1
                    },
                     new Parametro()
                     {
@@ -465,7 +465,7 @@ namespace ServerDeclara.Datos.Datos_Iniciales
                         Atributo = "",
                         Formula = "",
                         Tipo = "RENTA",
-                        HistorialParametroId = 2
+                        HistorialParametroId = 1
                     },
 
                      new Parametro()
@@ -481,7 +481,7 @@ namespace ServerDeclara.Datos.Datos_Iniciales
                          Atributo = "",
                          Formula = "",
                          Tipo = "RENTA",
-                         HistorialParametroId = 2
+                         HistorialParametroId = 1
                      },
                       new Parametro()
                       {
@@ -496,7 +496,7 @@ namespace ServerDeclara.Datos.Datos_Iniciales
                           Atributo = "BPC",
                           Formula = "5660",
                           Tipo = "BPC",
-                          HistorialParametroId = 2
+                          HistorialParametroId = 1
                       },
                        new Parametro()
                        {
@@ -511,7 +511,7 @@ namespace ServerDeclara.Datos.Datos_Iniciales
                            Atributo = "DeduccionLegalIngresos",
                            Formula = "IngIndependiente * -0.3",
                            Tipo = "CALCULO",
-                           HistorialParametroId = 2
+                           HistorialParametroId = 1
                        },
                           new Parametro()
                           {
@@ -526,7 +526,7 @@ namespace ServerDeclara.Datos.Datos_Iniciales
                               Atributo = "IngTotalIndependiente",
                               Formula = "IngIndependiente + DeduccionLegalIngresos",
                               Tipo = "CALCULO",
-                              HistorialParametroId = 2
+                              HistorialParametroId = 1
                           },
                           new Parametro()
                           {
@@ -541,7 +541,7 @@ namespace ServerDeclara.Datos.Datos_Iniciales
                               Atributo = "IngIncrementoSeisPorciento",
                               Formula = "IIF((IngDependenciaCess + IngDependenciaNoCess + IngSalVacacional) > (BPC * 10), IngDependenciaCess * 0.06, 0)",
                               Tipo = "CALCULO",
-                              HistorialParametroId = 2
+                              HistorialParametroId = 1
                           },
                             new Parametro()
                             {
@@ -556,7 +556,7 @@ namespace ServerDeclara.Datos.Datos_Iniciales
                                 Atributo = "IngTotalDependencia",
                                 Formula = "IngDependenciaCess + IngDependenciaNoCess + IngSalVacacional + IngIncrementoSeisPorciento",
                                 Tipo = "CALCULO",
-                                HistorialParametroId = 2
+                                HistorialParametroId = 1
                             },
                             new Parametro()
                             {
@@ -571,7 +571,7 @@ namespace ServerDeclara.Datos.Datos_Iniciales
                                 Atributo = "IngParaAnticipo",
                                 Formula = "IngTotalIndependiente + IngTotalDependencia + IngOtros",
                                 Tipo = "CALCULO",
-                                HistorialParametroId = 2
+                                HistorialParametroId = 1
                             },
                              new Parametro()
                              {
@@ -586,7 +586,7 @@ namespace ServerDeclara.Datos.Datos_Iniciales
                                  Atributo = "DeduccionTotalDeducir",
                                  Formula = "(DeduccionSDmenores * 20 * BPC + DeduccionCD * 40 * BPC) / 12 + (DeduccionSDMenoresCincuenta * 20 * BPC + DeduccionCDCincuenta * 40 * BPC) * 0.5 / 12",
                                  Tipo = "CALCULO",
-                                 HistorialParametroId = 2
+                                 HistorialParametroId = 1
                              },
                               new Parametro()
                               {
@@ -601,7 +601,7 @@ namespace ServerDeclara.Datos.Datos_Iniciales
                                   Atributo = "DeduccionFondoSolidaridad",
                                   Formula = "CantidadBPCParaFS * BPC / 12",
                                   Tipo = "CALCULO",
-                                  HistorialParametroId = 2
+                                  HistorialParametroId = 1
                               },
                               new Parametro()
                               {
@@ -616,7 +616,7 @@ namespace ServerDeclara.Datos.Datos_Iniciales
                                   Atributo = "DeduccionTotal",
                                   Formula = "DeduccionTotalDeducir + DeduccionFondoSolidaridad + DeduccionFondoSolidaridadAdicional + DeduccionCJPPU + DeduccionJubilatorio + DeduccionFonasa + DeduccionFRL + DeduccionOtros",
                                   Tipo = "CALCULO",
-                                  HistorialParametroId = 2
+                                  HistorialParametroId = 1
                               },
                                new Parametro()
                                {
@@ -631,7 +631,7 @@ namespace ServerDeclara.Datos.Datos_Iniciales
                                    Atributo = "DeduccionFondoSolidaridadAdicional",
                                    Formula = "IIF(AdicionalFS = true,5/3 * BPC / 12, 0)",
                                    Tipo = "CALCULO",
-                                   HistorialParametroId = 2
+                                   HistorialParametroId = 1
                                },
                                 new Parametro()
                                 {
@@ -646,7 +646,7 @@ namespace ServerDeclara.Datos.Datos_Iniciales
                                     Atributo = "AnticipoMensual",
                                     Formula = "IIF(AnticipoNF = false, LiquidacionMes, LiquidacionMes * 0.95)",
                                     Tipo = "CALCULO",
-                                    HistorialParametroId = 2
+                                    HistorialParametroId = 1
                                 },
                                   new Parametro()
                                   {
@@ -661,7 +661,7 @@ namespace ServerDeclara.Datos.Datos_Iniciales
                                       Atributo = "TasaDeduccion",
                                       Formula = "IIF(TotalExcedenteIngresos > (15 * BPC), 0.08, 0.10)",
                                       Tipo = "CALCULO",
-                                      HistorialParametroId = 2
+                                      HistorialParametroId = 1
                                   },
                                     new Parametro()
                                     {
@@ -676,7 +676,7 @@ namespace ServerDeclara.Datos.Datos_Iniciales
                                         Atributo = "TotalExcedenteIngresos",
                                         Formula = "IngParaAnticipo - IngIncrementoSeisPorciento - IngSalVacacional - DeduccionLegalIngresos",
                                         Tipo = "CALCULO",
-                                        HistorialParametroId = 2
+                                        HistorialParametroId = 1
                                     },
                                       new Parametro()
                                       {
@@ -691,7 +691,7 @@ namespace ServerDeclara.Datos.Datos_Iniciales
                                           Atributo = "TotalDeducible",
                                           Formula = "DeduccionTotal * TasaDeduccion",
                                           Tipo = "CALCULO",
-                                          HistorialParametroId = 2
+                                          HistorialParametroId = 1
                                       },
                                        new Parametro()
                                        {
@@ -706,7 +706,7 @@ namespace ServerDeclara.Datos.Datos_Iniciales
                                            Atributo = "LiquidacionMes",
                                            Formula = "IIF((LiquidacionIngresos - TotalDeducible)>0,(LiquidacionIngresos -TotalDeducible),0)",
                                            Tipo = "CALCULO",
-                                           HistorialParametroId = 2
+                                           HistorialParametroId = 1
                                        } );
 
 

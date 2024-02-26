@@ -6,11 +6,9 @@
 {
     @foreach (var histParam in historialParametros)
     {
-        <div class="recuadro">
-            <button @onclick="() => EditarParametros(histParam.Id)">@histParam.Descripcion </button>
-        </div>
+        <CardParametro HistorialParametro="histParam" />
     }
-    }
+}
    
 
 
@@ -20,14 +18,7 @@
     protected async override Task OnInitializedAsync()
     {
         historialParametros = await _parametroServicio.GetHistorialParametros();
-        historialParametros.OrderByDescending(o => o.Id);
     }
 
-    private async Task EditarParametros(int historialParamId)
-    {
-        var historialParamSeleccionado = historialParametros.SingleOrDefault(s => s.Id == historialParamId);
-        await _parametroServicio.SetParametroSeleccionado(historialParamSeleccionado);
-
-        _nav.NavigateTo("/EdicionParametros");
-    }
+  
 }
