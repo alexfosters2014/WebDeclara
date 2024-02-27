@@ -7,59 +7,64 @@
 
 <PageTitle></PageTitle>
 
-<p>@id_token</p>
-<p>@mail</p>
-<p>@id</p>
+<p style="font-size:1.5rem">@IdToken</p>
 
 <button @onclick="AutentificarmeConGoogle">Iniciar Sesión con Google</button>
 
 @code{
-    [Parameter]
-    [SupplyParameterFromQuery]
-    public string id_token { get; set; }
 
-    string mail;
-    string id;
+    public string IdToken { get; set; }
 
     protected async override Task OnInitializedAsync()
     {
-        if (!string.IsNullOrEmpty(id_token))
-        {
-            //token jwt
-            var tupla = JWTServicio.GetClaimsFromToken(id_token);
-            mail = tupla.mail;
-            id = tupla.id;
-            await AutentificarmeEnDuro(tupla.mail, tupla.id);
-        }
+        //leer token desde la localstorage si hay dato iniciar sesión
+        //sino pedir la autentificacion con google
+        IdToken = Util.ExtraerTokenURL(_nav.Uri);
+
+        await Autentificarme();
+        
     }
 
     private async void AutentificarmeConGoogle()
     {
-        // var url = "https://accounts.google.com/o/oauth2/v2/auth?";
-        // url += "client_id=306259551712-7972udthqs21p1lfb4dovegufboroqo4.apps.googleusercontent.com";
-        // url += "&redirect_uri=https://declaraapp.azurewebsites.net";
-        // url += "&response_type=id_token";
-        // url += "&scope=openid%20profile%20email&nonce=RANDOM_NONCE&state=RANDOM_STATE";
+        //aca levanto el local storage para  saber si ya está autentificado
 
-        // _nav.NavigateTo(url);
-        await AutentificarmeEnDuro("alexfosters2014@gmail.com", "123456");
+
+        var url = "https://accounts.google.com/o/oauth2/v2/auth?";
+        url += "client_id=306259551712-7972udthqs21p1lfb4dovegufboroqo4.apps.googleusercontent.com";
+        url += "&redirect_uri=https://declaraapp.azurewebsites.net";
+        url += "&response_type=id_token";
+        url += "&scope=openid%20profile%20email&nonce=RANDOM_NONCE&state=RANDOM_STATE";
+
+        _nav.NavigateTo(url);
+        //
 
     }
 
-    private async Task AutentificarmeEnDuro(string mail, string idGoogle)
+    private async Task Autentificarme()
     {
         try
         {
-            bool autentificado = await _usuarioServicio.LoginRegistro(mail, idGoogle);
-            if (autentificado)
+            if (!string.IsNullOrEmpty(IdToken))
             {
-                _toastServicio.ShowSuccess("bienvenido");
-                _nav.NavigateTo("/Principal");
+                //token jwt
+
+                var tupla = JWTServicio.GetClaimsFromToken(IdToken);
+                string mail = tupla.mail;
+                string idGoogle = tupla.id;
+
+                bool autentificado = await _usuarioServicio.LoginRegistro(mail, idGoogle, IdToken);
+                if (autentificado)
+                {
+                    _toastServicio.ShowSuccess("bienvenido");
+                    _nav.NavigateTo("/Principal");
+                }
+                else
+                {
+                    _toastServicio.ShowInfo("Verificar usuario");
+                }
             }
-            else
-            {
-                _toastServicio.ShowInfo("Verificar usuario");
-            }
+           
         }
         catch (Exception ex)
         {

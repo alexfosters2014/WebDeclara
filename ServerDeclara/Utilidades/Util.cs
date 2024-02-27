@@ -68,5 +68,27 @@ namespace ServerDeclara.Utilidades
             {1,"Enero" }, {2,"Febrero"}, {3,"Marzo"}, {4,"Abril"}, {5,"Mayo"}, {6,"Junio"}, {7,"Julio"}, {8,"Agosto"}, {9,"Setiembre"}, {10,"Octubre"}, {11,"Noviembre"}, {12,"Diciembre"}
         };
 
+
+        public static string ExtraerTokenURL(string uri)
+        {
+            string token = string.Empty;
+
+            string[] partes = uri.Split("&");
+
+            if (partes.Length == 0) return token;
+
+            string? buscarIdToken = partes.SingleOrDefault(s => s.Contains("id_token"));
+
+            if (!string.IsNullOrEmpty(buscarIdToken))
+            {
+                token = buscarIdToken.Split("=")[1];
+            }
+
+            return token;
+        }
+
+
+
+
     }
 }

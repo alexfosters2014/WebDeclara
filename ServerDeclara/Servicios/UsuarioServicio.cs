@@ -18,13 +18,14 @@ namespace ServerDeclara.Servicios
             return usuarioLogueado;
         }
 
-        public async Task<bool> LoginRegistro(string email, string idGoogle)
+        public async Task<bool> LoginRegistro(string email, string idGoogle, string idToken)
         {
             // llamar al repositorio para loguear o registrar automaticamente
             var usuario = new UsuarioDTO()
             {
                 Email = email,
-                IdGoogle = idGoogle
+                IdGoogle = idGoogle,
+                Token = idToken
             };
 
             usuarioLogueado = await usuarioRepositorio.GetUsuario(usuario);
