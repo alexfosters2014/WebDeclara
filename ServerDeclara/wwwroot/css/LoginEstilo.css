@@ -1,0 +1,67 @@
+﻿@import url('https://fonts.googleapis.com/css2?family=Gayathri:wght@100;400;700&family=Lato:ital,wght@0,100;0,300;0,400;0,700;1,100;1,300&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+
+.fondoLogin {
+    position:fixed;
+    left:0;
+    top:0;
+    width: 100vw;
+    height: 100vh;
+    z-index:-1;
+}
+
+.iconoGoogle {
+    width: 40px;
+    height: 40px;
+    margin-right: 20px;
+}
+
+.botonGoogle {
+    position: fixed;
+    display:flex;
+    align-content:center;
+    align-items:center;
+    left: 10%;
+    top: 40%;
+    width: 80%;
+    padding: 10px 15px;
+    background-color: snow;
+    border: 3px solid dimgrey;
+    border-radius: 15px;
+    color: grey;
+    font-size:1.1rem;
+    z-index:10;
+}
+
+.botonGoogle:hover {
+    background-color: #c3c3c3;
+    color: white;
+}
+
+.TituloLogin h2{
+    color: snow;
+    font-weight: 700;
+    font-family: "Montserrat", sans-serif;
+    font-size:2rem;
+    text-align:center;
+    margin-top:20px;
+    line-height:2;
+}
+
+.TituloLogin h2 {
+    font-size: 1.8rem;
+    text-align: center;
+    margin-top: 15vh;
+}
+
+.TituloLogin h1 {
+    font-size: 2.5rem;
+    margin-top: 20px;
+}
+
+.TituloLogin h1, .TituloLogin h2 {
+    color: snow;
+    font-weight: 700;
+    font-family: "Montserrat", sans-serif;
+    text-align: center;
+}

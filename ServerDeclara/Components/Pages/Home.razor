@@ -5,11 +5,20 @@
 @inject IJSRuntime _js
 @inject IToastService _toastServicio
 
-<PageTitle></PageTitle>
 
-<p style="font-size:1.5rem">@IdToken</p>
+<div class="TituloLogin">
+    <h2 class="TituloLogin">Bienvenidos a</h2>
+    <h1>DeclaraWeb 1.0</h1>
+</div>
 
-<button @onclick="AutentificarmeConGoogle">Iniciar Sesión con Google</button>
+    <button @onclick="AutentificarmeConGoogle" class="botonGoogle">
+    <img src="/imagenes/iconos/iconoGoogle.png" class="iconoGoogle" />
+        Inicio de sesión con Google
+    </button>
+
+
+<img src="/imagenes/fondo.jpg" alt="fondo" class="fondoLogin" />
+
 
 @code{
 
