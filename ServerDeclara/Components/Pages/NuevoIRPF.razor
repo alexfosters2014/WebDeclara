@@ -3,6 +3,7 @@
 @inject UsuarioServicio _usuarioServicio
 @inject IRPFServicio _irpfServicio
 @inject NavigationManager _nav
+@inject CabeceraServicio _cabeceraServicio
 
 <section class="boxIRPFEdicion" >
 
@@ -310,10 +311,12 @@
 
     protected async override Task OnInitializedAsync()
     {
+       
         historialParametros = await _parametroServicio.GetHistorialParametros();
         cantidadHistorialesParam = historialParametros.Count;
         if (modoFormulario == Util.modoFormulario.NUEVO.ToString())
         {
+            _cabeceraServicio.ActualizarTituloMenu("Nuevo IRPF");
             ImpuestoBimensual.Desde = DateTime.Today;
             ImpuestoBimensual.Hasta = DateTime.Today;
             ImpuestoBimensual.Usuario = _usuarioServicio.GetUsuarioLogueado();
@@ -321,6 +324,7 @@
 
         if (modoFormulario == Util.modoFormulario.EDICION.ToString())
         {
+            _cabeceraServicio.ActualizarTituloMenu("Edición IRPF");
             ImpuestoBimensual = await _irpfServicio.ObtenerDeclaracion();
         }
         if (modoFormulario == Util.modoFormulario.COPIA.ToString())

@@ -1,9 +1,12 @@
 ﻿@page "/resumenAnual"
-
+@inject CabeceraServicio _cabeceraServicio
 
 <h2>Funcionalidad en construcción</h2>
 
 
 @code {
-
+    protected async override Task OnInitializedAsync()
+    {
+        _cabeceraServicio.ActualizarTituloMenu("Resumenes anuales");
+    }
 }

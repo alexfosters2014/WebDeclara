@@ -37,6 +37,8 @@ builder.Services.AddRadzenComponents();
 
 builder.Services.AddScoped<BlobAzureServicio>();
 
+builder.Services.AddScoped<CabeceraServicio>();
+
 builder.Services.AddScoped<UsuarioServicio>();
 builder.Services.AddScoped<UsuarioRepositorio>();
 

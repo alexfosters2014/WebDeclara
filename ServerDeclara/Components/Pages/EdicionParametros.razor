@@ -1,5 +1,6 @@
 ﻿@page "/EdicionParametros"
 @inject ParametroServicio _parametroServicio
+@inject CabeceraServicio _cabeceraServicio
 
 
 @if (historialParamentro != null)
@@ -66,8 +67,6 @@
 
     <button @onclick="Guardar">Guardar</button>
 
-
-
 }
 
 
@@ -81,6 +80,7 @@
 
     protected async override Task OnInitializedAsync()
     {
+        _cabeceraServicio.ActualizarTituloMenu("Edición parametro");
         historialParamentro = _parametroServicio.GetParametroSeleccionado();
         tablas = historialParamentro.Parametros.Where(w => w.Tipo == Util.TipoListadoIRPF.RENTA.ToString()).ToList();
         calculos = historialParamentro.Parametros.Where(w => w.Tipo == Util.TipoListadoIRPF.CALCULO.ToString()).ToList();

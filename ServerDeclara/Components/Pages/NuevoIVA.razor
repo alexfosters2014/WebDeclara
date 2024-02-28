@@ -7,6 +7,8 @@
 @inject IConfiguration _config;
 @inject NavigationManager _nav
 @inject IToastService _toastServicio
+@inject CabeceraServicio _cabeceraServicio
+
 
 
 @if (!ModoManual)
@@ -130,6 +132,8 @@ else
     protected override async Task OnInitializedAsync()
     {
         UrlPdf = _config["AzureBlobStorage:UrlVisorPDF"];
+         _cabeceraServicio.ActualizarTituloMenu("Nuevo comprobante");
+
         await ActualizaListadoComercios();
         if (!ModoManual)
         {

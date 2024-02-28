@@ -1,6 +1,7 @@
 ﻿@page "/HistorialIRPF"
 @inject IRPFServicio _irpfServicio
 @inject NavigationManager _nav
+@inject CabeceraServicio _cabeceraServicio
 
 @if (LisadoBimensual.Count > 0)
 {
@@ -24,10 +25,11 @@ else
  
 
 @code {
-        List<BimensualIRPF_ViewList> LisadoBimensual = new();
+    List<BimensualIRPF_ViewList> LisadoBimensual = new();
 
     protected async override Task OnInitializedAsync()
     {
+        _cabeceraServicio.ActualizarTituloMenu("Listado IRPF");
         LisadoBimensual = await _irpfServicio.GetListado();
     }
 

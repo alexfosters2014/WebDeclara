@@ -1,10 +1,22 @@
-﻿
+﻿@inject CabeceraServicio _cabeceraServicio
+
+
 <div class="cabecera-blanca"></div>
 <div class="cabecera-separador"></div>
 <div class="d-flex justify-content-center align-items-center pt-2 cabecera">
-    <p>Titulo</p>
+    <p>@titulo</p>
 </div>
 
 @code {
+    string titulo = "";
 
+    protected async override Task OnInitializedAsync()
+    {
+        _cabeceraServicio.OnActualizarMenu += Actualizar;
+    }
+    private void Actualizar()
+    {
+        titulo = _cabeceraServicio.GetTitulo();
+        StateHasChanged();
+    }
 }

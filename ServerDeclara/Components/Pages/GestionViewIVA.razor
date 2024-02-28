@@ -1,6 +1,8 @@
 ﻿@page "/gestionIVA"
 @inject IVAServicio _ivaServicio
 @inject NavigationManager _nav
+@inject CabeceraServicio _cabeceraServicio
+
 
 <CardIVAVista Titulo="Ventas">
     @if (Ventas != null && Ventas.Count > 0)
@@ -49,6 +51,7 @@
 
     protected async override Task OnInitializedAsync()
     {
+        _cabeceraServicio.ActualizarTituloMenu("Gestión IVA");
         declaracionIVAId = _ivaServicio.GetIdBimensual();
         await Actualizar();
     }

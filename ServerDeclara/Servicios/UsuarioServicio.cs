@@ -1,4 +1,5 @@
-﻿using ServerDeclara.DTOs;
+﻿using Microsoft.AspNetCore.Components;
+using ServerDeclara.DTOs;
 using ServerDeclara.Servicios_de_datos;
 
 namespace ServerDeclara.Servicios
@@ -7,14 +8,21 @@ namespace ServerDeclara.Servicios
     {
         private UsuarioDTO usuarioLogueado { get; set; }
         private readonly UsuarioRepositorio usuarioRepositorio;
+        private readonly NavigationManager navigationManager;
 
-        public UsuarioServicio(UsuarioRepositorio usuarioRepositorio)
+
+        public UsuarioServicio(UsuarioRepositorio usuarioRepositorio, NavigationManager navigationManager)
         {
             this.usuarioRepositorio = usuarioRepositorio;
+            this.navigationManager = navigationManager;
         }
 
         public UsuarioDTO GetUsuarioLogueado()
         {
+            if (usuarioLogueado == null)
+            {
+                navigationManager.NavigateTo("/");
+            }
             return usuarioLogueado;
         }
 

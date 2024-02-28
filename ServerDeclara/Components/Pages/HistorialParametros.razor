@@ -1,6 +1,7 @@
 ﻿@page "/HistorialParametros"
 @inject ParametroServicio _parametroServicio
 @inject NavigationManager _nav
+@inject CabeceraServicio _cabeceraServicio
 
 @if (historialParametros != null)
 {
@@ -17,6 +18,7 @@
 
     protected async override Task OnInitializedAsync()
     {
+        _cabeceraServicio.ActualizarTituloMenu("PArametros");
         historialParametros = await _parametroServicio.GetHistorialParametros();
     }
 
