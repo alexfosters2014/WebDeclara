@@ -8,18 +8,18 @@
 <section class="boxIRPFEdicion" >
 
 
-    <article class="recuadro">
+    <article class="recuadro recuadro-margin-bottom">
 
         <p>Periodo de la declaración</p>
         <div class="d-flex justify-content-between">
             <input type="month"  class="form-control" @bind-value="ImpuestoBimensual.Desde" />
             <input type="month"  class="form-control" @bind-value="ImpuestoBimensual.Hasta" />
-        </div>
+        </div> 
 
     </article>
-     
 
-       <article class="recuadro">
+
+    <article class="recuadro recuadro-margin-bottom">
        
         <p>Cálculo a utilizar </p>
         <div class="d-flex justify-content-center">
@@ -65,7 +65,7 @@
     </article>
 
     <h3>Ingresos</h3>
-    <article class="recuadro">
+    <article class="recuadro recuadro-margin-bottom">
        
 
         <h5>Ingresos fuera de la relación de dependencia</h5>
@@ -79,7 +79,7 @@
     </article>
 
 
-    <article class="recuadro">
+    <article class="recuadro recuadro-margin-bottom">
         <h5>Ingresos en relación de dependencia (excl. aguinaldo)</h5>
 
         <p>Ingresos nominales mensual gravados con CESS</p>
@@ -111,7 +111,7 @@
 
     <h3>Deducciones</h3>
     
-    <article class="recuadro">
+    <article class="recuadro recuadro-margin-bottom">
        
 
         <h5>Deducción para personas a cargo</h5>
@@ -143,7 +143,7 @@
     </article>
 
 
-    <article class="recuadro">
+    <article class="recuadro recuadro-margin-bottom">
 
 
         <h5>Aportes al fondo de solidaridad, CJPPU y Caja Notarial</h5>
@@ -205,15 +205,14 @@
         <p>Adicional Fondo Solidaridad</p>
         <div class="d-flex justify-content-around">
    
-            <div>
+            <div class="color-switch">
                 <RadzenSwitch @bind-Value=@ImpuestoBimensual.DeclaracionMes1.AdicionalFS /><span> Mes 1</span>
-
             </div>
-            
 
-                <div>
+
+            <div class="color-switch">
                     <RadzenSwitch @bind-Value=@ImpuestoBimensual.DeclaracionMes2.AdicionalFS /><span> Mes 2</span>
-                </div>
+             </div>
            
 
            @*  <select @onchange="AdicionalFS_MES1" placeholder="Mes1" class="form-control">
@@ -234,7 +233,7 @@
     </article>
 
     
-    <article class="recuadro">
+    <article class="recuadro recuadro-margin-bottom">
         <h5>Aportes a la seguridad social</h5>
 
         <p>Aportes jubitalorios</p>
@@ -257,7 +256,7 @@
 
     </article>
 
-    <article class="recuadro">
+    <article class="recuadro recuadro-margin-bottom">
     
         <p>Otras deducciones (mensual)</p>
         <div class="d-flex justify-content-between">
@@ -268,7 +267,7 @@
     </article>
 
 
-    <article class="recuadro">
+    <article class="recuadro recuadro-margin-bottom">
 
         <h5>Determinación del anticipo</h5>
 
@@ -391,20 +390,27 @@
     private async void GenerarCalculos()
     {
         //ImpuestoBimensual.GenerarCalculos();
-
-        BimensualIRPF_DTO impuestoBimensualCalculado = CalculosIRPFServicio.GenerarCalculos(ImpuestoBimensual);
-
-        if (modoFormulario == Util.modoFormulario.NUEVO.ToString())
+        try
         {
-            bool resultado = await _irpfServicio.CrearNuevaDeclaracion(impuestoBimensualCalculado);
-        }
+            BimensualIRPF_DTO impuestoBimensualCalculado = CalculosIRPFServicio.GenerarCalculos(ImpuestoBimensual);
 
-        if (modoFormulario == Util.modoFormulario.EDICION.ToString())
-        {
-            bool resultado = await _irpfServicio.EditarDeclaracion(impuestoBimensualCalculado);
+            if (modoFormulario == Util.modoFormulario.NUEVO.ToString())
+            {
+                bool resultado = await _irpfServicio.CrearNuevaDeclaracion(impuestoBimensualCalculado);
+            }
+
+            if (modoFormulario == Util.modoFormulario.EDICION.ToString())
+            {
+                bool resultado = await _irpfServicio.EditarDeclaracion(impuestoBimensualCalculado);
+            }
+            //cartel de ok
+            _nav.NavigateTo("/HistorialIRPF");
         }
-        //cartel de ok
-        _nav.NavigateTo("/HistorialIRPF");
+        catch (Exception ex)
+        {
+            //mensaje que hay cosas que no funcionan bien
+        }
+       
     }
 
 

@@ -14,8 +14,8 @@
 }
 
 .boxIRPFEdicion p {
-  margin:0;
-  padding:0;
+    margin: 0;
+    padding: 0;
 }
 
 .recuadro {
@@ -28,3 +28,33 @@
    margin:10px;
 }
 
+.recuadro-margin-bottom {
+    margin-bottom: 25px;
+}
+
+.boxIRPFEdicion h3{
+    font-size:1.6rem;
+    margin-top:20px;
+    font-weight:700;
+    text-align:center;
+}
+.boxIRPFEdicion h5 {
+    font-size:1.1rem;
+    color:orangered;
+}
+
+.boxIRPFEdicion select {
+    margin: 10px 0;
+    padding: 5px;
+}
+
+.color-switch {
+    margin: 10px 0 20px 0;
+}
+
+.boxIRPFEdicion p {
+    color: #8889FF;
+}
+.color-switch {
+    color: darkgreen;
+}

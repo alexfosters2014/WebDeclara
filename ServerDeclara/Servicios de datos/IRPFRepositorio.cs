@@ -52,6 +52,7 @@ namespace ServerDeclara.Servicios_de_datos
                 {
                     if (bimensualDTO != null && await NoExisteDeclaracion(bimensualDTO))
                     {
+                    //validar
                     Usuario usuarioBuscado = await _db.Usuarios.SingleOrDefaultAsync(s => s.Id == bimensualDTO.Usuario.Id);
                     HistorialParametro historialParametro = await _db.HistorialParametros.SingleOrDefaultAsync(s => s.Id == bimensualDTO.HistorialParametro.Id);
                     BimensualRPF bimensual = _mapper.Map<BimensualRPF>(bimensualDTO);
