@@ -4,6 +4,7 @@
 @inject IRPFServicio _irpfServicio
 @inject NavigationManager _nav
 @inject CabeceraServicio _cabeceraServicio
+@inject IToastService _toast
 
 <section class="boxIRPFEdicion" >
 
@@ -310,7 +311,7 @@
 
     protected async override Task OnInitializedAsync()
     {
-       
+
         historialParametros = await _parametroServicio.GetHistorialParametros();
         cantidadHistorialesParam = historialParametros.Count;
         if (modoFormulario == Util.modoFormulario.NUEVO.ToString())
@@ -408,7 +409,7 @@
         }
         catch (Exception ex)
         {
-            //mensaje que hay cosas que no funcionan bien
+            _toast.ShowWarning(ex.Message);
         }
        
     }

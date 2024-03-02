@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
+using FluentValidation.Results;
 using Microsoft.EntityFrameworkCore;
 using ServerDeclara.Datos;
 using ServerDeclara.DTOs;
 using ServerDeclara.DTOs.Otros;
 using ServerDeclara.Utilidades;
+using ServerDeclara.Validadores;
 
 namespace ServerDeclara.Servicios_de_datos
 {
@@ -50,7 +52,16 @@ namespace ServerDeclara.Servicios_de_datos
             {
                 try
                 {
-                    if (bimensualDTO != null && await NoExisteDeclaracion(bimensualDTO))
+                ValidadorIRPF validador = new ValidadorIRPF(_db);
+                ValidationResult resultado = validador.Validate(bimensualDTO);
+
+                if (!resultado.IsValid)
+                {
+                    throw new Exception(string.Join(",", resultado.Errors.Select(e => e.ErrorMessage)));
+                }
+
+
+                if (bimensualDTO != null && await NoExisteDeclaracion(bimensualDTO))
                     {
                     //validar
                     Usuario usuarioBuscado = await _db.Usuarios.SingleOrDefaultAsync(s => s.Id == bimensualDTO.Usuario.Id);
@@ -81,9 +92,9 @@ namespace ServerDeclara.Servicios_de_datos
                     }
 
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
-                    return false;
+                    throw new Exception(ex.Message);
                 }
 
             }

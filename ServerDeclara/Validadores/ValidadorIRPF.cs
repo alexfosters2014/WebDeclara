@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using Microsoft.EntityFrameworkCore;
 using ServerDeclara.Datos;
 using ServerDeclara.DTOs;
 
@@ -17,33 +18,34 @@ namespace ServerDeclara.Validadores
         {
             RuleFor(r => r.Desde).NotEmpty().NotNull();
             RuleFor(r => r.Hasta).NotEmpty().NotNull();
-            RuleFor(r => r).MustAsync((bimensual, desde) => EsFechaValida(bimensual));
+            RuleFor(r => r).Must((bimensual, desde) => EsFechaValida(bimensual)).WithMessage("Los periodos de fechas no son correctos");
+            RuleFor(r => r).MustAsync((bimensual, desde) => NoExistePeriodoDuplicado(bimensual)).WithMessage("Existe una duplicación de periodo");
+            RuleFor(r => r).MustAsync((bimensual, desde) => ExisteSeleccionParametros(bimensual)).WithMessage("No elijió ningún parámetro");
+            RuleFor(r => r).MustAsync((bimensual, desde) => ValidarDeclaraciones(bimensual)).WithMessage("Algunos datos están incorrector");
 
         }
 
-        private async Task<bool> EsFechaValida(BimensualIRPF_DTO bimensual)
+        private bool EsFechaValida(BimensualIRPF_DTO bimensual)
         {
            bool fechas = bimensual.Desde < bimensual.Hasta ? true : false;
             return fechas;
         }
 
-            //RuleFor(r => r.MontoIvaRetenido).GreaterThanOrEqualTo(0);
-            //RuleFor(r => r.MontoIVA).GreaterThanOrEqualTo(0);
-            //RuleFor(r => r.MontoMasIVA).GreaterThanOrEqualTo(0);
-            //RuleFor(r => r.MontoTotal).GreaterThanOrEqualTo(0);
-            //RuleFor(r => r.Comercio).NotNull();
-            //RuleFor(r => r.Fecha).NotNull().NotEmpty().Must(f => f > DateTime.MinValue);
-            //RuleFor(r => r.TipoIva).NotEmpty().Must(tipoiva => tipoiva == Util.TipoIva.COMPRA.ToString() ||
-            //                                                   tipoiva == Util.TipoIva.VENTA.ToString());
-            //RuleFor(r => r.NombreArchivoPDF).NotEmpty().NotNull().Must(ContienePdf);
-            //RuleFor(r => r.Comprobante).NotEmpty();
-            //RuleFor(r => r.BimensualIVAId).GreaterThan(0).MustAsync(ExisteBimensual);
+        private async Task<bool> NoExistePeriodoDuplicado(BimensualIRPF_DTO bimensual)
+        {
+            var existe = await _db.BimensualesRPFs.SingleOrDefaultAsync(s => s.Desde == bimensual.Desde && s.Hasta == bimensual.Hasta);
+            return existe == null;
+        }
 
-            //bool ContienePdf(string nombreArchivo)
-            //{
-            //    bool resultado = nombreArchivo.Contains(".pdf");
-            //    return resultado;
-            //}
+        private async Task<bool> ExisteSeleccionParametros(BimensualIRPF_DTO bimensual)
+        {
+            return bimensual.HistorialParametro != null;
+        }
+
+        private async Task<bool> ValidarDeclaraciones(BimensualIRPF_DTO bimensual)
+        {
+            return true;
+        }
 
 
     }

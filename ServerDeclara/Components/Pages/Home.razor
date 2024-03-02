@@ -11,7 +11,7 @@
     <h1>DeclaraWeb 1.0</h1>
 </div>
 
-    <button @onclick="AutentificarmeConGoogle" class="botonGoogle">
+<button @onclick="AutentificarmeEnDuro" class="botonGoogle">
     <img src="/imagenes/iconos/iconoGoogle.png" class="iconoGoogle" />
         Inicio de sesión con Google
     </button>
@@ -28,17 +28,17 @@
     {
         //leer token desde la localstorage si hay dato iniciar sesión
         //sino pedir la autentificacion con google
+
+
+
         IdToken = Util.ExtraerTokenURL(_nav.Uri);
 
         await Autentificarme();
-        
+
     }
 
     private async void AutentificarmeConGoogle()
     {
-        //aca levanto el local storage para  saber si ya está autentificado
-
-
         var url = "https://accounts.google.com/o/oauth2/v2/auth?";
         url += "client_id=306259551712-7972udthqs21p1lfb4dovegufboroqo4.apps.googleusercontent.com";
         url += "&redirect_uri=https://declaraapp.azurewebsites.net";
@@ -46,8 +46,6 @@
         url += "&scope=openid%20profile%20email&nonce=RANDOM_NONCE&state=RANDOM_STATE";
 
         _nav.NavigateTo(url);
-        //
-
     }
 
     private async Task Autentificarme()
@@ -56,17 +54,17 @@
         {
             if (!string.IsNullOrEmpty(IdToken))
             {
-                //token jwt
 
                 var tupla = JWTServicio.GetClaimsFromToken(IdToken);
                 string mail = tupla.mail;
                 string idGoogle = tupla.id;
 
+
                 bool autentificado = await _usuarioServicio.LoginRegistro(mail, idGoogle, IdToken);
                 if (autentificado)
                 {
-                    _toastServicio.ShowSuccess("bienvenido");
-                    _nav.NavigateTo("/Principal");
+                    _toastServicio.ShowSuccess("Bienvenido");
+                    _nav.NavigateTo("/HistorialVA");
                 }
                 else
                 {
@@ -83,6 +81,31 @@
     }
 
     
+    private async Task AutentificarmeEnDuro()
+    {
+        try
+        {
+                string mail = "alexfosters2014@gmail.com";
+                string idGoogle = "123456";
+
+                bool autentificado = await _usuarioServicio.LoginRegistro(mail, idGoogle, IdToken);
+                if (autentificado)
+                {
+                    _toastServicio.ShowSuccess("Bienvenido");
+                    _nav.NavigateTo("/HistorialVA");
+                }
+                else
+                {
+                    _toastServicio.ShowInfo("Verificar usuario");
+                }
+
+        }
+        catch (Exception ex)
+        {
+            _toastServicio.ShowInfo(ex.Message);
+        }
+
+    }
 
 
 

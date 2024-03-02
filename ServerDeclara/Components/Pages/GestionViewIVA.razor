@@ -4,6 +4,10 @@
 @inject CabeceraServicio _cabeceraServicio
 
 
+<CardIVAVista Titulo="Monto IVA a pagar">
+    <p>IVA a pagar: $@bimensualIVA.AnticipoBimestreIVA</p>
+</CardIVAVista>
+
 <CardIVAVista Titulo="Ventas">
     @if (Ventas != null && Ventas.Count > 0)
     {
@@ -34,9 +38,7 @@
     }
 </CardIVAVista>
 
-<CardIVAVista Titulo="Monto IVA a pagar">
-    <p>IVA a pagar: $@bimensualIVA.AnticipoBimestreIVA</p>
-</CardIVAVista>
+
 
 <div class="botonMas" @onclick="IrNuevoComprobante">
     <img src="/imagenes/iconos/botonMas.png" alt="boton +" />

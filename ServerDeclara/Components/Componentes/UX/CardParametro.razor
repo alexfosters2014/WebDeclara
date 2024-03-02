@@ -6,14 +6,11 @@
    @*  <article>
         @HistorialParametro.Fecha
     </article> *@
-    <p>
+    <p @onclick="EditarParametros" class="padding-horizontal">
         @HistorialParametro.Descripcion
     </p>
     <div class="d-flex  justify-content-end card-general-submenu">
-        <a href="" @onclick="EditarParametros" @onclick:preventDefault>
-            <img src="/imagenes/iconos/editar.png" alt="">
-        </a>
-
+      
         <a href="" @onclick="CopiarParametros" @onclick:preventDefault>
             <img src="/imagenes/iconos/copiar.png" alt="">
         </a>

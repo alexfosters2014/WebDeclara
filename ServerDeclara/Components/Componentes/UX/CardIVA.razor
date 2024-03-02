@@ -8,16 +8,13 @@
     <article>
         @FormatearPeriodo()
     </article>
-    <p class="@ColorAnticipo()">
+    <p class="@ColorAnticipo() padding-horizontal" @onclick="() => EditarCambiosDeclaracion(DeclaracionBimensual.Id)">
         @TextoAnticipo()
     </p>
     <div class="d-flex  justify-content-end card-general-submenu">
-        <a href="" @onclick="() => EditarCambiosDeclaracion(DeclaracionBimensual.Id)" @onclick:preventDefault>
-            <img src="/imagenes/iconos/editar.png" alt="">
-        </a>
-
-        <a href="" @onclick="() => AgregarNuevoIVA(DeclaracionBimensual.Id)" @onclick:preventDefault>
-            <img src="/imagenes/iconos/botonMas.png" alt="">
+      
+        <a href="" @onclick="() => AgregarNuevoIVA(DeclaracionBimensual.Id)" @onclick:preventDefault class="zindexprimero">
+            <img src="/imagenes/iconos/botonMasSmall.png" alt="">
         </a>
 
     </div>

@@ -57,8 +57,8 @@ else
                 </select>
             </div>
 
-            <div class="col-2">
-                <img src="/imagenes/iconos/botonMas.png" alt="Agregar nuevo comercio" style="height:30px;width:30px" @onclick="AgregarNuevoComercio" />
+            <div class="col-2 mb-3">
+                <img src="/imagenes/iconos/botonMasSmall.png" alt="Agregar nuevo comercio" style="height:30px;width:30px" @onclick="AgregarNuevoComercio" />
             </div>
                        
         </div>
@@ -66,32 +66,32 @@ else
 
 
             <label>Fecha</label>
-            <input type="date" @bind-value="nuevaEntradaIVA.Fecha" class="form-control" />
+        <input type="date" @bind-value="nuevaEntradaIVA.Fecha" class="form-control mb-3" />
 
             
               <label>Comprobante n°</label>
-            <input type="text" @bind-value="nuevaEntradaIVA.Comprobante" class="form-control" />
+        <input type="text" @bind-value="nuevaEntradaIVA.Comprobante" class="form-control mb-3" />
 
               <label>Monto total sin IVA</label>
-            <input type="number" @bind-value="nuevaEntradaIVA.MontoMasIVA" class="form-control" />
+        <input type="number" @bind-value="nuevaEntradaIVA.MontoMasIVA" class="form-control mb-3" />
 
             <label>Monto de IVA</label>
-            <input type="number" @bind-value="nuevaEntradaIVA.MontoIVA" class="form-control" />
+        <input type="number" @bind-value="nuevaEntradaIVA.MontoIVA" class="form-control mb-3" />
 
        
             @if (nuevaEntradaIVA.TipoIva == Util.TipoIva.VENTA.ToString())
             {
             <label>IVA retenido por venta</label>
-                <input type="number" @bind-value="nuevaEntradaIVA.MontoIvaRetenido" class="form-control" />
+            <input type="number" @bind-value="nuevaEntradaIVA.MontoIvaRetenido" class="form-control mb-3" />
             }
              <label>Tipo de comprobante</label>
-             <GrupoBotonesTipoIva valor="@nuevaEntradaIVA.TipoIva" CambioValorTipoIva="CambioValorTipoIva" />
+             <GrupoBotonesTipoIva valor="@nuevaEntradaIVA.TipoIva" CambioValorTipoIva="CambioValorTipoIva"/>
 
 
-            <div class="d-flex m-3">
+        <div class="d-flex flex-column mb-3 align-items-center">
 
-            <InputFile OnChange="@SubirPDF" name="foto" id="pdfUpload" class="input-file"/>
-              <label for="pdfUpload" class="label-file">
+            <InputFile OnChange="@SubirPDF" name="foto" id="pdfUpload" class="input-file mb-5"/>
+              <label for="pdfUpload" class="label-file mb-5">
                 <img src="/imagenes/iconos/UploadIcon.png" alt="Seleccionar PDF" />
               </label>
                 

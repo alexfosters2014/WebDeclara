@@ -40,11 +40,19 @@ namespace ServerDeclara.Servicios
         }
         public async Task<bool> CrearNuevaDeclaracion(BimensualIRPF_DTO bimensualDTO)
         {
-            bimensualDTO.Usuario = _usuarioServicio.GetUsuarioLogueado();
+            try
+            {
+                bimensualDTO.Usuario = _usuarioServicio.GetUsuarioLogueado();
 
-            bool nuevo = await IRPFRepositorio.CrearNuevaDeclaracion(bimensualDTO);
+                bool nuevo = await IRPFRepositorio.CrearNuevaDeclaracion(bimensualDTO);
 
-            return nuevo;
+                return nuevo;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+          
 
         }
 
