@@ -1,3 +1,4 @@
+using Blazored.LocalStorage;
 using Blazored.Modal;
 using Blazored.Toast;
 using FluentValidation;
@@ -10,6 +11,8 @@ using ServerDeclara.Datos;
 using ServerDeclara.Servicios;
 using ServerDeclara.Servicios_de_datos;
 using ServerDeclara.Validadores;
+using System.Text.Json.Serialization;
+using System.Text.Json;
 using static OpenAI.ObjectModels.SharedModels.IOpenAiModels;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -29,6 +32,9 @@ builder.Services.AddDbContext<DeclaraContext>(options =>
 
 builder.Services.AddBlazoredModal();
 builder.Services.AddBlazoredToast();
+
+builder.Services.AddBlazoredLocalStorage();
+
 
 builder.Services.AddAutoMapper(typeof(Program));
 
