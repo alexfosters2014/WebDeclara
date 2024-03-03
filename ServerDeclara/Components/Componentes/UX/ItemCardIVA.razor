@@ -1,6 +1,8 @@
 ﻿@inject IConfiguration _config
+@inject IVAServicio _ivaServicio
 
-<section class="row item-iva justify-content-center">
+
+<section class="row item-iva justify-content-center" @onclick="BorrarComprobante" >
     <article class="col-5 d-flex flex-column align-items-center justify-content-center p-0">
         <p class="fuente-pequeña">@entradaIVA.Fecha.ToString("dd/MM/yyyy")</p>
         <p>@NombreEmpresa()</p>
@@ -37,6 +39,7 @@
 
 @code {
     [Parameter] public EntradaIVADiarioDTO entradaIVA { get; set; }
+    [Parameter] public EventCallback ActualizarBorrado { get; set; }
     [CascadingParameter] IModalService Modal { get; set; } = default!;
 
     string urlPDF = "";
@@ -60,4 +63,23 @@
         return verURL;
     }
 
+    private async Task BorrarComprobante()
+    {
+        var parametros = new ModalParameters();
+        parametros.Add(nameof(DialogoConfirmacion.Texto), $"Desea borrar el comporbante {entradaIVA.Comprobante}?");
+
+        var dialogo = Modal.Show<DialogoConfirmacion>("Borrar", parametros);
+
+        var result = await dialogo.Result;
+
+        if (result.Confirmed)
+        {
+            bool borrado = await _ivaServicio.BorrarComprobanteIVA(entradaIVA.Id);
+            if (borrado)
+            {
+                await ActualizarBorrado.InvokeAsync();
+            }
+        }
+    }
+    
 }

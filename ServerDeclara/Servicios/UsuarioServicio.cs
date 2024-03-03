@@ -8,20 +8,20 @@ namespace ServerDeclara.Servicios
     {
         private UsuarioDTO usuarioLogueado { get; set; }
         private readonly UsuarioRepositorio usuarioRepositorio;
-        private readonly NavigationManager navigationManager;
+        private readonly NavigationManager _navigationManager;
 
 
-        public UsuarioServicio(UsuarioRepositorio usuarioRepositorio, NavigationManager navigationManager)
+        public UsuarioServicio(UsuarioRepositorio usuarioRepositorio, NavigationManager _navigationManager)
         {
             this.usuarioRepositorio = usuarioRepositorio;
-            this.navigationManager = navigationManager;
+            this._navigationManager = _navigationManager;
         }
 
         public UsuarioDTO GetUsuarioLogueado()
         {
             if (usuarioLogueado == null)
             {
-                navigationManager.NavigateTo("/");
+                _navigationManager.NavigateTo("/");
             }
             return usuarioLogueado;
         }

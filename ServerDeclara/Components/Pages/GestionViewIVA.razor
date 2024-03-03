@@ -13,7 +13,7 @@
     {
         @foreach (var itemVenta in Ventas)
         {
-            <ItemCardIVA entradaIVA="itemVenta" />
+            <ItemCardIVA entradaIVA="itemVenta" ActualizarBorrado="ActualizarBorrado" />
         }
 
     }
@@ -28,7 +28,7 @@
     {
         @foreach (var itemCompra in Compras)
         {
-            <ItemCardIVA entradaIVA="itemCompra" />
+            <ItemCardIVA entradaIVA="itemCompra" ActualizarBorrado="ActualizarBorrado" />
         }
 
     }
@@ -69,12 +69,17 @@
                 Ventas = bimensualIVA.EntradasIVADiarios.Where(w => w.TipoIva == Util.TipoIva.VENTA.ToString()).ToList();
             }
         }
-       
+
     }
 
 
     private void IrNuevoComprobante()
     {
         _nav.NavigateTo($"/NuevoComprobante/{Util.Vistas.GESTION_IVA.ToString()}");
+    }
+
+    private async Task ActualizarBorrado()
+    {
+        await Actualizar();
     }
 }

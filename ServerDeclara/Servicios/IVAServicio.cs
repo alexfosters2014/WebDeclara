@@ -68,6 +68,23 @@ namespace ServerDeclara.Servicios
 
         }
 
+        public async Task<bool> BorrarComprobanteIVA(int ivaId)
+        {
+            try
+            {
+                bool borrado = await _IVARepositorio.BorrarComprobanteIVA(ivaId);
+
+                return borrado;
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception(ex.Message);
+            }
+
+
+        }
+
 
 
     }

@@ -198,5 +198,29 @@ namespace ServerDeclara.Servicios_de_datos
             }
         }
 
+
+
+        public async Task<bool> BorrarComprobanteIVA(int ivaId)
+        {
+            try
+            {
+                var comprobante = await _db.EntradasIVAsDiarios.SingleOrDefaultAsync(s => s.Id == ivaId);
+               
+                _db.EntradasIVAsDiarios.Remove(comprobante);
+
+                int cantidadNuevos = await _db.SaveChangesAsync();
+
+                return cantidadNuevos > 0;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+
+
+
+
     }
 }
