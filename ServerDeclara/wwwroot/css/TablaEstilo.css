@@ -1,0 +1,24 @@
+﻿.tablaEstilo table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+.tablaEstilo th, .tablaEstilo td {
+    padding: 2px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    word-wrap: break-word; /* Rompe la palabra larga para que no cause desbordamiento */
+    text-align:center;
+}
+
+.font-chica {
+    font-size: 0.8rem;
+}
+
+
+.tablaRenta td{
+    width:25%;
+    text-align:center;
+}
+

@@ -1,8 +1,11 @@
 ﻿using AutoMapper;
+using FluentValidation.Results;
 using Microsoft.EntityFrameworkCore;
 using ServerDeclara.Datos;
 using ServerDeclara.DTOs;
 using ServerDeclara.DTOs.Otros;
+using ServerDeclara.Utilidades;
+using ServerDeclara.Validadores;
 
 namespace ServerDeclara.Servicios_de_datos
 {
@@ -24,7 +27,9 @@ namespace ServerDeclara.Servicios_de_datos
             {
                 if (usuarioId > 0)
                 {
-                    List<BimensualRPF> bimensual = await _db.BimensualesRPFs.Where(w => w.Usuario.Id == usuarioId).ToListAsync();
+                    List<BimensualRPF> bimensual = await _db.BimensualesRPFs.Where(w => w.Usuario.Id == usuarioId)
+                                                                            .OrderByDescending(o => o.Desde)
+                                                                            .ToListAsync();
 
                     if (bimensual == null) return null;
 
@@ -47,12 +52,26 @@ namespace ServerDeclara.Servicios_de_datos
             {
                 try
                 {
-                    if (bimensualDTO != null && await NoExisteDeclaracion(bimensualDTO))
+                ValidadorIRPF validador = new ValidadorIRPF(_db);
+                ValidationResult resultado = validador.Validate(bimensualDTO);
+
+                if (!resultado.IsValid)
+                {
+                    throw new Exception(string.Join(",", resultado.Errors.Select(e => e.ErrorMessage)));
+                }
+
+
+                if (bimensualDTO != null && await NoExisteDeclaracion(bimensualDTO))
                     {
+                    //validar
                     Usuario usuarioBuscado = await _db.Usuarios.SingleOrDefaultAsync(s => s.Id == bimensualDTO.Usuario.Id);
                     HistorialParametro historialParametro = await _db.HistorialParametros.SingleOrDefaultAsync(s => s.Id == bimensualDTO.HistorialParametro.Id);
                     BimensualRPF bimensual = _mapper.Map<BimensualRPF>(bimensualDTO);
 
+                    DateTime desde = bimensual.Desde;
+                    DateTime hasta = bimensual.Hasta;
+                    bimensual.Desde = Util.PrimerDiaDelMes(desde);
+                    bimensual.Hasta = Util.UltimoDiaDelMes(hasta);
                     
                     bimensual.Usuario = usuarioBuscado;
                     bimensual.HistorialParametro = historialParametro;
@@ -73,9 +92,9 @@ namespace ServerDeclara.Servicios_de_datos
                     }
 
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
-                    return false;
+                    throw new Exception(ex.Message);
                 }
 
             }
@@ -181,6 +200,66 @@ namespace ServerDeclara.Servicios_de_datos
 
         }
 
+        public async Task<BimensualIRPF_DTO> CopiaDeclaracionBimensual(int idBimensual)
+        {
+            var declaracionACopiar = await _db.BimensualesRPFs.AsNoTracking()
+                                                        .Include(i => i.DeclaracionMes1)
+                                                        .Include(i => i.DeclaracionMes2)
+                                                        .Include(i => i.Usuario)
+                                                        .Include(i => i.HistorialParametro.Parametros)
+                                                        .SingleOrDefaultAsync(s => s.Id == idBimensual);
+
+
+            declaracionACopiar.Id = 0;
+            declaracionACopiar.Desde = DateTime.MinValue;
+            declaracionACopiar.Hasta = DateTime.MinValue;
+
+            declaracionACopiar.DeclaracionMes1.Id = 0;
+            declaracionACopiar.DeclaracionMes2.Id = 0;
+
+            declaracionACopiar.Usuario = await _db.Usuarios.SingleOrDefaultAsync(s => s.Id == declaracionACopiar.Usuario.Id);
+            declaracionACopiar.HistorialParametro = await _db.HistorialParametros.SingleOrDefaultAsync(s => s.Id == declaracionACopiar.HistorialParametro.Id);
+
+            _db.Entry(declaracionACopiar.Usuario).State = EntityState.Unchanged;
+            _db.Entry(declaracionACopiar.HistorialParametro).State = EntityState.Unchanged;
+
+            var entidad = await _db.BimensualesRPFs.AddAsync(declaracionACopiar);
+
+            await _db.SaveChangesAsync();
+
+            BimensualIRPF_DTO declaracionDTO = _mapper.Map<BimensualIRPF_DTO>(entidad.Entity);
+
+            return declaracionDTO;
+        }
+
+        public async Task<List<BimensualIRPF_DTO>> GetListadoBimensualHistorial(int usuarioId, int cantidadAniosHaciaAtras)
+        {
+            try
+            {
+                if (usuarioId > 0)
+                {
+                    List<BimensualRPF> bimensual = await _db.BimensualesRPFs.Include(i => i.DeclaracionMes1)
+                                                                            .Include(i => i.DeclaracionMes2)
+                                                                            .Where(w => w.Usuario.Id == usuarioId &&
+                                                                                        w.Desde.Year >= (DateTime.Today.Year - cantidadAniosHaciaAtras))
+                                                                            .ToListAsync();
+
+                    if (bimensual == null) return null;
+
+                    List<BimensualIRPF_DTO> bimensualResultado = _mapper.Map<List<BimensualIRPF_DTO>>(bimensual);
+                    return bimensualResultado;
+                }
+                else
+                {
+                    return null;
+                }
+
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
 
 
     }

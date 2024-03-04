@@ -12,8 +12,8 @@ using ServerDeclara.Datos;
 namespace ServerDeclara.Migrations
 {
     [DbContext(typeof(DeclaraContext))]
-    [Migration("20240114145634_InicialMigration")]
-    partial class InicialMigration
+    [Migration("20240218052957_usuario")]
+    partial class usuario
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,33 @@ namespace ServerDeclara.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("ServerDeclara.Datos.BimensualIVA", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<double>("AnticipoBimestreIVA")
+                        .HasColumnType("float");
+
+                    b.Property<DateTime>("Desde")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("Hasta")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("UsuarioId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UsuarioId");
+
+                    b.ToTable("BimensualesIVA");
+                });
 
             modelBuilder.Entity("ServerDeclara.Datos.BimensualRPF", b =>
                 {
@@ -47,6 +74,12 @@ namespace ServerDeclara.Migrations
 
                     b.Property<int?>("DeclaracionMes2Id")
                         .HasColumnType("int");
+
+                    b.Property<DateTime>("Desde")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("Hasta")
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("HistorialParametroId")
                         .HasColumnType("int");
@@ -217,8 +250,14 @@ namespace ServerDeclara.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("BimensualIVAId")
+                        .HasColumnType("int");
+
                     b.Property<int?>("ComercioId")
                         .HasColumnType("int");
+
+                    b.Property<string>("Comprobante")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("Fecha")
                         .HasColumnType("datetime2");
@@ -238,14 +277,14 @@ namespace ServerDeclara.Migrations
                     b.Property<string>("NombreArchivoPDF")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("UsuarioId")
-                        .HasColumnType("int");
+                    b.Property<string>("TipoIva")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ComercioId");
+                    b.HasIndex("BimensualIVAId");
 
-                    b.HasIndex("UsuarioId");
+                    b.HasIndex("ComercioId");
 
                     b.ToTable("EntradasIVAsDiarios");
                 });
@@ -274,6 +313,12 @@ namespace ServerDeclara.Migrations
                             Id = 1,
                             Descripcion = "Periodo enero-diciembre 2024",
                             Fecha = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Descripcion = "Periodo enero-diciembre 2023",
+                            Fecha = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         });
                 });
 
@@ -334,7 +379,7 @@ namespace ServerDeclara.Migrations
                             HistorialParametroId = 1,
                             IngresosDesde = 0.0,
                             IngresosHasta = 7.0,
-                            Orden = 1,
+                            Orden = 3,
                             Tasa = 0.0,
                             Tipo = "RENTA",
                             ValidezParametrosDesde = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -349,7 +394,7 @@ namespace ServerDeclara.Migrations
                             HistorialParametroId = 1,
                             IngresosDesde = 7.0,
                             IngresosHasta = 10.0,
-                            Orden = 2,
+                            Orden = 6,
                             Tasa = 0.10000000000000001,
                             Tipo = "RENTA",
                             ValidezParametrosDesde = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -364,7 +409,7 @@ namespace ServerDeclara.Migrations
                             HistorialParametroId = 1,
                             IngresosDesde = 10.0,
                             IngresosHasta = 15.0,
-                            Orden = 3,
+                            Orden = 9,
                             Tasa = 0.14999999999999999,
                             Tipo = "RENTA",
                             ValidezParametrosDesde = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -379,7 +424,7 @@ namespace ServerDeclara.Migrations
                             HistorialParametroId = 1,
                             IngresosDesde = 15.0,
                             IngresosHasta = 30.0,
-                            Orden = 4,
+                            Orden = 12,
                             Tasa = 0.23999999999999999,
                             Tipo = "RENTA",
                             ValidezParametrosDesde = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -394,7 +439,7 @@ namespace ServerDeclara.Migrations
                             HistorialParametroId = 1,
                             IngresosDesde = 30.0,
                             IngresosHasta = 50.0,
-                            Orden = 5,
+                            Orden = 15,
                             Tasa = 0.25,
                             Tipo = "RENTA",
                             ValidezParametrosDesde = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -409,7 +454,7 @@ namespace ServerDeclara.Migrations
                             HistorialParametroId = 1,
                             IngresosDesde = 50.0,
                             IngresosHasta = 75.0,
-                            Orden = 6,
+                            Orden = 18,
                             Tasa = 0.27000000000000002,
                             Tipo = "RENTA",
                             ValidezParametrosDesde = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -424,7 +469,7 @@ namespace ServerDeclara.Migrations
                             HistorialParametroId = 1,
                             IngresosDesde = 75.0,
                             IngresosHasta = 115.0,
-                            Orden = 7,
+                            Orden = 21,
                             Tasa = 0.31,
                             Tipo = "RENTA",
                             ValidezParametrosDesde = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -439,7 +484,7 @@ namespace ServerDeclara.Migrations
                             HistorialParametroId = 1,
                             IngresosDesde = 115.0,
                             IngresosHasta = 20000.0,
-                            Orden = 8,
+                            Orden = 24,
                             Tasa = 0.35999999999999999,
                             Tipo = "RENTA",
                             ValidezParametrosDesde = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -448,9 +493,9 @@ namespace ServerDeclara.Migrations
                         new
                         {
                             Id = 9,
-                            Atributo = "",
+                            Atributo = "BPC",
                             Descripcion = "BPC",
-                            Formula = "",
+                            Formula = "5660",
                             HistorialParametroId = 1,
                             IngresosDesde = 0.0,
                             IngresosHasta = 0.0,
@@ -495,7 +540,7 @@ namespace ServerDeclara.Migrations
                             Id = 12,
                             Atributo = "IngIncrementoSeisPorciento",
                             Descripcion = "Incremento del 6%",
-                            Formula = "IFF((IngDependenciaCess + IngDependenciaNoCess + IngSalVacacional) > (BPC * 10), IngDependenciaCess * 0.06, 0)",
+                            Formula = "IIF((IngDependenciaCess + IngDependenciaNoCess + IngSalVacacional) > (BPC * 10), IngDependenciaCess * 0.06, 0)",
                             HistorialParametroId = 1,
                             IngresosDesde = 0.0,
                             IngresosHasta = 0.0,
@@ -555,7 +600,7 @@ namespace ServerDeclara.Migrations
                             Id = 16,
                             Atributo = "DeduccionFondoSolidaridad",
                             Descripcion = "Deduccion de fondo de solidaridad",
-                            Formula = "CantidadBPCParaFS * BPC",
+                            Formula = "CantidadBPCParaFS * BPC / 12",
                             HistorialParametroId = 1,
                             IngresosDesde = 0.0,
                             IngresosHasta = 0.0,
@@ -585,7 +630,7 @@ namespace ServerDeclara.Migrations
                             Id = 18,
                             Atributo = "DeduccionFondoSolidaridadAdicional",
                             Descripcion = "Adicional fondo de solidaridad",
-                            Formula = "IFF(AdicionalFS = true,5/3 * BPC / 12, 0)",
+                            Formula = "IIF(AdicionalFS = true,5/3 * BPC / 12, 0)",
                             HistorialParametroId = 1,
                             IngresosDesde = 0.0,
                             IngresosHasta = 0.0,
@@ -600,7 +645,7 @@ namespace ServerDeclara.Migrations
                             Id = 19,
                             Atributo = "AnticipoMensual",
                             Descripcion = "Anticipo Mensual",
-                            Formula = "IFF(AnticipoNF = false, LiquidacionMes, LiquidacionMes * 0.95)",
+                            Formula = "IIF(AnticipoNF = false, LiquidacionMes, LiquidacionMes * 0.95)",
                             HistorialParametroId = 1,
                             IngresosDesde = 0.0,
                             IngresosHasta = 0.0,
@@ -615,11 +660,401 @@ namespace ServerDeclara.Migrations
                             Id = 20,
                             Atributo = "TasaDeduccion",
                             Descripcion = "Tasa liquidacion",
-                            Formula = "IFF(IngresosExc > (15 * BPC), 0.8, 0.14)",
+                            Formula = "IIF(TotalExcedenteIngresos > (15 * BPC), 0.08, 0.14)",
                             HistorialParametroId = 1,
                             IngresosDesde = 0.0,
                             IngresosHasta = 0.0,
                             Orden = 20,
+                            Tasa = 0.0,
+                            Tipo = "CALCULO",
+                            ValidezParametrosDesde = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ValidezParametrosHasta = new DateTime(2024, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 21,
+                            Atributo = "TotalExcedenteIngresos",
+                            Descripcion = "Ingresos exc. AG y SV",
+                            Formula = "IngParaAnticipo - IngIncrementoSeisPorciento - IngSalVacacional - DeduccionLegalIngresos",
+                            HistorialParametroId = 1,
+                            IngresosDesde = 0.0,
+                            IngresosHasta = 0.0,
+                            Orden = 21,
+                            Tasa = 0.0,
+                            Tipo = "CALCULO",
+                            ValidezParametrosDesde = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ValidezParametrosHasta = new DateTime(2024, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 22,
+                            Atributo = "TotalDeducible",
+                            Descripcion = "Total deducible para liquidacion",
+                            Formula = "DeduccionTotal * TasaDeduccion",
+                            HistorialParametroId = 1,
+                            IngresosDesde = 0.0,
+                            IngresosHasta = 0.0,
+                            Orden = 22,
+                            Tasa = 0.0,
+                            Tipo = "CALCULO",
+                            ValidezParametrosDesde = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ValidezParametrosHasta = new DateTime(2024, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 23,
+                            Atributo = "LiquidacionMes",
+                            Descripcion = "Liquidacion mes",
+                            Formula = "IIF((LiquidacionIngresos - TotalDeducible)>0,(LiquidacionIngresos -TotalDeducible),0)",
+                            HistorialParametroId = 1,
+                            IngresosDesde = 0.0,
+                            IngresosHasta = 0.0,
+                            Orden = 23,
+                            Tasa = 0.0,
+                            Tipo = "CALCULO",
+                            ValidezParametrosDesde = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ValidezParametrosHasta = new DateTime(2024, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 24,
+                            Atributo = "",
+                            Descripcion = "0 A 7 BPC",
+                            Formula = "",
+                            HistorialParametroId = 2,
+                            IngresosDesde = 0.0,
+                            IngresosHasta = 7.0,
+                            Orden = 3,
+                            Tasa = 0.0,
+                            Tipo = "RENTA",
+                            ValidezParametrosDesde = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ValidezParametrosHasta = new DateTime(2024, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 25,
+                            Atributo = "",
+                            Descripcion = "7 A 10 BPC",
+                            Formula = "",
+                            HistorialParametroId = 2,
+                            IngresosDesde = 7.0,
+                            IngresosHasta = 10.0,
+                            Orden = 6,
+                            Tasa = 0.10000000000000001,
+                            Tipo = "RENTA",
+                            ValidezParametrosDesde = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ValidezParametrosHasta = new DateTime(2024, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 26,
+                            Atributo = "",
+                            Descripcion = "10 A 15 BPC",
+                            Formula = "",
+                            HistorialParametroId = 2,
+                            IngresosDesde = 10.0,
+                            IngresosHasta = 15.0,
+                            Orden = 9,
+                            Tasa = 0.14999999999999999,
+                            Tipo = "RENTA",
+                            ValidezParametrosDesde = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ValidezParametrosHasta = new DateTime(2024, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 27,
+                            Atributo = "",
+                            Descripcion = "15 A 30 BPC",
+                            Formula = "",
+                            HistorialParametroId = 2,
+                            IngresosDesde = 15.0,
+                            IngresosHasta = 30.0,
+                            Orden = 12,
+                            Tasa = 0.23999999999999999,
+                            Tipo = "RENTA",
+                            ValidezParametrosDesde = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ValidezParametrosHasta = new DateTime(2024, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 28,
+                            Atributo = "",
+                            Descripcion = "30 A 50 BPC",
+                            Formula = "",
+                            HistorialParametroId = 2,
+                            IngresosDesde = 30.0,
+                            IngresosHasta = 50.0,
+                            Orden = 15,
+                            Tasa = 0.25,
+                            Tipo = "RENTA",
+                            ValidezParametrosDesde = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ValidezParametrosHasta = new DateTime(2024, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 29,
+                            Atributo = "",
+                            Descripcion = "50 A 75 BPC",
+                            Formula = "",
+                            HistorialParametroId = 2,
+                            IngresosDesde = 50.0,
+                            IngresosHasta = 75.0,
+                            Orden = 18,
+                            Tasa = 0.27000000000000002,
+                            Tipo = "RENTA",
+                            ValidezParametrosDesde = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ValidezParametrosHasta = new DateTime(2024, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 30,
+                            Atributo = "",
+                            Descripcion = "75 A 115 BPC",
+                            Formula = "",
+                            HistorialParametroId = 2,
+                            IngresosDesde = 75.0,
+                            IngresosHasta = 115.0,
+                            Orden = 21,
+                            Tasa = 0.31,
+                            Tipo = "RENTA",
+                            ValidezParametrosDesde = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ValidezParametrosHasta = new DateTime(2024, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 31,
+                            Atributo = "",
+                            Descripcion = "> BPC",
+                            Formula = "",
+                            HistorialParametroId = 2,
+                            IngresosDesde = 115.0,
+                            IngresosHasta = 20000.0,
+                            Orden = 24,
+                            Tasa = 0.35999999999999999,
+                            Tipo = "RENTA",
+                            ValidezParametrosDesde = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ValidezParametrosHasta = new DateTime(2024, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 32,
+                            Atributo = "BPC",
+                            Descripcion = "BPC",
+                            Formula = "5660",
+                            HistorialParametroId = 2,
+                            IngresosDesde = 0.0,
+                            IngresosHasta = 0.0,
+                            Orden = 9,
+                            Tasa = 5660.0,
+                            Tipo = "BPC",
+                            ValidezParametrosDesde = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ValidezParametrosHasta = new DateTime(2024, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 33,
+                            Atributo = "DeduccionLegalIngresos",
+                            Descripcion = "Deducción legal 30%",
+                            Formula = "IngIndependiente * -0.3",
+                            HistorialParametroId = 2,
+                            IngresosDesde = 0.0,
+                            IngresosHasta = 0.0,
+                            Orden = 10,
+                            Tasa = 0.0,
+                            Tipo = "CALCULO",
+                            ValidezParametrosDesde = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ValidezParametrosHasta = new DateTime(2024, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 34,
+                            Atributo = "IngTotalIndependiente",
+                            Descripcion = "Total ingresos fuera de la relación de dependencia",
+                            Formula = "IngIndependiente + DeduccionLegalIngresos",
+                            HistorialParametroId = 2,
+                            IngresosDesde = 0.0,
+                            IngresosHasta = 0.0,
+                            Orden = 11,
+                            Tasa = 0.0,
+                            Tipo = "CALCULO",
+                            ValidezParametrosDesde = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ValidezParametrosHasta = new DateTime(2024, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 35,
+                            Atributo = "IngIncrementoSeisPorciento",
+                            Descripcion = "Incremento del 6%",
+                            Formula = "IIF((IngDependenciaCess + IngDependenciaNoCess + IngSalVacacional) > (BPC * 10), IngDependenciaCess * 0.06, 0)",
+                            HistorialParametroId = 2,
+                            IngresosDesde = 0.0,
+                            IngresosHasta = 0.0,
+                            Orden = 12,
+                            Tasa = 0.0,
+                            Tipo = "CALCULO",
+                            ValidezParametrosDesde = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ValidezParametrosHasta = new DateTime(2024, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 36,
+                            Atributo = "IngTotalDependencia",
+                            Descripcion = "Ingresos totales en realaciòn de dependencia",
+                            Formula = "IngDependenciaCess + IngDependenciaNoCess + IngSalVacacional + IngIncrementoSeisPorciento",
+                            HistorialParametroId = 2,
+                            IngresosDesde = 0.0,
+                            IngresosHasta = 0.0,
+                            Orden = 13,
+                            Tasa = 0.0,
+                            Tipo = "CALCULO",
+                            ValidezParametrosDesde = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ValidezParametrosHasta = new DateTime(2024, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 37,
+                            Atributo = "IngParaAnticipo",
+                            Descripcion = "Ingreso computable para anticipo",
+                            Formula = "IngTotalIndependiente + IngTotalDependencia + IngOtros",
+                            HistorialParametroId = 2,
+                            IngresosDesde = 0.0,
+                            IngresosHasta = 0.0,
+                            Orden = 14,
+                            Tasa = 0.0,
+                            Tipo = "CALCULO",
+                            ValidezParametrosDesde = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ValidezParametrosHasta = new DateTime(2024, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 38,
+                            Atributo = "DeduccionTotalDeducir",
+                            Descripcion = "Importe a deducir",
+                            Formula = "(DeduccionSDmenores * 20 * BPC + DeduccionCD * 40 * BPC) / 12 + (DeduccionSDMenoresCincuenta * 20 * BPC + DeduccionCDCincuenta * 40 * BPC) * 0.5 / 12",
+                            HistorialParametroId = 2,
+                            IngresosDesde = 0.0,
+                            IngresosHasta = 0.0,
+                            Orden = 15,
+                            Tasa = 0.0,
+                            Tipo = "CALCULO",
+                            ValidezParametrosDesde = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ValidezParametrosHasta = new DateTime(2024, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 39,
+                            Atributo = "DeduccionFondoSolidaridad",
+                            Descripcion = "Deduccion de fondo de solidaridad",
+                            Formula = "CantidadBPCParaFS * BPC / 12",
+                            HistorialParametroId = 2,
+                            IngresosDesde = 0.0,
+                            IngresosHasta = 0.0,
+                            Orden = 16,
+                            Tasa = 0.0,
+                            Tipo = "CALCULO",
+                            ValidezParametrosDesde = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ValidezParametrosHasta = new DateTime(2024, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 40,
+                            Atributo = "DeduccionTotal",
+                            Descripcion = "Total de deducciones",
+                            Formula = "DeduccionTotalDeducir + DeduccionFondoSolidaridad + DeduccionFondoSolidaridadAdicional + DeduccionCJPPU + DeduccionJubilatorio + DeduccionFonasa + DeduccionFRL + DeduccionOtros",
+                            HistorialParametroId = 2,
+                            IngresosDesde = 0.0,
+                            IngresosHasta = 0.0,
+                            Orden = 17,
+                            Tasa = 0.0,
+                            Tipo = "CALCULO",
+                            ValidezParametrosDesde = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ValidezParametrosHasta = new DateTime(2024, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 41,
+                            Atributo = "DeduccionFondoSolidaridadAdicional",
+                            Descripcion = "Adicional fondo de solidaridad",
+                            Formula = "IIF(AdicionalFS = true,5/3 * BPC / 12, 0)",
+                            HistorialParametroId = 2,
+                            IngresosDesde = 0.0,
+                            IngresosHasta = 0.0,
+                            Orden = 18,
+                            Tasa = 0.0,
+                            Tipo = "CALCULO",
+                            ValidezParametrosDesde = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ValidezParametrosHasta = new DateTime(2024, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 42,
+                            Atributo = "AnticipoMensual",
+                            Descripcion = "Anticipo Mensual",
+                            Formula = "IIF(AnticipoNF = false, LiquidacionMes, LiquidacionMes * 0.95)",
+                            HistorialParametroId = 2,
+                            IngresosDesde = 0.0,
+                            IngresosHasta = 0.0,
+                            Orden = 19,
+                            Tasa = 0.0,
+                            Tipo = "CALCULO",
+                            ValidezParametrosDesde = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ValidezParametrosHasta = new DateTime(2024, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 43,
+                            Atributo = "TasaDeduccion",
+                            Descripcion = "Tasa liquidacion",
+                            Formula = "IIF(TotalExcedenteIngresos > (15 * BPC), 0.08, 0.10)",
+                            HistorialParametroId = 2,
+                            IngresosDesde = 0.0,
+                            IngresosHasta = 0.0,
+                            Orden = 20,
+                            Tasa = 0.0,
+                            Tipo = "CALCULO",
+                            ValidezParametrosDesde = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ValidezParametrosHasta = new DateTime(2024, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 44,
+                            Atributo = "TotalExcedenteIngresos",
+                            Descripcion = "Ingresos exc. AG y SV",
+                            Formula = "IngParaAnticipo - IngIncrementoSeisPorciento - IngSalVacacional - DeduccionLegalIngresos",
+                            HistorialParametroId = 2,
+                            IngresosDesde = 0.0,
+                            IngresosHasta = 0.0,
+                            Orden = 21,
+                            Tasa = 0.0,
+                            Tipo = "CALCULO",
+                            ValidezParametrosDesde = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ValidezParametrosHasta = new DateTime(2024, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 45,
+                            Atributo = "TotalDeducible",
+                            Descripcion = "Total deducible para liquidacion",
+                            Formula = "DeduccionTotal * TasaDeduccion",
+                            HistorialParametroId = 2,
+                            IngresosDesde = 0.0,
+                            IngresosHasta = 0.0,
+                            Orden = 22,
+                            Tasa = 0.0,
+                            Tipo = "CALCULO",
+                            ValidezParametrosDesde = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ValidezParametrosHasta = new DateTime(2024, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 46,
+                            Atributo = "LiquidacionMes",
+                            Descripcion = "Liquidacion mes",
+                            Formula = "IIF((LiquidacionIngresos - TotalDeducible)>0,(LiquidacionIngresos -TotalDeducible),0)",
+                            HistorialParametroId = 2,
+                            IngresosDesde = 0.0,
+                            IngresosHasta = 0.0,
+                            Orden = 23,
                             Tasa = 0.0,
                             Tipo = "CALCULO",
                             ValidezParametrosDesde = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -650,6 +1085,27 @@ namespace ServerDeclara.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Usuarios");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Email = "alexfosters2014@gmail.com",
+                            IdGoogle = "123456",
+                            RefreshToken = "",
+                            Token = ""
+                        });
+                });
+
+            modelBuilder.Entity("ServerDeclara.Datos.BimensualIVA", b =>
+                {
+                    b.HasOne("ServerDeclara.Datos.Usuario", "Usuario")
+                        .WithMany()
+                        .HasForeignKey("UsuarioId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Usuario");
                 });
 
             modelBuilder.Entity("ServerDeclara.Datos.BimensualRPF", b =>
@@ -692,17 +1148,19 @@ namespace ServerDeclara.Migrations
 
             modelBuilder.Entity("ServerDeclara.Datos.EntradaIVADiario", b =>
                 {
+                    b.HasOne("ServerDeclara.Datos.BimensualIVA", "BimensualIVA")
+                        .WithMany("EntradasIVADiarios")
+                        .HasForeignKey("BimensualIVAId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("ServerDeclara.Datos.Comercio", "Comercio")
                         .WithMany()
                         .HasForeignKey("ComercioId");
 
-                    b.HasOne("ServerDeclara.Datos.Usuario", "Usuario")
-                        .WithMany()
-                        .HasForeignKey("UsuarioId");
+                    b.Navigation("BimensualIVA");
 
                     b.Navigation("Comercio");
-
-                    b.Navigation("Usuario");
                 });
 
             modelBuilder.Entity("ServerDeclara.Datos.Parametro", b =>
@@ -714,6 +1172,11 @@ namespace ServerDeclara.Migrations
                         .IsRequired();
 
                     b.Navigation("HistorialParametro");
+                });
+
+            modelBuilder.Entity("ServerDeclara.Datos.BimensualIVA", b =>
+                {
+                    b.Navigation("EntradasIVADiarios");
                 });
 
             modelBuilder.Entity("ServerDeclara.Datos.HistorialParametro", b =>

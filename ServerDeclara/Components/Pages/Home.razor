@@ -2,33 +2,138 @@
 @page "/"
 @inject NavigationManager _nav
 @inject UsuarioServicio _usuarioServicio
+@inject IJSRuntime _js
+@inject IToastService _toastServicio
+@inject ILocalStorageService _localStorage
 
 
-<PageTitle></PageTitle>
+<div class="TituloLogin">
+    <h2 class="TituloLogin">Bienvenidos a</h2>
+    <h1>DeclaraWeb 1.0</h1>
+</div>
 
-<button @onclick="AutentificarmeEnDuro">Iniciar Sesión con Google</button>
+<button @onclick="AutentificarmeConGoogle" class="botonGoogle">
+    <img src="/imagenes/iconos/iconoGoogle.png" class="iconoGoogle" />
+        Inicio de sesión con Google
+    </button>
+
+
+<img src="/imagenes/fondo.jpg" alt="fondo" class="fondoLogin" />
 
 
 @code{
 
-    private void AutentificarmeConGoogle()
-    {
-        var url = "https://accounts.google.com/o/oauth2/v2/auth?";
-        url += "client_id=446867793846-0rp377qf18vd0ineseiftohhb7mi0852.apps.googleusercontent.com";
-        url += "&redirect_uri=https://localhost:7123/";
-        url += "&response_type=id_token";
-        url += "&scope=openid%20profile%20email&nonce=RANDOM_NONCE&state=RANDOM_STATE";
+    public string IdToken { get; set; }
 
-        _nav.NavigateTo(url);
+    protected async override Task OnInitializedAsync()
+    {
+
+        IdToken = Util.ExtraerTokenURL(_nav.Uri);
+
+        if (!string.IsNullOrEmpty(IdToken))
+        {
+            await Autentificarme();
+        }
+      
+    }
+
+    private async void AutentificarmeConGoogle()
+    {
+        string idTokenGuardado = await LeerTokenLocal();
+
+        if (!string.IsNullOrEmpty(idTokenGuardado))
+        {
+            IdToken = idTokenGuardado;
+            await Autentificarme();
+        }
+        else
+        {
+        var url = "https://accounts.google.com/o/oauth2/v2/auth?";
+            url += "client_id=306259551712-7972udthqs21p1lfb4dovegufboroqo4.apps.googleusercontent.com";
+            url += "&redirect_uri=https://declaraapp.azurewebsites.net";
+            url += "&response_type=id_token";
+            url += "&scope=openid%20profile%20email&nonce=RANDOM_NONCE&state=RANDOM_STATE";
+
+            _nav.NavigateTo(url);
+        }
+
+
+
+       
+    }
+
+    private async Task Autentificarme()
+    {
+        try
+        {
+                if (string.IsNullOrEmpty(await LeerTokenLocal()))
+                {
+                    await GuardarTokenLocal();
+                }
+
+
+                var tupla = JWTServicio.GetClaimsFromToken(IdToken);
+                string mail = tupla.mail;
+                string idGoogle = tupla.id;
+
+
+                bool autentificado = await _usuarioServicio.LoginRegistro(mail, idGoogle, IdToken);
+                if (autentificado)
+                {
+                    _toastServicio.ShowSuccess("Bienvenido");
+                    _nav.NavigateTo("/HistorialVA");
+                }
+                else
+                {
+                    _toastServicio.ShowInfo("Verificar usuario");
+                }
+
+        }
+        catch (Exception ex)
+        {
+            _toastServicio.ShowInfo(ex.Message);
+        }
 
     }
+
 
     private async Task AutentificarmeEnDuro()
     {
-        bool autentificado = await _usuarioServicio.LoginRegistro("alexfosters2014@gmail.com", "123456");
-        if (autentificado)
+        try
         {
-            _nav.NavigateTo("/Principal");
+            string mail = "alexfosters2014@gmail.com";
+            string idGoogle = "123456";
+
+            bool autentificado = await _usuarioServicio.LoginRegistro(mail, idGoogle, IdToken);
+            if (autentificado)
+            {
+                _toastServicio.ShowSuccess("Bienvenido");
+                _nav.NavigateTo("/HistorialVA");
+            }
+            else
+            {
+                _toastServicio.ShowInfo("Verificar usuario");
+            }
+
         }
+        catch (Exception ex)
+        {
+            _toastServicio.ShowInfo(ex.Message);
+        }
+
     }
+
+
+    private async Task<string> LeerTokenLocal()
+    {
+        return await _localStorage.GetItemAsync<string>(Constantes.TOKEN_LOCAL);
+    }
+
+    private async Task GuardarTokenLocal()
+    {
+        await _localStorage.SetItemAsync(Constantes.TOKEN_LOCAL, IdToken);
+    }
+
+
+
 }

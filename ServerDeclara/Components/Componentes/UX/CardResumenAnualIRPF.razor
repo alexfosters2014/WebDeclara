@@ -1,0 +1,85 @@
+﻿
+<MargenVertical Altura="15px" />
+
+<h4 class="subtitulo-orange">Declaraciones de IRPF</h4>
+
+<div class="recuadro tablaEstilo colorBlanco font-chica">
+    @if (mensualResumidoIRPF != null)
+    {
+        <table>
+            <tr>
+                <td>Ingresos dependientes</td>
+                <td>$</td>
+                <td>@mensualResumidoIRPF.IngDependientes</td>
+            </tr>
+
+            <tr>
+                <td>Ingresos independientes</td>
+                <td>$</td>
+                <td>@mensualResumidoIRPF.IngIndependientes</td>
+            </tr>
+
+            <tr>
+                <td>Deducciones</td>
+                <td>$</td>
+                <td>@mensualResumidoIRPF.Deducciones</td>
+            </tr>
+
+            <tr>
+                <td>Retenciones y anticipos</td>
+                <td>$</td>
+                <td>@mensualResumidoIRPF.RetencionesAnticipos</td>
+            </tr>
+
+            <tr>
+                <td>Créditos y arrendamientos</td>
+                <td>$</td>
+                <td>@mensualResumidoIRPF.CreditosArrendamientos</td>
+            </tr>
+
+            <tr>
+                <td>Anticipo Bimestre</td>
+                <td>$</td>
+                <td>@mensualResumidoIRPF.AnticipoBimestre</td>
+            </tr>
+        </table>
+    }
+    else
+    {
+        <p>Todavia no hay resumen para mostrar</p>
+    }
+
+</div>
+
+<MargenVertical Altura="10px" />
+
+@code {
+    [Parameter] public List<BimensualIRPF_DTO> bimensuales { get; set; }
+
+    private MensualIRPF_Resumido mensualResumidoIRPF = new();
+
+
+    protected async override Task OnInitializedAsync()
+    {
+        await ReorganizarDatos();
+    }
+
+    private async Task ReorganizarDatos()
+    {
+        if (bimensuales != null && bimensuales.Count > 0)
+        {
+            mensualResumidoIRPF = new MensualIRPF_Resumido()
+                {
+                    IngDependientes = Math.Round(bimensuales.Sum(s => s.DeclaracionMes1.IngTotalDependencia) + bimensuales.Sum(s => s.DeclaracionMes2.IngTotalDependencia),0),
+                    IngIndependientes = Math.Round(bimensuales.Sum(s => s.DeclaracionMes1.IngTotalIndependiente) + bimensuales.Sum(s => s.DeclaracionMes2.IngTotalIndependiente),0),
+                    Deducciones = Math.Round(bimensuales.Sum(s => s.DeclaracionMes1.DeduccionTotal) + bimensuales.Sum(s => s.DeclaracionMes2.DeduccionTotal),0),
+                    RetencionesAnticipos = Math.Round(bimensuales.Sum(s => s.DeclaracionMes1.AnticipoRetenciones) + bimensuales.Sum(s => s.DeclaracionMes2.AnticipoRetenciones),0),
+                    CreditosArrendamientos = 0,
+                    AnticipoBimestre = Math.Round(bimensuales.Sum(s => s.AnticipoBimestre),0)
+            };
+        }
+    }
+
+   
+
+}

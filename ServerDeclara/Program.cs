@@ -1,9 +1,19 @@
+using Blazored.LocalStorage;
+using Blazored.Modal;
+using Blazored.Toast;
+using FluentValidation;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Radzen;
 using ServerDeclara.Components;
 using ServerDeclara.Datos;
 using ServerDeclara.Servicios;
 using ServerDeclara.Servicios_de_datos;
+using ServerDeclara.Validadores;
+using System.Text.Json.Serialization;
+using System.Text.Json;
+using static OpenAI.ObjectModels.SharedModels.IOpenAiModels;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,14 +21,29 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
-string conexionBaseDatosLocal = "ConnectionStrings:LocalBD";
-string conexionBaseDatosAzure = "ConnectionStrings:AzureBD";
+#if DEBUG
+string conexionBaseDatos = "ConnectionStrings:LocalBD";
+#else
+string conexionBaseDatos = "ConnectionStrings:AzureBD";
+#endif
 
 builder.Services.AddDbContext<DeclaraContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetValue<string>(conexionBaseDatosLocal)), ServiceLifetime.Transient);
+    options.UseSqlServer(builder.Configuration.GetValue<string>(conexionBaseDatos)), ServiceLifetime.Transient);
+
+builder.Services.AddBlazoredModal();
+builder.Services.AddBlazoredToast();
+
+builder.Services.AddBlazoredLocalStorage();
 
 
 builder.Services.AddAutoMapper(typeof(Program));
+
+builder.Services.AddRadzenComponents();
+
+
+builder.Services.AddScoped<BlobAzureServicio>();
+
+builder.Services.AddScoped<CabeceraServicio>();
 
 builder.Services.AddScoped<UsuarioServicio>();
 builder.Services.AddScoped<UsuarioRepositorio>();
@@ -28,6 +53,14 @@ builder.Services.AddScoped<ParametroRepositorio>();
 
 builder.Services.AddScoped<IRPFServicio>();
 builder.Services.AddScoped<IRPFRepositorio>();
+
+builder.Services.AddScoped<IVAServicio>();
+builder.Services.AddScoped<IVARepositorio>();
+
+builder.Services.AddScoped<ComercioServicio>();
+builder.Services.AddScoped<ComercioRepositorio>();
+
+builder.Services.AddScoped<ResumenServicio>();
 
 
 var app = builder.Build();

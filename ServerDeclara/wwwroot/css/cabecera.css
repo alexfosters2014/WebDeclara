@@ -7,7 +7,7 @@
     padding: 0;
     background-color: var(--color-primario);
     height: 8vh;
-    z-index: 1000;
+    z-index: 100;
     color: white;
 }
 
@@ -18,7 +18,7 @@
     width: 100vw;
     background-color: var(--color-primario);
     height: 5px;
-    z-index: 1001;
+    z-index: 101;
 }
 
 .cabecera-blanca {
@@ -28,5 +28,5 @@
     width: 100vw;
     background-color: white;
     height: 5px;
-    z-index: 1002;
+    z-index: 102;
 }

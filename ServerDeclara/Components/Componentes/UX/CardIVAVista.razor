@@ -1,0 +1,17 @@
+﻿<section class="card-vista">
+    <div class="row">
+        <span>@Titulo</span>
+    </div>
+
+    @ChildContent
+
+</section>
+
+
+
+@code {
+    [Parameter] public RenderFragment ChildContent { get; set; }
+    [Parameter] public string Titulo { get; set; }
+
+
+}

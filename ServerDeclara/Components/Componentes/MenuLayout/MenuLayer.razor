@@ -21,6 +21,11 @@
         <p>Anual</p>
     </div>
 
+    <div class="text-center @seleccionMenu[3]" @onclick="() => ClickItemMenu(3)">
+        <img src="/imagenes/iconos/config.svg" alt="">
+        <p>Parametros</p>
+    </div>
+
 </div>
 
 @code {
@@ -30,7 +35,7 @@
     {
         seleccionMenu = new()
         {
-            "selector","",""
+            "selector","","",""
         };
     }
 
@@ -56,13 +61,16 @@
     {
         switch (opcion){
             case 0:
-                _nav.NavigateTo("/NuevoIRPF");
+                _nav.NavigateTo("/HistorialVA");
                 break;
             case 1:
                 _nav.NavigateTo("/HistorialIRPF");
                 break;
             case 2:
-                _nav.NavigateTo("/NuevoIRPF");
+                _nav.NavigateTo("/resumenAnual");
+                break;
+            case 3:
+                _nav.NavigateTo("/HistorialParametros");
                 break;
         }
     }

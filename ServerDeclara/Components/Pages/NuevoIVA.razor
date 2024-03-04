@@ -1,0 +1,370 @@
+﻿@page "/NuevoComprobante/{VistaSeleccionada}"
+@inject IVAServicio _ivaServicio
+@inject ComercioServicio _comercioServicio
+@inject IVAServicio _ivaServicio
+@inject BlobAzureServicio _blobService
+@inject IJSRuntime _js
+@inject IConfiguration _config;
+@inject NavigationManager _nav
+@inject IToastService _toastServicio
+@inject CabeceraServicio _cabeceraServicio
+
+
+
+@if (!ModoManual)
+{
+    <div class="contenedor-iva">
+        <div>
+            <p class="@escuchaEmpresa">Empresa</p>
+            <p style="color:red">@(nuevaEntradaIVA.Comercio != null ? nuevaEntradaIVA.Comercio.RazonSocial : "No encontrado")</p>
+
+            <p class="@escuchaFecha">Fecha</p>
+            <p style="color:red">@(nuevaEntradaIVA.Fecha != DateTime.MinValue ? nuevaEntradaIVA.Fecha : "Sin fecha")</p>
+
+
+            <p class="@escuchaMonto">Monto</p>
+            <p style="color:red">@nuevaEntradaIVA.MontoMasIVA</p>
+
+            <p class="@escuchaIVA">IVA</p>
+            <p style="color:red">@nuevaEntradaIVA.MontoIVA</p>
+
+            <p class="@escuchaCompraVenta">Tipo de IVA (Compra o Venta)</p>
+            <p style="color:red">@(nuevaEntradaIVA.TipoIva != "" ? nuevaEntradaIVA.TipoIva : "")</p>
+        </div>
+    </div>
+
+}
+else
+{
+    <section class="recuadro recuadro-margin">
+
+            <label>Comercio</label>
+        <div class="row">
+            <div class="col-10">
+                <select @onchange="SeleccionarComercioManual" placeholder="Mes1" class="form-control">
+                    <option value="0" selected>Elija un comercio</option>
+                    @foreach (var item in Comercios)
+                    {
+                        @if (nuevaEntradaIVA.Comercio != null && item.Id == nuevaEntradaIVA.Comercio.Id)
+                        {
+                            <option value="@item.Id" selected>@item.RUT - @item.RazonSocial</option>
+                        }
+                        else
+                        {
+                            <option value="@item.Id">@item.RUT - @item.RazonSocial</option>
+                        }
+                    }
+                </select>
+            </div>
+
+            <div class="col-2 mb-3">
+                <img src="/imagenes/iconos/botonMasSmall.png" alt="Agregar nuevo comercio" style="height:30px;width:30px" @onclick="AgregarNuevoComercio" />
+            </div>
+                       
+        </div>
+           
+
+
+            <label>Fecha</label>
+        <input type="date" @bind-value="nuevaEntradaIVA.Fecha" class="form-control mb-3" />
+
+            
+              <label>Comprobante n°</label>
+        <input type="text" @bind-value="nuevaEntradaIVA.Comprobante" class="form-control mb-3" />
+
+              <label>Monto total sin IVA</label>
+        <input type="number" @bind-value="nuevaEntradaIVA.MontoMasIVA" class="form-control mb-3" />
+
+            <label>Monto de IVA</label>
+        <input type="number" @bind-value="nuevaEntradaIVA.MontoIVA" class="form-control mb-3" />
+
+       
+            @if (nuevaEntradaIVA.TipoIva == Util.TipoIva.VENTA.ToString())
+            {
+            <label>IVA retenido por venta</label>
+            <input type="number" @bind-value="nuevaEntradaIVA.MontoIvaRetenido" class="form-control mb-3" />
+            }
+             <label>Tipo de comprobante</label>
+             <GrupoBotonesTipoIva valor="@nuevaEntradaIVA.TipoIva" CambioValorTipoIva="CambioValorTipoIva"/>
+
+
+        <div class="d-flex flex-column mb-3 align-items-center">
+
+            <InputFile OnChange="@SubirPDF" name="foto" id="pdfUpload" class="input-file mb-5"/>
+              <label for="pdfUpload" class="label-file mb-5">
+                <img src="/imagenes/iconos/UploadIcon.png" alt="Seleccionar PDF" />
+              </label>
+                
+
+            @if (!string.IsNullOrEmpty(nuevaEntradaIVA.NombreArchivoPDF))
+            {
+                <a href="@ObtenerURL()" >
+                    <img src="/imagenes/iconos/ojo.png" alt="ver PDF" class="imagen_boton">
+                </a>
+            }
+
+            <button @onclick="GuardarNuevoComprobante">Guardar</button>
+
+         </div>
+
+    </section>
+
+
+
+
+@code {
+    [Parameter] public string VistaSeleccionada { get; set; }
+    [CascadingParameter] IModalService Modal { get; set; } = default!;
+
+    int? idComercio;
+    bool ModoManual = true;
+    string escuchaEmpresa = "";
+    string escuchaFecha = "";
+    string escuchaMonto = "";
+    string escuchaIVA = "";
+    string escuchaCompraVenta = "";
+
+    string UrlPdf = "";
+
+    List<ComercioDTO> Comercios = new();
+    EntradaIVADiarioDTO nuevaEntradaIVA = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        UrlPdf = _config["AzureBlobStorage:UrlVisorPDF"];
+         _cabeceraServicio.ActualizarTituloMenu("Nuevo comprobante");
+
+        await ActualizaListadoComercios();
+        if (!ModoManual)
+        {
+            await Escucha();
+        }
+
+    }
+
+    private async Task ActualizaListadoComercios()
+    {
+        Comercios = await _comercioServicio.GetListadoComerciosPorUsuario();
+
+        if (nuevaEntradaIVA.Fecha == DateTime.MinValue) nuevaEntradaIVA.Fecha = DateTime.Today;
+        if (string.IsNullOrEmpty(nuevaEntradaIVA.TipoIva)) nuevaEntradaIVA.TipoIva = Util.TipoIva.COMPRA.ToString();
+
+        StateHasChanged();
+    }
+
+    private async Task Escucha()
+    {
+        await EscucharEmpresa();
+
+        await EscucharFecha();
+
+        //en realidad es monto SIN IVA
+        nuevaEntradaIVA.MontoMasIVA = await EscucharValorNumerico("monto");
+
+        nuevaEntradaIVA.MontoIVA = await EscucharValorNumerico("iva");
+
+        await EscucharCompraVenta();
+
+        ModoManual = true;
+    }
+
+    private async Task EscucharFecha()
+    {
+        string textoDeEscucha = "";
+
+        await IconoEscucha("fecha");
+
+        textoDeEscucha = await _js.InvokeAsync<string>("LeerVoz");
+
+        if (string.IsNullOrEmpty(textoDeEscucha)) return;
+
+        DateTime fecha = ProcesadorVoz.ProcesarFechaPorVoz(textoDeEscucha);
+
+        if (fecha != DateTime.MinValue) nuevaEntradaIVA.Fecha = fecha;
+    }
+
+    private async Task EscucharEmpresa()
+    {
+        string textoDeEscucha = "";
+
+        await IconoEscucha("empresa");
+
+        textoDeEscucha = await _js.InvokeAsync<string>("LeerVoz");
+
+        if (string.IsNullOrEmpty(textoDeEscucha)) return;
+
+        ComercioDTO comercioBuscado = await ProcesadorVoz.BusquedaComercioPorRazonSocial(textoDeEscucha, Comercios);
+
+        if (comercioBuscado != null) nuevaEntradaIVA.Comercio = comercioBuscado;
+
+    }
+
+    private async Task<double> EscucharValorNumerico(string tipoIcono)
+    {
+        string textoDeEscucha = "";
+
+        await IconoEscucha(tipoIcono);
+
+        textoDeEscucha = await _js.InvokeAsync<string>("LeerVoz");
+
+        if (string.IsNullOrEmpty(textoDeEscucha)) return 0;
+
+        double valor = ProcesadorVoz.ProcesarValoresPorVoz(textoDeEscucha);
+
+        return valor;
+    }
+
+    private async Task EscucharCompraVenta()
+    {
+        string textoDeEscucha = "";
+
+        await IconoEscucha("compra-venta");
+
+        textoDeEscucha = await _js.InvokeAsync<string>("LeerVoz");
+
+        if (string.IsNullOrEmpty(textoDeEscucha)) return;
+
+        string compraVenta = ProcesadorVoz.ProcesarCompraVentaPorVoz(textoDeEscucha);
+
+        if (compraVenta != "")
+        {
+            nuevaEntradaIVA.TipoIva = compraVenta;
+        }
+    }
+
+    private async Task IconoEscucha(string foco)
+    {
+
+        escuchaEmpresa = "";
+        escuchaFecha = "";
+        escuchaMonto = "";
+        escuchaIVA = "";
+        escuchaCompraVenta = "";
+
+        switch (foco)
+        {
+            case "empresa":
+                escuchaEmpresa = "beforeIconEscucha";
+                break;
+            case "fecha":
+                escuchaFecha = "beforeIconEscucha";
+                break;
+            case "monto":
+                escuchaMonto = "beforeIconEscucha";
+                break;
+            case "iva":
+                escuchaIVA = "beforeIconEscucha";
+                break;
+            case "compra-venta":
+                escuchaCompraVenta = "beforeIconEscucha";
+                break;
+            default:
+                break;
+        }
+        StateHasChanged();
+    }
+    private void SeleccionarComercioManual(ChangeEventArgs e)
+    {
+        int idComercio = int.Parse(e.Value.ToString());
+        if (idComercio > 0)
+        {
+            nuevaEntradaIVA.Comercio = Comercios.FirstOrDefault(f => f.Id == idComercio);
+        }
+    }
+
+    private async Task SubirPDF(InputFileChangeEventArgs e)
+    {
+        try
+        {
+            IBrowserFile file;
+            byte[] pdfData;
+
+            file = e.File;
+
+            if (file != null)
+            {
+                using (var memoryStream = new MemoryStream())
+                {
+                    await file.OpenReadStream(file.Size).CopyToAsync(memoryStream);
+                    pdfData = memoryStream.ToArray();
+                    //string imagenBase64 = Convert.ToBase64String(imageData);
+                }
+                if (pdfData.Length > 0)
+                {
+                    string nombreArchivoSubido = await _blobService.SubirPDF(pdfData);
+                    if (!string.IsNullOrEmpty(nombreArchivoSubido))
+                    {
+                        nuevaEntradaIVA.NombreArchivoPDF = nombreArchivoSubido;
+                        _toastServicio.ShowSuccess("Archivo subido correctamente");
+                        StateHasChanged();
+                    }
+                    else
+                    {
+                        throw new Exception("No se pudo subir el pdf correctamente");
+                    }
+
+                }
+                else
+                {
+                    throw new Exception("No se pudo subir el pdf correctamente");
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            _toastServicio.ShowWarning(ex.Message);
+        }
+
+    }
+
+    private string ObtenerURL()
+    {
+        string verURL = UrlPdf + nuevaEntradaIVA.NombreArchivoPDF;
+        return verURL;
+    }
+
+
+    private async Task AgregarNuevoComercio()
+    {
+        var comercioModal = Modal.Show<NuevoComercio>("Nuevo");
+        var result = await comercioModal.Result;
+
+        if (result.Confirmed)
+        {
+            await ActualizaListadoComercios();
+            _toastServicio.ShowInfo("Nuevo comercio guardado");
+        }
+    }
+
+    private async Task GuardarNuevoComprobante()
+    {
+        try
+        {
+            nuevaEntradaIVA.BimensualIVAId = _ivaServicio.GetIdBimensual();
+
+            var resultado = await _ivaServicio.CrearNuevoComprobanteIVA(nuevaEntradaIVA);
+
+            if (VistaSeleccionada == Util.Vistas.GESTION_IVA.ToString())
+            {
+                _nav.NavigateTo("gestionIVA");
+            }
+            else
+            {
+                await _ivaServicio.ObtenerDeclaracion();
+                _nav.NavigateTo("HistorialVA");
+            }
+
+        }
+        catch (Exception ex)
+        {
+            _toastServicio.ShowWarning(ex.Message);
+        }
+    }
+
+    async Task CambioValorTipoIva(string valorTipoIva)
+    {
+        nuevaEntradaIVA.TipoIva = valorTipoIva;
+    }
+
+    }
+}

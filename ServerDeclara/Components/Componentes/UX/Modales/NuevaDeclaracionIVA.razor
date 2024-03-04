@@ -1,0 +1,25 @@
+﻿
+<article class="recuadro" >
+
+    <p>Elija el periodo de la declaracìón</p>
+    <div class="d-flex justify-content-between">
+        <input type="month" class="form-control" @bind-value="periodo.Desde" style="margin-right:5px;"/>
+        <input type="month" class="form-control" @bind-value="periodo.Hasta" style="margin-left:5px;"/>
+    </div>
+
+    <MargenVertical Altura="30px" />
+
+     <div class="d-flex justify-content-between">
+        <button @onclick="AgregarNuevo">Agregar</button>
+        <button @onclick="Cancelar">Cancelar</button>
+    </div>
+</article>
+
+
+@code {
+    [CascadingParameter] BlazoredModalInstance BlazoredModal { get; set; } = default!;
+    Periodo periodo = new(); 
+
+    private async Task AgregarNuevo() => await BlazoredModal.CloseAsync(ModalResult.Ok(periodo));
+    private async Task Cancelar() => await BlazoredModal.CancelAsync();
+}

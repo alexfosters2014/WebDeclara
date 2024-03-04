@@ -1,6 +1,7 @@
 ﻿:root {
     --color-primario: #46AFC5;
     --color-secundario: #2ecc71;
+    --color-label: #8889FF;
 }
 
   /*  background-color: var(--color-primario);*/

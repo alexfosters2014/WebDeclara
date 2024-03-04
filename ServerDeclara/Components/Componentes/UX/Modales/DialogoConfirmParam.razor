@@ -1,0 +1,26 @@
+﻿
+<h4>@Texto</h4>
+
+<input type="date" placeholder="Escriba la fecha de inicio de validéz" @bind="inicio" class="form-control"/>
+<input type="date" placeholder="Escriba la fecha de fin de validéz" @bind="fin" class="form-control" />
+
+<button @onclick="Cancelar">No</button>
+<button @onclick="Confirmar">Confirmar</button>
+
+
+@code {
+    [Parameter] public string Texto { get; set; }
+    [CascadingParameter] BlazoredModalInstance BlazoredModal { get; set; } = default!;
+
+    private DateTime inicio = DateTime.Today;
+    private DateTime fin = DateTime.Today.AddMonths(1);
+
+
+    private async Task Confirmar() => await BlazoredModal.CloseAsync(ModalResult.Ok(new DataCopiaParametro()
+    {
+        Inicio = inicio,
+        Fin = fin
+    }));
+
+    private async Task Cancelar() => await BlazoredModal.CancelAsync();
+}

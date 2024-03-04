@@ -1,0 +1,17 @@
+﻿.input-file{
+    display:none;
+}
+
+
+.label-file {
+    display: inline-block;
+    cursor: pointer;
+}
+
+.label-file img {
+    width: 60px; /* Ancho deseado de la imagen */
+    height: 60px; /* Alto deseado de la imagen */
+    /* Otras propiedades de estilo según sea necesario */
+}
+
+

@@ -1,0 +1,67 @@
+﻿@using System.Globalization
+@inject NavigationManager _nav
+@inject IVAServicio _IVAServicio
+@inject IJSRuntime _js
+
+
+<section class="card-general">
+    <article>
+        @FormatearPeriodo()
+    </article>
+    <p class="@ColorAnticipo() padding-horizontal" @onclick="() => EditarCambiosDeclaracion(DeclaracionBimensual.Id)">
+        @TextoAnticipo()
+    </p>
+    <div class="d-flex  justify-content-end card-general-submenu">
+      
+        <a href="" @onclick="() => AgregarNuevoIVA(DeclaracionBimensual.Id)" @onclick:preventDefault class="zindexprimero">
+            <img src="/imagenes/iconos/botonMasSmall.png" alt="">
+        </a>
+
+    </div>
+</section>
+
+
+
+
+@code {
+    [Parameter] public BimensualIVA_ViewList DeclaracionBimensual { get; set; }
+
+    private string FormatearPeriodo()
+    {
+        var formatoFechaEspanol = DateTimeFormatInfo.GetInstance(new System.Globalization.CultureInfo("es-ES"));
+
+        string fechaDesde = DeclaracionBimensual.Desde.ToString("MMMM", formatoFechaEspanol);
+        string fechaHasta = DeclaracionBimensual.Hasta.ToString("MMMM", formatoFechaEspanol);
+        string anio = DeclaracionBimensual.Desde.ToString("yyyy");
+
+        return fechaDesde + "-" + fechaHasta + " " + anio;
+    }
+
+    private string TextoAnticipo()
+    {
+        string texto = DeclaracionBimensual.AnticipoBimestreIVA >= 0 ? "Anticipo de IVA a pagar " : "Excedente de IVA a  favor ";
+        return texto + "$ " + DeclaracionBimensual.AnticipoBimestreIVA;
+    }
+
+    private string ColorAnticipo() => DeclaracionBimensual.AnticipoBimestreIVA >= 0 ? "color-rojo" : "color-verde";
+
+
+    private void EditarCambiosDeclaracion(int idBimensual)
+    {
+        SetBimensualId(idBimensual);
+        _nav.NavigateTo("/gestionIVA");
+    }
+
+    private async Task AgregarNuevoIVA(int idBimensual)
+    {
+        SetBimensualId(idBimensual);
+        _nav.NavigateTo($"/NuevoComprobante/{Util.Vistas.LISTADO_BIMENSUAL_IVA.ToString()}");
+
+        // texto = await _js.InvokeAsync<string>("LeerVoz");
+    }
+
+    private void SetBimensualId(int idBimensual)
+    {
+        _IVAServicio.SetIdBimensual(idBimensual);
+    }
+}

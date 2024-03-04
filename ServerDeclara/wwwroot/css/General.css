@@ -1,0 +1,86 @@
+﻿.imagen_boton{
+    height:60px;
+    width:60px;
+}
+
+.imagen_boton_chico {
+    height: 30px;
+    width: 30px;
+    margin-left: 10px;
+}
+
+.grupo_boton_seleccionado {
+    background-color: #A2C4EE !important;
+    color: blue;
+}
+.selectorTipoIva button {
+    border-style: none;
+    border: 1px solid #C6CBD2;
+    padding: 10px;
+    width: 100px;
+    text-align: center;
+}
+
+
+.colorBlanco {
+    background-color: snow;
+}
+.colorVioletaDegradado {
+    background: linear-gradient(90deg, rgba(168,205,214,1) 15%, rgba(180,215,221,1) 37%, rgba(208,224,228,1) 67%, rgba(229,226,232,1) 85%);
+}
+
+
+.selectorTipoIva button:first-child {
+    border-radius: 50% 0 0 50%;
+}
+
+.selectorTipoIva button:last-child {
+    border-radius: 0 50% 50% 0;
+}
+
+textarea {
+    min-width: 100%;
+    width: 100%;
+    resize: none; /* Evita que se pueda redimensionar */
+    box-sizing: border-box;
+}
+.input-small{
+    width:50%;
+}
+
+button {
+    border: none;
+    color: white;
+    padding: 10px 24px;
+    cursor: pointer;
+    border-radius: 7px;
+    background-color: #007bff;
+}
+
+button:hover {
+    background: #0b7dda;
+}
+
+.zindexprimero{
+    z-index:20;
+}
+
+.padding-horizontal{
+    padding:25px 0 !important;
+    margin: 5px 0 !important;
+}
+
+.h2-resumen {
+    padding: 10px;
+    color: white;
+    background-color: #9843C3;
+    text-align: center;
+    width: 100%;
+    border-radius: 10px;
+}
+
+.subtitulo-orange{
+    text-align:center;
+    color: orangered;
+    font-weight:500;
+}

@@ -22,6 +22,33 @@ namespace ServerDeclara.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("ServerDeclara.Datos.BimensualIVA", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<double>("AnticipoBimestreIVA")
+                        .HasColumnType("float");
+
+                    b.Property<DateTime>("Desde")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("Hasta")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("UsuarioId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UsuarioId");
+
+                    b.ToTable("BimensualesIVA");
+                });
+
             modelBuilder.Entity("ServerDeclara.Datos.BimensualRPF", b =>
                 {
                     b.Property<int>("Id")
@@ -220,8 +247,14 @@ namespace ServerDeclara.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("BimensualIVAId")
+                        .HasColumnType("int");
+
                     b.Property<int?>("ComercioId")
                         .HasColumnType("int");
+
+                    b.Property<string>("Comprobante")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("Fecha")
                         .HasColumnType("datetime2");
@@ -241,14 +274,14 @@ namespace ServerDeclara.Migrations
                     b.Property<string>("NombreArchivoPDF")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("UsuarioId")
-                        .HasColumnType("int");
+                    b.Property<string>("TipoIva")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ComercioId");
+                    b.HasIndex("BimensualIVAId");
 
-                    b.HasIndex("UsuarioId");
+                    b.HasIndex("ComercioId");
 
                     b.ToTable("EntradasIVAsDiarios");
                 });
@@ -1049,6 +1082,27 @@ namespace ServerDeclara.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Usuarios");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Email = "alexfosters2014@gmail.com",
+                            IdGoogle = "123456",
+                            RefreshToken = "",
+                            Token = ""
+                        });
+                });
+
+            modelBuilder.Entity("ServerDeclara.Datos.BimensualIVA", b =>
+                {
+                    b.HasOne("ServerDeclara.Datos.Usuario", "Usuario")
+                        .WithMany()
+                        .HasForeignKey("UsuarioId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Usuario");
                 });
 
             modelBuilder.Entity("ServerDeclara.Datos.BimensualRPF", b =>
@@ -1091,17 +1145,19 @@ namespace ServerDeclara.Migrations
 
             modelBuilder.Entity("ServerDeclara.Datos.EntradaIVADiario", b =>
                 {
+                    b.HasOne("ServerDeclara.Datos.BimensualIVA", "BimensualIVA")
+                        .WithMany("EntradasIVADiarios")
+                        .HasForeignKey("BimensualIVAId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("ServerDeclara.Datos.Comercio", "Comercio")
                         .WithMany()
                         .HasForeignKey("ComercioId");
 
-                    b.HasOne("ServerDeclara.Datos.Usuario", "Usuario")
-                        .WithMany()
-                        .HasForeignKey("UsuarioId");
+                    b.Navigation("BimensualIVA");
 
                     b.Navigation("Comercio");
-
-                    b.Navigation("Usuario");
                 });
 
             modelBuilder.Entity("ServerDeclara.Datos.Parametro", b =>
@@ -1113,6 +1169,11 @@ namespace ServerDeclara.Migrations
                         .IsRequired();
 
                     b.Navigation("HistorialParametro");
+                });
+
+            modelBuilder.Entity("ServerDeclara.Datos.BimensualIVA", b =>
+                {
+                    b.Navigation("EntradasIVADiarios");
                 });
 
             modelBuilder.Entity("ServerDeclara.Datos.HistorialParametro", b =>

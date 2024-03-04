@@ -1,0 +1,94 @@
+﻿@page "/HistorialVA"
+@inject IVAServicio _IVAServicio
+@inject NavigationManager _nav
+@inject CabeceraServicio _cabeceraServicio
+@inject IToastService _toast
+
+@if (LisadoBimensual.Count > 0)
+{
+    @foreach (var declaracion in LisadoBimensual)
+    {
+        <CardIVA DeclaracionBimensual="declaracion" />
+    }
+}
+else
+{
+    <p>Aun no tiene ningúna declaración de IVA realizada</p>
+}
+
+<div class="botonMas" @onclick="ModalDeclaracionBimestre">
+    <img src="/imagenes/iconos/botonMas.png" alt="boton +" />
+</div>
+
+<MargenVertical Altura="40px" />
+
+
+@code {
+    [CascadingParameter] IModalService Modal { get; set; } = default!;
+
+    List<BimensualIVA_ViewList> LisadoBimensual = new();
+
+
+    protected async override Task OnInitializedAsync()
+    {
+        _cabeceraServicio.ActualizarTituloMenu("Listado declaración IVA");
+        await ActualizarListado();
+    }
+
+    private async Task ActualizarListado()
+    {
+        LisadoBimensual = await _IVAServicio.GetListado();
+
+    }
+
+    private void IrIRPFNuevo()
+    {
+        _nav.NavigateTo("/NuevoIRPF/" + Util.modoFormulario.NUEVO.ToString());
+    }
+
+    private async Task ModalDeclaracionBimestre()
+    {
+        try
+        {
+            var periodoModal = Modal.Show<NuevaDeclaracionIVA>("Nueva declaración de IVA");
+            var result = await periodoModal.Result;
+
+            if (result.Confirmed)
+            {
+                Console.WriteLine("Modal was cancelled");
+                Periodo periodo = (Periodo)result.Data;
+
+                if (periodo == null) throw new Exception("Periodo no encontrado");
+
+                await NuevaDeclaracionBimestral(periodo);
+
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+
+
+    }
+
+    private async Task NuevaDeclaracionBimestral(Periodo periodo)
+    {
+        bool nuevo = await _IVAServicio.CrearNuevaDeclaracion(periodo);
+        if (nuevo)
+        {
+            _toast.ShowSuccess("Periodo creado");
+            await ActualizarListado();
+        }
+        else
+        {
+            _toast.ShowWarning("No se ha podido crear un nuevo periodo. Ya existe alguno creado");
+        }
+       
+    }
+
+
+
+
+
+}

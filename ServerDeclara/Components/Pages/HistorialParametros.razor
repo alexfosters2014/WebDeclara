@@ -1,0 +1,26 @@
+﻿@page "/HistorialParametros"
+@inject ParametroServicio _parametroServicio
+@inject NavigationManager _nav
+@inject CabeceraServicio _cabeceraServicio
+
+@if (historialParametros != null)
+{
+    @foreach (var histParam in historialParametros)
+    {
+        <CardParametro HistorialParametro="histParam" />
+    }
+}
+   
+
+
+@code {
+    List<HistorialParametroDTO> historialParametros;
+
+    protected async override Task OnInitializedAsync()
+    {
+        _cabeceraServicio.ActualizarTituloMenu("Parámetros");
+        historialParametros = await _parametroServicio.GetHistorialParametros();
+    }
+
+  
+}

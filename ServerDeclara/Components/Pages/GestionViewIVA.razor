@@ -1,0 +1,86 @@
+﻿@page "/gestionIVA"
+@inject IVAServicio _ivaServicio
+@inject NavigationManager _nav
+@inject CabeceraServicio _cabeceraServicio
+
+
+<CardIVAVista Titulo="Monto IVA a pagar">
+    <p>IVA a pagar: $@bimensualIVA.AnticipoBimestreIVA</p>
+</CardIVAVista>
+
+<CardIVAVista Titulo="Ventas">
+    @if (Ventas != null && Ventas.Count > 0)
+    {
+        @foreach (var itemVenta in Ventas)
+        {
+            <ItemCardIVA entradaIVA="itemVenta" ActualizarBorrado="ActualizarBorrado" />
+        }
+
+    }
+    else
+    {
+        <p>Todavia no tiene comprobante ingresado</p>
+    }
+</CardIVAVista>
+
+<CardIVAVista Titulo="Compras">
+    @if (Compras != null && Compras.Count > 0)
+    {
+        @foreach (var itemCompra in Compras)
+        {
+            <ItemCardIVA entradaIVA="itemCompra" ActualizarBorrado="ActualizarBorrado" />
+        }
+
+    }
+    else
+    {
+        <p>Todavia no tiene comprobante ingresado</p>
+    }
+</CardIVAVista>
+
+<div class="botonMas" @onclick="IrNuevoComprobante">
+    <img src="/imagenes/iconos/botonMas.png" alt="boton +" />
+</div>
+
+
+
+
+@code {
+    int declaracionIVAId = 0;
+    BimensualIVADTO bimensualIVA = new();
+
+    List<EntradaIVADiarioDTO> Compras = new();
+    List<EntradaIVADiarioDTO> Ventas = new();
+
+    protected async override Task OnInitializedAsync()
+    {
+        _cabeceraServicio.ActualizarTituloMenu("Gestión IVA");
+        declaracionIVAId = _ivaServicio.GetIdBimensual();
+        await Actualizar();
+    }
+
+    private async Task Actualizar()
+    {
+        bimensualIVA = await _ivaServicio.ObtenerDeclaracion();
+        if(bimensualIVA != null)
+        {
+            if (bimensualIVA.EntradasIVADiarios != null && bimensualIVA.EntradasIVADiarios.Count > 0)
+            {
+                Compras = bimensualIVA.EntradasIVADiarios.Where(w => w.TipoIva == Util.TipoIva.COMPRA.ToString()).ToList();
+                Ventas = bimensualIVA.EntradasIVADiarios.Where(w => w.TipoIva == Util.TipoIva.VENTA.ToString()).ToList();
+            }
+        }
+        StateHasChanged();
+    }
+
+
+    private void IrNuevoComprobante()
+    {
+        _nav.NavigateTo($"/NuevoComprobante/{Util.Vistas.GESTION_IVA.ToString()}");
+    }
+
+    private async Task ActualizarBorrado()
+    {
+        await Actualizar();
+    }
+}

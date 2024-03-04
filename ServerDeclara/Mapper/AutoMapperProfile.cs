@@ -17,9 +17,12 @@ namespace ServerDeclara.Mapper
             CreateMap<HistorialParametro, HistorialParametroDTO>().ReverseMap();
             CreateMap<Usuario, UsuarioDTO>().ReverseMap();
             CreateMap<BimensualIRPF_ViewList, BimensualRPF>().ReverseMap();
+            CreateMap<BimensualIVA_ViewList, BimensualIVA>().ReverseMap();
+            CreateMap<BimensualIVA, BimensualIVADTO>().ReverseMap();
             CreateMap<DeclaracionlIRFTransitorio, DeclaracionMensualIRPF>().ReverseMap();
+            CreateMap<ParametroTransitorio, ParametroDTO>().ReverseMap();
+            CreateMap<ParametroTransitorio, Parametro>().ReverseMap();
 
-            
         }
     }
 }

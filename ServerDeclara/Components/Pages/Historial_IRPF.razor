@@ -1,6 +1,7 @@
 ﻿@page "/HistorialIRPF"
 @inject IRPFServicio _irpfServicio
 @inject NavigationManager _nav
+@inject CabeceraServicio _cabeceraServicio
 
 @if (LisadoBimensual.Count > 0)
 {
@@ -11,8 +12,10 @@
 }
 else
 {
-    <p>Aun no tiene ningúna declaración realizada</p>
+    <p>Aun no tiene ningúna declaración de IRPF realizada</p>
 }
+
+
 
 <div class="botonMas" @onclick="IrIRPFNuevo">
     <img src="/imagenes/iconos/botonMas.png" alt="boton +" />
@@ -26,6 +29,7 @@ else
 
     protected async override Task OnInitializedAsync()
     {
+        _cabeceraServicio.ActualizarTituloMenu("Listado IRPF");
         LisadoBimensual = await _irpfServicio.GetListado();
     }
 

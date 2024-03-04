@@ -1,0 +1,138 @@
+﻿@page "/EdicionParametros"
+@inject ParametroServicio _parametroServicio
+@inject CabeceraServicio _cabeceraServicio
+@inject IToastService _toast
+@inject NavigationManager _nav
+
+
+@if (historialParamentro != null)
+{
+
+    <CardIVAVista Titulo="Tablas de valores">
+        @if (tablas != null && tablas.Count > 0)
+        {
+            <table class="tablaEstilo tablaRenta">
+              <tr>
+                  <th>Descripcion</th>
+                  <th>Desde</th>
+                  <th>Hasta</th>
+                  <th></th>
+              </tr>
+            @foreach (var param in tablas)
+            {
+                <tr>
+                        <td>@param.Descripcion</td>
+                        <td>@param.IngresosDesde</td>
+                        <td>@param.IngresosHasta</td>
+                        <td><input type="number" step="0.01" @bind="param.Tasa" class="input-small"/></td>
+                </tr>
+            }
+            </table>
+
+            <MargenVertical Altura="100px" /> 
+
+            <span>BPC: <input type="number" step="0.01" @bind="@Bpc.Tasa" class="input-small" /></span>
+
+        }
+        else
+        {
+            <p>Todavia no tiene parametros ingresado</p>
+        }
+    </CardIVAVista>
+
+
+
+    <CardIVAVista Titulo="Cálculos">
+        @if (calculos != null && calculos.Count > 0)
+        {
+            <table class="tablaEstilo font-chica">
+                <tr>
+                    <th>Descripcion</th>
+                    <th>Atributo</th>
+                    <th>Formula</th>
+                </tr>
+                @foreach (var param in calculos)
+                {
+                    <tr>
+                        <td>@param.Descripcion</td>
+                        <td>@AtributoCorto(param.Atributo)</td>
+                        <td><img src="/imagenes/iconos/ojo.png" class="imagen_boton_chico" @onclick="() => EditarCalculo(param)"/></td>
+                    </tr>
+                }
+            </table>
+        }
+        else
+        {
+            <p>Todavia no tiene parametros ingresado</p>
+        }
+    </CardIVAVista>
+
+    <button @onclick="Guardar">Guardar</button>
+
+}
+
+
+@code{
+
+    private HistorialParametroDTO historialParamentro = null;
+    private List<ParametroDTO> tablas = new();
+    private List<ParametroDTO> calculos = new();
+    private ParametroDTO Bpc = new();
+    [CascadingParameter] IModalService Modal { get; set; } = default!;
+
+    protected async override Task OnInitializedAsync()
+    {
+        _cabeceraServicio.ActualizarTituloMenu("Edición parametro");
+        historialParamentro = _parametroServicio.GetParametroSeleccionado();
+        tablas = historialParamentro.Parametros.Where(w => w.Tipo == Util.TipoListadoIRPF.RENTA.ToString()).ToList();
+        calculos = historialParamentro.Parametros.Where(w => w.Tipo == Util.TipoListadoIRPF.CALCULO.ToString()).ToList();
+        Bpc = historialParamentro.Parametros.SingleOrDefault(w => w.Tipo == Util.TipoListadoIRPF.BPC.ToString());
+
+    }
+
+    private async Task EditarCalculo(ParametroDTO parametro)
+    {
+        var parametroTabla = new ModalParameters().Add(nameof(ModalCalculo.parametroDTO), parametro);
+
+        var calculoModal = Modal.Show<ModalCalculo>("Edición de formula", parametroTabla);
+        var result = await calculoModal.Result;
+
+        if (result.Confirmed)
+        {
+            Console.WriteLine("Modal was cancelled");
+            var paramModal = (ParametroDTO)result.Data;
+            parametro.Formula = paramModal.Formula;
+        }
+    }
+
+    private async Task Guardar()
+    {
+        try
+        {
+            bool actualizado = await _parametroServicio.EditarParametros(historialParamentro);
+            if (actualizado)
+            {
+                _toast.ShowSuccess("Parámetros actualizados!!");
+                _nav.NavigateTo("/HistorialParametros");
+            }
+            else
+            {
+                _toast.ShowWarning("No se pudo actualizar");
+            }
+        }
+        catch (Exception ex)
+        {
+            _toast.ShowWarning(ex.Message);
+        }
+
+    }
+
+    private string AtributoCorto(string atributo)
+    {
+        int cantidadCaracteres = 15;
+
+        string atr = atributo.Length >= cantidadCaracteres ? atributo.Substring(0, cantidadCaracteres) : atributo;
+        return atr;
+    }
+
+}

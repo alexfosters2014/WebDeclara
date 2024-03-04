@@ -12,6 +12,7 @@ namespace ServerDeclara.Datos
         {
             modelBuilder.ApplyConfiguration(new HistorialParametroSeed());
             modelBuilder.ApplyConfiguration(new ParametroSeed());
+            modelBuilder.ApplyConfiguration(new UsuarioSeed());
         }
 
 
@@ -22,5 +23,6 @@ namespace ServerDeclara.Datos
         public DbSet<DeclaracionMensualIRPF> DeclaracionsMensualesIRPFs { get; set; }
         public DbSet<Comercio> Comercios { get; set; }
         public DbSet<BimensualRPF> BimensualesRPFs { get; set; }
+        public DbSet<BimensualIVA> BimensualesIVA { get; set; }
     }
 }
