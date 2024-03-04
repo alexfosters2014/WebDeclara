@@ -21,9 +21,14 @@
     text-align: center;
 }
 
+
 .colorBlanco {
     background-color: snow;
 }
+.colorVioletaDegradado {
+    background: linear-gradient(90deg, rgba(168,205,214,1) 15%, rgba(180,215,221,1) 37%, rgba(208,224,228,1) 67%, rgba(229,226,232,1) 85%);
+}
+
 
 .selectorTipoIva button:first-child {
     border-radius: 50% 0 0 50%;
@@ -63,4 +68,19 @@ button:hover {
 .padding-horizontal{
     padding:25px 0 !important;
     margin: 5px 0 !important;
+}
+
+.h2-resumen {
+    padding: 10px;
+    color: white;
+    background-color: #9843C3;
+    text-align: center;
+    width: 100%;
+    border-radius: 10px;
+}
+
+.subtitulo-orange{
+    text-align:center;
+    color: orangered;
+    font-weight:500;
 }

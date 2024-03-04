@@ -11,6 +11,7 @@ using iText.Layout.Properties;
 using Microsoft.AspNetCore.Components.Forms;
 using System;
 using System.IO;
+using System.Reflection.Metadata;
 
 
 
@@ -83,6 +84,21 @@ namespace ServerDeclara.Servicios
             catch (Exception ex)
             {
                 return null;
+            }
+        }
+
+        public async Task<bool> BorrarImagen(string nombreArchivo)
+        {
+            try
+            {
+                BlobContainerClient blobContainer = new BlobContainerClient(conexionAzureBlob, nombreStorageBlob);
+                BlobClient blobAEliminar = blobContainer.GetBlobClient(nombreArchivo);
+                await blobAEliminar.DeleteAsync();
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
             }
         }
 

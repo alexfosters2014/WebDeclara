@@ -9,6 +9,7 @@
     text-align: left;
     border-bottom: 1px solid #ddd;
     word-wrap: break-word; /* Rompe la palabra larga para que no cause desbordamiento */
+    text-align:center;
 }
 
 .font-chica {

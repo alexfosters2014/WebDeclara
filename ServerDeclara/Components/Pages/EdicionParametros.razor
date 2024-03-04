@@ -1,6 +1,8 @@
 ﻿@page "/EdicionParametros"
 @inject ParametroServicio _parametroServicio
 @inject CabeceraServicio _cabeceraServicio
+@inject IToastService _toast
+@inject NavigationManager _nav
 
 
 @if (historialParamentro != null)
@@ -105,9 +107,24 @@
 
     private async Task Guardar()
     {
-        bool actualizado = await _parametroServicio.EditarParametros(historialParamentro);
+        try
+        {
+            bool actualizado = await _parametroServicio.EditarParametros(historialParamentro);
+            if (actualizado)
+            {
+                _toast.ShowSuccess("Parámetros actualizados!!");
+                _nav.NavigateTo("/HistorialParametros");
+            }
+            else
+            {
+                _toast.ShowWarning("No se pudo actualizar");
+            }
+        }
+        catch (Exception ex)
+        {
+            _toast.ShowWarning(ex.Message);
+        }
 
-        int ahgh = 0;
     }
 
     private string AtributoCorto(string atributo)

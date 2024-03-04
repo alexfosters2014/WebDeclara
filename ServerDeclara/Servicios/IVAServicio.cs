@@ -8,12 +8,14 @@ namespace ServerDeclara.Servicios
     {
         private readonly IVARepositorio _IVARepositorio;
         private readonly UsuarioServicio _usuarioServicio;
+        private readonly BlobAzureServicio _blobAzureServicio;
         private int bimensualIdSeleccionado = 0;
 
-        public IVAServicio(IVARepositorio iVARepositorio, UsuarioServicio usuarioServicio)
+        public IVAServicio(IVARepositorio iVARepositorio, UsuarioServicio usuarioServicio, BlobAzureServicio blobAzureServicio)
         {
             _IVARepositorio = iVARepositorio;
             _usuarioServicio = usuarioServicio;
+            _blobAzureServicio = blobAzureServicio;
         }
 
         public void SetIdBimensual(int IdBimensual) => bimensualIdSeleccionado = IdBimensual;
@@ -68,13 +70,13 @@ namespace ServerDeclara.Servicios
 
         }
 
-        public async Task<bool> BorrarComprobanteIVA(int ivaId)
+        public async Task<bool> BorrarComprobanteIVA(int ivaId, string nombreArchivo)
         {
             try
             {
                 bool borrado = await _IVARepositorio.BorrarComprobanteIVA(ivaId);
-
-                return borrado;
+                bool borradoImagen = await _blobAzureServicio.BorrarImagen(nombreArchivo);
+                return borrado && borradoImagen;
             }
             catch (Exception ex)
             {

@@ -1,0 +1,74 @@
+﻿
+<MargenVertical Altura="40px" />
+
+<h4 class="subtitulo-orange">Declaraciones de IVA</h4>
+
+<div class="recuadro tablaEstilo colorBlanco font-chica">
+@if (mensualesResumidos != null && mensualesResumidos.Count > 0)
+{
+    <table>
+        <tr>
+            <th>Bimestre</th>
+            <th>IVA V</th>
+            <th>IVA V Ret</th>
+            <th>IVA C</th>
+            <th>Anticipo</th>
+        </tr>
+        @foreach(var bim in mensualesResumidos)
+        {
+            <tr>
+                <td>@bim.Bimestre</td>
+                <td>@bim.IvaVenta</td>
+                <td>@bim.IvaVentaRetenido</td>
+                <td>@bim.IvaCompra</td>
+                <td>@bim.AnticipoTotal</td>
+            </tr>
+        }
+
+    </table>
+}
+else
+{
+    <p>Todavia no hay resumen para mostrar</p>
+}
+
+</div>
+
+@code {
+
+    [Parameter] public List<BimensualIVADTO> bimensuales { get; set; }
+
+    private List<MensualIVA_Resumido> mensualesResumidos = new();
+
+
+    protected async override Task OnInitializedAsync()
+    {
+        await ReorganizarDatos();
+    }
+
+    private async Task ReorganizarDatos()
+    {
+
+        foreach (var bim in bimensuales)
+        {
+            MensualIVA_Resumido resumido = new()
+                {
+                    Bimestre = PeriodoFormateado(bim.Desde, bim.Hasta),
+                    IvaVenta = bim.EntradasIVADiarios.Where(w => w.TipoIva == Util.TipoIva.VENTA.ToString()).Sum(s => s.MontoIVA),
+                    IvaVentaRetenido = bim.EntradasIVADiarios.Where(w => w.TipoIva == Util.TipoIva.VENTA.ToString()).Sum(s => s.MontoIvaRetenido),
+                    IvaCompra = bim.EntradasIVADiarios.Where(w => w.TipoIva == Util.TipoIva.COMPRA.ToString()).Sum(s => s.MontoIVA),
+                    AnticipoTotal = bim.AnticipoBimestreIVA
+                };
+            mensualesResumidos.Add(resumido);
+        }
+      
+    }
+
+    private string PeriodoFormateado(DateTime desde, DateTime hasta)
+    {
+        string desdeString = desde.ToString("MMM");
+        string hastaString = hasta.ToString("MMM");
+
+        return $"{desdeString}-{hastaString}";
+    }
+}

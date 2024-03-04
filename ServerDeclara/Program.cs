@@ -60,6 +60,8 @@ builder.Services.AddScoped<IVARepositorio>();
 builder.Services.AddScoped<ComercioServicio>();
 builder.Services.AddScoped<ComercioRepositorio>();
 
+builder.Services.AddScoped<ResumenServicio>();
+
 
 var app = builder.Build();
 

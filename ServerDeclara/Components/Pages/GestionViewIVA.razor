@@ -38,11 +38,12 @@
     }
 </CardIVAVista>
 
-
-
 <div class="botonMas" @onclick="IrNuevoComprobante">
     <img src="/imagenes/iconos/botonMas.png" alt="boton +" />
 </div>
+
+
+
 
 @code {
     int declaracionIVAId = 0;
@@ -69,7 +70,7 @@
                 Ventas = bimensualIVA.EntradasIVADiarios.Where(w => w.TipoIva == Util.TipoIva.VENTA.ToString()).ToList();
             }
         }
-
+        StateHasChanged();
     }
 
 

@@ -232,7 +232,34 @@ namespace ServerDeclara.Servicios_de_datos
             return declaracionDTO;
         }
 
+        public async Task<List<BimensualIRPF_DTO>> GetListadoBimensualHistorial(int usuarioId, int cantidadAniosHaciaAtras)
+        {
+            try
+            {
+                if (usuarioId > 0)
+                {
+                    List<BimensualRPF> bimensual = await _db.BimensualesRPFs.Include(i => i.DeclaracionMes1)
+                                                                            .Include(i => i.DeclaracionMes2)
+                                                                            .Where(w => w.Usuario.Id == usuarioId &&
+                                                                                        w.Desde.Year >= (DateTime.Today.Year - cantidadAniosHaciaAtras))
+                                                                            .ToListAsync();
 
+                    if (bimensual == null) return null;
+
+                    List<BimensualIRPF_DTO> bimensualResultado = _mapper.Map<List<BimensualIRPF_DTO>>(bimensual);
+                    return bimensualResultado;
+                }
+                else
+                {
+                    return null;
+                }
+
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
 
 
     }

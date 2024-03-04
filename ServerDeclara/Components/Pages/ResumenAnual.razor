@@ -1,12 +1,40 @@
 ﻿@page "/resumenAnual"
 @inject CabeceraServicio _cabeceraServicio
+@inject ResumenServicio _resumenServicio
 
-<h2>Funcionalidad en construcción</h2>
+
+@if (ResumenesAnuales != null && ResumenesAnuales.Count > 0)
+{
+    @foreach (var resumen in ResumenesAnuales)
+    {
+        <section class="recuadro colorVioletaDegradado m-2">
+
+            <h2 class="h2-resumen">@resumen.Anio</h2>
+
+            <CardResumenAnualIRPF bimensuales="resumen.BimensualesIRPF" />
+
+            <CardResumenAnualIVA bimensuales="resumen.BimensualesIVA" />
+
+        </section>
+
+        <MargenVertical Altura="20px" />
+    }
+}
+
 
 
 @code {
+
+    private List<BimensualesResumido> ResumenesAnuales = new();
+
     protected async override Task OnInitializedAsync()
     {
         _cabeceraServicio.ActualizarTituloMenu("Resumenes anuales");
+        await ObtenerResumenes();
+    }
+
+    private async Task ObtenerResumenes()
+    {
+        ResumenesAnuales = await _resumenServicio.GetBimensualesResumido(cantidadAniosAtrás:5);
     }
 }

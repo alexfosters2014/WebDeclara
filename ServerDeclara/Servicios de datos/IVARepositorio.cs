@@ -138,7 +138,7 @@ namespace ServerDeclara.Servicios_de_datos
                 bool resultado = false;
                 if (periodo != null)
                 {
-                    BimensualRPF bimensual = await _db.BimensualesRPFs.SingleOrDefaultAsync(w => w.Desde.Month == periodo.Desde.Month &&
+                    BimensualIVA bimensual = await _db.BimensualesIVA.SingleOrDefaultAsync(w => w.Desde.Month == periodo.Desde.Month &&
                                                                                                  w.Desde.Year == periodo.Desde.Year &&
                                                                                                  w.Hasta.Month == periodo.Hasta.Month &&
                                                                                                  w.Hasta.Year == periodo.Hasta.Year &&
@@ -219,7 +219,34 @@ namespace ServerDeclara.Servicios_de_datos
         }
 
 
+        public async Task<List<BimensualIVADTO>> GetListadosBimensualesHistorial(int usuarioId, int cantidadAniosHaciaAtras)
+        {
+            try
+            {
+                if (usuarioId > 0)
+                {
+                    List<BimensualIVA> bimensual = await _db.BimensualesIVA.Include(i => i.EntradasIVADiarios).ThenInclude(t => t.Comercio)
+                                                                            .Where(w => w.Usuario.Id == usuarioId &&
+                                                                                       w.Desde.Year >= (DateTime.Today.Year - cantidadAniosHaciaAtras))
+                                                                            .OrderByDescending(o => o.Desde)
+                                                                            .ToListAsync();
 
+                    if (bimensual == null) return null;
+
+                    List<BimensualIVADTO> bimensualResultado = _mapper.Map<List<BimensualIVADTO>>(bimensual);
+                    return bimensualResultado;
+                }
+                else
+                {
+                    return null;
+                }
+
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
 
 
     }

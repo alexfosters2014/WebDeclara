@@ -2,6 +2,7 @@
 @inject IVAServicio _IVAServicio
 @inject NavigationManager _nav
 @inject CabeceraServicio _cabeceraServicio
+@inject IToastService _toast
 
 @if (LisadoBimensual.Count > 0)
 {
@@ -74,8 +75,16 @@ else
     private async Task NuevaDeclaracionBimestral(Periodo periodo)
     {
         bool nuevo = await _IVAServicio.CrearNuevaDeclaracion(periodo);
-
-        await ActualizarListado();
+        if (nuevo)
+        {
+            _toast.ShowSuccess("Periodo creado");
+            await ActualizarListado();
+        }
+        else
+        {
+            _toast.ShowWarning("No se ha podido crear un nuevo periodo. Ya existe alguno creado");
+        }
+       
     }
 
 
