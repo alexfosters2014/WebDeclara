@@ -109,6 +109,8 @@
     {
         try
         {
+            Bpc.Formula = Bpc.Tasa.ToString();
+
             bool actualizado = await _parametroServicio.EditarParametros(historialParamentro);
             if (actualizado)
             {

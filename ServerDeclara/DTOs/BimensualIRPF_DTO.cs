@@ -31,7 +31,7 @@ namespace ServerDeclara.DTOs
             double anticipo = 0;
 
             anticipo += DeclaracionMes1.LiquidacionMes + DeclaracionMes2.LiquidacionMes;
-            anticipo += DeclaracionMes1.AnticipoRetenciones + DeclaracionMes2.AnticipoRetenciones;
+            anticipo += (DeclaracionMes1.AnticipoRetenciones + DeclaracionMes2.AnticipoRetenciones) * -1;
             anticipo += AnticipoExcedente;
 
             AnticipoBimestre = Math.Round(anticipo);
